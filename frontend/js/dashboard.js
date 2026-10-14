@@ -1,6 +1,5 @@
 /* ===========================================================
-   NEXA XDR PLATFORM - SINGULARITY SOC DASHBOARD CONTROLLER
-   Theme: Obsidian & Cyber Emerald Green
+   NEXA XDR PLATFORM - SHARP CORNER GREENLIFY CONTROLLER
 =========================================================== */
 
 function getApiBaseUrl() {
@@ -19,9 +18,8 @@ let allAssets = [];
 let allLogs = [];
 let allAlerts = [];
 
-let trendChart;
-let assetChart;
-let riskChart;
+let barChartInstance;
+let overviewChartInstance;
 
 /* ===========================================================
    HTML SANITIZATION (PREVENT XSS)
@@ -75,40 +73,135 @@ document.addEventListener("DOMContentLoaded", () => {
     const userEl = document.getElementById("username");
     if (userEl) userEl.innerText = username;
 
-    initSubNavTabs();
-    initTrendChart();
-    updateLastUpdated();
+    initCharts();
 
     loadDashboard();
     loadAssets();
     loadAlerts();
     loadLogs();
-    loadAnalytics();
 });
 
 /* ===========================================================
-   SUB-NAV TABS HIGHLIGHT
+   CHARTS INITIALIZATION (Matching Reference Image)
 =========================================================== */
-function initSubNavTabs() {
-    const tabs = document.querySelectorAll(".sub-tab");
-    tabs.forEach(tab => {
-        tab.addEventListener("click", () => {
-            tabs.forEach(t => t.classList.remove("active"));
-            tab.classList.add("active");
+function initCharts() {
+    // 1. Bar Chart (Left)
+    const barCanvas = document.getElementById("barChart");
+    if (barCanvas) {
+        const ctxBar = barCanvas.getContext("2d");
+        barChartInstance = new Chart(ctxBar, {
+            type: "bar",
+            data: {
+                labels: ["M", "T", "W", "T", "F", "S", "S", "M", "T"],
+                datasets: [{
+                    label: "Threat Ingestion",
+                    data: [320, 240, 180, 290, 410, 360, 480, 390, 450],
+                    backgroundColor: "#01b574",
+                    borderRadius: 0,
+                    barThickness: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: "#718096", font: { size: 10, family: "Plus Jakarta Sans" } }
+                    },
+                    y: {
+                        grid: { color: "rgba(255, 255, 255, 0.04)" },
+                        ticks: { color: "#718096", font: { size: 10, family: "JetBrains Mono" } }
+                    }
+                }
+            }
         });
-    });
+    }
+
+    // 2. Sales / Threat Overview Area Chart (Right, from image: dual green + white curves)
+    const overviewCanvas = document.getElementById("overviewChart");
+    if (overviewCanvas) {
+        const ctxOver = overviewCanvas.getContext("2d");
+
+        const greenGradient = ctxOver.createLinearGradient(0, 0, 0, 240);
+        greenGradient.addColorStop(0, "rgba(1, 181, 116, 0.45)");
+        greenGradient.addColorStop(1, "rgba(1, 181, 116, 0.0)");
+
+        const whiteGradient = ctxOver.createLinearGradient(0, 0, 0, 240);
+        whiteGradient.addColorStop(0, "rgba(255, 255, 255, 0.2)");
+        whiteGradient.addColorStop(1, "rgba(255, 255, 255, 0.0)");
+
+        overviewChartInstance = new Chart(ctxOver, {
+            type: "line",
+            data: {
+                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                datasets: [
+                    {
+                        label: "Active Detections",
+                        data: [200, 230, 300, 350, 370, 420, 550, 400, 380, 500, 460, 520],
+                        borderColor: "#01b574",
+                        backgroundColor: greenGradient,
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.45,
+                        pointRadius: 0,
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "#01b574",
+                    },
+                    {
+                        label: "Baseline Events",
+                        data: [500, 340, 110, 300, 490, 350, 270, 130, 425, 300, 210, 450],
+                        borderColor: "#ffffff",
+                        backgroundColor: whiteGradient,
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.45,
+                        pointRadius: 0,
+                        pointHoverRadius: 4,
+                        pointHoverBackgroundColor: "#ffffff",
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: "index",
+                    intersect: false
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: "#08100d",
+                        titleColor: "#ffffff",
+                        bodyColor: "#a0aec0",
+                        borderColor: "#01b574",
+                        borderWidth: 1,
+                        padding: 10,
+                        cornerRadius: 0,
+                        usePointStyle: true
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: "rgba(255, 255, 255, 0.04)" },
+                        ticks: { color: "#718096", font: { size: 11, family: "Plus Jakarta Sans" } }
+                    },
+                    y: {
+                        grid: { color: "rgba(255, 255, 255, 0.04)" },
+                        ticks: { color: "#718096", font: { size: 11, family: "JetBrains Mono" } }
+                    }
+                }
+            }
+        });
+    }
 }
 
 /* ===========================================================
-   LAST UPDATED
-=========================================================== */
-function updateLastUpdated() {
-    const el = document.getElementById("currentDate");
-    if (el) el.innerText = new Date().toLocaleTimeString();
-}
-
-/* ===========================================================
-   TOAST NOTIFICATIONS
+   TOAST NOTIFICATIONS (Sharp Rectangles)
 =========================================================== */
 function showToast(message, type = "info") {
     const container = document.getElementById("toastContainer");
@@ -118,9 +211,8 @@ function showToast(message, type = "info") {
     toast.className = `toast ${type}`;
 
     let icon = "fa-circle-info";
-    if (type === "success") icon = "fa-circle-check";
-    else if (type === "error") icon = "fa-circle-xmark";
-    else if (type === "warning") icon = "fa-triangle-exclamation";
+    if (type === "success") icon = "fa-check";
+    else if (type === "error") icon = "fa-xmark";
 
     toast.innerHTML = `
         <i class="fa-solid ${icon}"></i>
@@ -130,8 +222,7 @@ function showToast(message, type = "info") {
     container.appendChild(toast);
 
     setTimeout(() => {
-        toast.style.animation = "slideOut .3s forwards";
-        setTimeout(() => toast.remove(), 300);
+        toast.remove();
     }, 3200);
 }
 
@@ -149,28 +240,34 @@ function logout() {
 async function loadDashboard() {
     try {
         const response = await authFetch(API + "/dashboard/stats");
-        if (!response.ok) throw new Error("Unable to load dashboard statistics.");
+        if (!response.ok) throw new Error("Unable to load stats.");
 
         const data = await response.json();
         animateCounter("totalAssets", data.total_assets);
         animateCounter("activeAlerts", data.active_alerts);
         animateCounter("highAlerts", data.high_alerts);
         animateCounter("totalLogs", data.total_logs);
-        updateLastUpdated();
+
+        // Update mini metrics
+        const miniAssets = document.getElementById("miniAssets");
+        if (miniAssets) miniAssets.innerText = data.total_assets;
+
+        const miniThreats = document.getElementById("miniThreats");
+        if (miniThreats) miniThreats.innerText = data.active_alerts;
+
+        const miniLogs = document.getElementById("miniLogs");
+        if (miniLogs) miniLogs.innerText = data.total_logs;
     } catch (error) {
         console.error(error);
     }
 }
 
-/* ===========================================================
-   COUNTER ANIMATION
-=========================================================== */
 function animateCounter(id, value) {
     const element = document.getElementById(id);
     if (!element) return;
 
     const start = Number(element.innerText.replace(/,/g, "")) || 0;
-    const duration = 400;
+    const duration = 350;
     const startTime = performance.now();
 
     function update(time) {
@@ -194,115 +291,8 @@ setInterval(() => {
         loadAssets();
         loadAlerts();
         loadLogs();
-        loadAnalytics();
-        updateLastUpdated();
     }
 }, 30000);
-
-/* ===========================================================
-   FEATURED TIMELINE CHART (SentinelOne Spline Style)
-=========================================================== */
-function initTrendChart() {
-    const canvas = document.getElementById("alertsTrendChart");
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-
-    // Cyber green gradient
-    const greenGrad = ctx.createLinearGradient(0, 0, 0, 200);
-    greenGrad.addColorStop(0, "rgba(0, 245, 155, 0.28)");
-    greenGrad.addColorStop(1, "rgba(0, 245, 155, 0.0)");
-
-    // Cyan gradient
-    const cyanGrad = ctx.createLinearGradient(0, 0, 0, 200);
-    cyanGrad.addColorStop(0, "rgba(6, 182, 212, 0.22)");
-    cyanGrad.addColorStop(1, "rgba(6, 182, 212, 0.0)");
-
-    trendChart = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: ["12:00", "13:30", "15:00", "16:30", "18:00", "19:30", "21:00"],
-            datasets: [
-                {
-                    label: "Brute-Force Detection",
-                    data: [18, 36, 92, 145, 110, 85, 120],
-                    borderColor: "#00f59b",
-                    backgroundColor: greenGrad,
-                    borderWidth: 2.2,
-                    tension: 0.4,
-                    fill: true,
-                    pointRadius: 3,
-                    pointHoverRadius: 6,
-                    pointBackgroundColor: "#00f59b",
-                },
-                {
-                    label: "Enumeration",
-                    data: [12, 24, 45, 68, 80, 60, 75],
-                    borderColor: "#06b6d4",
-                    backgroundColor: cyanGrad,
-                    borderWidth: 2,
-                    tension: 0.4,
-                    fill: true,
-                    pointRadius: 2,
-                    pointHoverRadius: 5,
-                    pointBackgroundColor: "#06b6d4",
-                },
-                {
-                    label: "Privilege Escalation",
-                    data: [5, 8, 22, 38, 25, 30, 42],
-                    borderColor: "#eab308",
-                    borderWidth: 1.8,
-                    borderDash: [4, 4],
-                    tension: 0.35,
-                    fill: false,
-                    pointRadius: 2,
-                    pointBackgroundColor: "#eab308",
-                },
-                {
-                    label: "Critical Exploits",
-                    data: [2, 4, 8, 14, 9, 6, 11],
-                    borderColor: "#ef4444",
-                    borderWidth: 2,
-                    tension: 0.4,
-                    fill: false,
-                    pointRadius: 3,
-                    pointBackgroundColor: "#ef4444",
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: {
-                mode: "index",
-                intersect: false
-            },
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    backgroundColor: "rgba(14, 18, 28, 0.95)",
-                    titleColor: "#f8fafc",
-                    bodyColor: "#94a3b8",
-                    borderColor: "rgba(0, 245, 155, 0.3)",
-                    borderWidth: 1,
-                    padding: 12,
-                    boxPadding: 6,
-                    usePointStyle: true
-                }
-            },
-            scales: {
-                x: {
-                    grid: { color: "rgba(255, 255, 255, 0.04)" },
-                    ticks: { color: "#64748b", font: { family: "JetBrains Mono", size: 11 } }
-                },
-                y: {
-                    grid: { color: "rgba(255, 255, 255, 0.04)" },
-                    ticks: { color: "#64748b", font: { family: "JetBrains Mono", size: 11 } }
-                }
-            }
-        }
-    });
-}
 
 /* ===========================================================
    LOAD ASSETS
@@ -326,35 +316,26 @@ function renderAssets(assets) {
     table.innerHTML = "";
 
     if (!assets || assets.length === 0) {
-        table.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted);">No assets found. Run network scan to discover endpoints.</td></tr>`;
+        table.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 20px;">No endpoints registered. Click 'Scan Network' to discover devices.</td></tr>`;
         return;
     }
 
     assets.forEach(asset => {
-        let riskPill = "low";
-        if (asset.risk_score >= 60) riskPill = "critical";
-        else if (asset.risk_score >= 25) riskPill = "high";
+        let riskClass = "low";
+        if (asset.risk_score >= 60) riskClass = "critical";
+        else if (asset.risk_score >= 25) riskClass = "high";
 
         const statusClass = asset.status === "Online" ? "online" : "offline";
-        let osIcon = "fa-laptop";
-        if (asset.operating_system && asset.operating_system.includes("Windows")) osIcon = "fa-brands fa-windows";
-        else if (asset.operating_system && asset.operating_system.includes("Linux")) osIcon = "fa-brands fa-linux";
-        else if (asset.operating_system && asset.operating_system.includes("Ubuntu")) osIcon = "fa-brands fa-ubuntu";
 
         table.innerHTML += `
             <tr>
-                <td>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <i class="${osIcon}" style="color: var(--accent-green); font-size: 14px;"></i>
-                        <strong>${escapeHtml(asset.hostname)}</strong>
-                    </div>
-                </td>
-                <td style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-secondary);">${escapeHtml(asset.ip_address)}</td>
+                <td><strong>${escapeHtml(asset.hostname)}</strong></td>
+                <td style="font-family: 'JetBrains Mono', monospace; color: var(--accent-green);">${escapeHtml(asset.ip_address)}</td>
                 <td>${escapeHtml(asset.operating_system || "Unknown")}</td>
-                <td><span class="sev-pill ${riskPill}">${asset.risk_score} Score</span></td>
-                <td><span class="status-pill ${statusClass}">● ${escapeHtml(asset.status)}</span></td>
+                <td><span class="sharp-badge ${riskClass}">${asset.risk_score} Risk</span></td>
+                <td><span class="sharp-badge ${statusClass}">${escapeHtml(asset.status)}</span></td>
                 <td style="text-align: right;">
-                    <button class="btn-icon" onclick="showAssetDetails(${asset.id})" title="Inspect Endpoint">
+                    <button class="sharp-btn-icon" onclick="showAssetDetails(${asset.id})" title="Inspect Device">
                         <i class="fa-solid fa-eye"></i>
                     </button>
                 </td>
@@ -369,21 +350,21 @@ function showAssetDetails(id) {
 
     document.getElementById("drawerTitle").innerHTML = `
         <i class="fa-solid fa-server" style="color: var(--accent-green);"></i>
-        <span>Endpoint Inspector: ${escapeHtml(asset.hostname)}</span>
+        <span>Endpoint: ${escapeHtml(asset.hostname)}</span>
     `;
 
     document.getElementById("drawerBody").innerHTML = `
-        <table class="drawer-table">
+        <table class="sharp-drawer-table">
             <tr><td>Hostname</td><td>${escapeHtml(asset.hostname)}</td></tr>
             <tr><td>IP Address</td><td>${escapeHtml(asset.ip_address)}</td></tr>
             <tr><td>MAC Address</td><td>${escapeHtml(asset.mac_address || "-")}</td></tr>
             <tr><td>Vendor Hardware</td><td>${escapeHtml(asset.vendor || "-")}</td></tr>
             <tr><td>Operating System</td><td>${escapeHtml(asset.operating_system)}</td></tr>
-            <tr><td>Classification</td><td>${escapeHtml(asset.asset_type || "Endpoint")}</td></tr>
+            <tr><td>Device Class</td><td>${escapeHtml(asset.asset_type || "Endpoint")}</td></tr>
             <tr><td>Open Ports</td><td>${escapeHtml(asset.open_ports || "-")}</td></tr>
             <tr><td>Detected Services</td><td>${escapeHtml(asset.services || "-")}</td></tr>
-            <tr><td>Vulnerability Risk</td><td><span class="sev-pill ${asset.risk_score >= 60 ? 'critical' : asset.risk_score >= 25 ? 'high' : 'low'}">${asset.risk_score}/100</span></td></tr>
-            <tr><td>Current Status</td><td><span class="status-pill ${asset.status === 'Online' ? 'online' : 'offline'}">${escapeHtml(asset.status)}</span></td></tr>
+            <tr><td>Vulnerability Score</td><td><span class="sharp-badge ${asset.risk_score >= 60 ? 'critical' : asset.risk_score >= 25 ? 'high' : 'low'}">${asset.risk_score}/100</span></td></tr>
+            <tr><td>Operational Status</td><td><span class="sharp-badge ${asset.status === 'Online' ? 'online' : 'offline'}">${escapeHtml(asset.status)}</span></td></tr>
             <tr><td>Last Scan Seen</td><td>${escapeHtml(asset.last_seen ? new Date(asset.last_seen).toLocaleString() : "-")}</td></tr>
         </table>
     `;
@@ -392,7 +373,7 @@ function showAssetDetails(id) {
 }
 
 /* ===========================================================
-   LOAD ALERTS & SEVERITY MATRIX
+   LOAD ALERTS
 =========================================================== */
 async function loadAlerts() {
     try {
@@ -401,31 +382,9 @@ async function loadAlerts() {
 
         allAlerts = await response.json();
         renderAlerts(allAlerts);
-        updateSeverityMatrix(allAlerts);
     } catch (error) {
         console.error(error);
     }
-}
-
-function updateSeverityMatrix(alerts) {
-    let crit = 0, high = 0, med = 0, low = 0;
-    alerts.forEach(a => {
-        const sev = (a.severity || "").toLowerCase();
-        if (sev === "critical") crit++;
-        else if (sev === "high") high++;
-        else if (sev === "medium") med++;
-        else low++;
-    });
-
-    const critEl = document.getElementById("sevCountCritical");
-    const highEl = document.getElementById("sevCountHigh");
-    const medEl = document.getElementById("sevCountMedium");
-    const lowEl = document.getElementById("sevCountLow");
-
-    if (critEl) critEl.innerText = crit || 3;
-    if (highEl) highEl.innerText = high || alerts.filter(a => a.severity === "High").length;
-    if (medEl) medEl.innerText = med || alerts.filter(a => a.severity === "Medium").length;
-    if (lowEl) lowEl.innerText = low || alerts.filter(a => a.severity === "Low").length;
 }
 
 function renderAlerts(alerts) {
@@ -435,7 +394,7 @@ function renderAlerts(alerts) {
     table.innerHTML = "";
 
     if (!alerts || alerts.length === 0) {
-        table.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted);">No active threat alerts. System telemetry normal.</td></tr>`;
+        table.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 20px;">No active security alerts detected.</td></tr>`;
         return;
     }
 
@@ -446,17 +405,13 @@ function renderAlerts(alerts) {
 
         table.innerHTML += `
             <tr>
-                <td><span class="sev-pill ${sevClass}">● ${escapeHtml(alert.severity)}</span></td>
+                <td><span class="sharp-badge ${sevClass}">${escapeHtml(alert.severity)}</span></td>
                 <td><strong>${escapeHtml(alert.title)}</strong></td>
-                <td>
-                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-green);">
-                        ${escapeHtml(alert.hostname)}
-                    </span>
-                </td>
-                <td><span class="status-pill ${statusClass}">${escapeHtml(alert.status)}</span></td>
-                <td style="color: var(--text-muted); font-size: 12px;">${escapeHtml(dateStr)}</td>
+                <td><span style="font-family: 'JetBrains Mono', monospace; color: var(--accent-green);">${escapeHtml(alert.hostname)}</span></td>
+                <td><span class="sharp-badge ${statusClass}">${escapeHtml(alert.status)}</span></td>
+                <td style="color: var(--text-muted); font-size: 11px;">${escapeHtml(dateStr)}</td>
                 <td style="text-align: right;">
-                    <button class="btn-icon" onclick="showAlertDetails('${escapeHtml(alert.id)}')" title="Triage Incident">
+                    <button class="sharp-btn-icon" onclick="showAlertDetails('${escapeHtml(alert.id)}')" title="Triage Threat">
                         <i class="fa-solid fa-crosshairs"></i>
                     </button>
                 </td>
@@ -470,26 +425,26 @@ function showAlertDetails(id) {
     if (!alert) return;
 
     document.getElementById("drawerTitle").innerHTML = `
-        <i class="fa-solid fa-triangle-exclamation" style="color: var(--sev-critical);"></i>
-        <span>Security Incident: #${escapeHtml(alert.id)}</span>
+        <i class="fa-solid fa-triangle-exclamation" style="color: var(--status-critical);"></i>
+        <span>Incident #${escapeHtml(alert.id)}</span>
     `;
 
     const dateStr = alert.timestamp ? new Date(alert.timestamp).toLocaleString() : "-";
 
     document.getElementById("drawerBody").innerHTML = `
-        <table class="drawer-table">
+        <table class="sharp-drawer-table">
             <tr><td>Incident Title</td><td><strong>${escapeHtml(alert.title)}</strong></td></tr>
-            <tr><td>Severity Level</td><td><span class="sev-pill ${(alert.severity || 'low').toLowerCase()}">● ${escapeHtml(alert.severity)}</span></td></tr>
+            <tr><td>Severity Level</td><td><span class="sharp-badge ${(alert.severity || 'low').toLowerCase()}">${escapeHtml(alert.severity)}</span></td></tr>
             <tr><td>Target Endpoint</td><td>${escapeHtml(alert.hostname)}</td></tr>
-            <tr><td>Investigation Status</td><td><span class="status-pill ${alert.status === 'Open' ? 'open' : 'acknowledged'}">${escapeHtml(alert.status)}</span></td></tr>
-            <tr><td>Detected At</td><td>${escapeHtml(dateStr)}</td></tr>
-            <tr><td>Threat Payload / Log</td><td style="color: var(--accent-green); word-break: break-all;">${escapeHtml(alert.description)}</td></tr>
+            <tr><td>Investigation Status</td><td><span class="sharp-badge ${alert.status === 'Open' ? 'open' : 'acknowledged'}">${escapeHtml(alert.status)}</span></td></tr>
+            <tr><td>Detected Timestamp</td><td>${escapeHtml(dateStr)}</td></tr>
+            <tr><td>Raw Payload / Log</td><td style="color: var(--accent-green); word-break: break-all;">${escapeHtml(alert.description)}</td></tr>
         </table>
         ${alert.status === "Open" ? `
             <div style="margin-top: 24px;">
-                <button class="pill-btn primary" style="width: 100%; justify-content: center; padding: 12px;" onclick="acknowledgeAlert('${escapeHtml(alert.id)}')">
-                    <i class="fa-solid fa-check-double"></i>
-                    <span>Acknowledge & Close Incident</span>
+                <button class="nav-action-btn green" style="width: 100%; justify-content: center; padding: 12px;" onclick="acknowledgeAlert('${escapeHtml(alert.id)}')">
+                    <i class="fa-solid fa-check"></i>
+                    <span>Acknowledge & Close Threat</span>
                 </button>
             </div>
         ` : ''}
@@ -503,7 +458,7 @@ async function acknowledgeAlert(alertId) {
         const response = await authFetch(`${API}/alerts/${alertId}/acknowledge`, { method: "PUT" });
         if (!response.ok) throw new Error("Failed to acknowledge alert");
 
-        showToast(`Incident #${alertId} successfully acknowledged.`, "success");
+        showToast(`Incident #${alertId} acknowledged.`, "success");
         closeDrawer();
         await loadAlerts();
         await loadDashboard();
@@ -535,26 +490,26 @@ function renderLogs(logs) {
     table.innerHTML = "";
 
     if (!logs || logs.length === 0) {
-        table.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted);">No logs available. Click 'Ingest Logs' to process events.</td></tr>`;
+        table.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 20px;">No logs available. Click 'Ingest' to process events.</td></tr>`;
         return;
     }
 
     logs.slice(0, 50).forEach((log, index) => {
         const sevClass = (log.level || "low").toLowerCase();
-        const shortMessage = log.message && log.message.length > 65
-            ? log.message.substring(0, 65) + "..."
+        const shortMessage = log.message && log.message.length > 70
+            ? log.message.substring(0, 70) + "..."
             : (log.message || "-");
         const timeStr = log.timestamp ? new Date(log.timestamp).toLocaleTimeString() : "-";
 
         table.innerHTML += `
             <tr>
-                <td><span class="sev-pill ${sevClass}">● ${escapeHtml(log.level)}</span></td>
-                <td style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-green);">${escapeHtml(log.hostname)}</td>
-                <td><span style="font-weight: 600; color: var(--text-secondary);">${escapeHtml(log.source)}</span></td>
-                <td style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-primary);">${escapeHtml(shortMessage)}</td>
-                <td style="color: var(--text-muted); font-size: 12px;">${escapeHtml(timeStr)}</td>
+                <td><span class="sharp-badge ${sevClass}">${escapeHtml(log.level)}</span></td>
+                <td style="font-family: 'JetBrains Mono', monospace; color: var(--accent-green);">${escapeHtml(log.hostname)}</td>
+                <td><strong>${escapeHtml(log.source)}</strong></td>
+                <td style="font-family: 'JetBrains Mono', monospace; font-size: 11px;">${escapeHtml(shortMessage)}</td>
+                <td style="color: var(--text-muted); font-size: 11px;">${escapeHtml(timeStr)}</td>
                 <td style="text-align: right;">
-                    <button class="btn-icon" onclick="showLogDetails(${index})" title="Inspect Raw Log">
+                    <button class="sharp-btn-icon" onclick="showLogDetails(${index})" title="Inspect Raw Log">
                         <i class="fa-solid fa-file-code"></i>
                     </button>
                 </td>
@@ -568,18 +523,18 @@ function showLogDetails(index) {
     if (!log) return;
 
     document.getElementById("drawerTitle").innerHTML = `
-        <i class="fa-solid fa-file-code" style="color: var(--cyan);"></i>
+        <i class="fa-solid fa-file-code" style="color: var(--accent-green);"></i>
         <span>Raw Security Audit Event</span>
     `;
 
     document.getElementById("drawerBody").innerHTML = `
-        <table class="drawer-table">
-            <tr><td>Origin Host</td><td>${escapeHtml(log.hostname)}</td></tr>
-            <tr><td>Threat Level</td><td><span class="sev-pill ${(log.level || 'low').toLowerCase()}">● ${escapeHtml(log.level)}</span></td></tr>
-            <tr><td>Daemon / Source</td><td>${escapeHtml(log.source)}</td></tr>
+        <table class="sharp-drawer-table">
+            <tr><td>Host Name</td><td>${escapeHtml(log.hostname)}</td></tr>
+            <tr><td>Threat Level</td><td><span class="sharp-badge ${(log.level || 'low').toLowerCase()}">${escapeHtml(log.level)}</span></td></tr>
+            <tr><td>Log Source</td><td>${escapeHtml(log.source)}</td></tr>
             <tr><td>Category</td><td>${escapeHtml(log.category || "AUTH")}</td></tr>
-            <tr><td>Event Timestamp</td><td>${escapeHtml(log.timestamp ? new Date(log.timestamp).toLocaleString() : "-")}</td></tr>
-            <tr><td>Full Payload</td><td style="word-break: break-all; color: var(--accent-green); background: rgba(0,0,0,0.3); padding: 12px; border-radius: 6px;">${escapeHtml(log.message)}</td></tr>
+            <tr><td>Timestamp</td><td>${escapeHtml(log.timestamp ? new Date(log.timestamp).toLocaleString() : "-")}</td></tr>
+            <tr><td>Message Payload</td><td style="word-break: break-all; color: var(--accent-green);">${escapeHtml(log.message)}</td></tr>
         </table>
     `;
 
@@ -587,7 +542,7 @@ function showLogDetails(index) {
 }
 
 function searchLogs() {
-    const input = document.getElementById("searchLog");
+    const input = document.getElementById("searchLog") || document.getElementById("globalSearch");
     if (!input) return;
 
     const keyword = input.value.toLowerCase();
@@ -602,106 +557,14 @@ function searchLogs() {
 }
 
 /* ===========================================================
-   ANALYTICS (Donut & Polar Charts with Cyber Green Theme)
-=========================================================== */
-async function loadAnalytics() {
-    try {
-        const response = await authFetch(API + "/analytics/");
-        if (!response.ok) throw new Error("Unable to load analytics.");
-
-        const data = await response.json();
-        createCharts(data);
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-function createCharts(data) {
-    if (assetChart) assetChart.destroy();
-    if (riskChart) riskChart.destroy();
-
-    const assetCanvas = document.getElementById("assetChart");
-    if (assetCanvas) {
-        assetChart = new Chart(assetCanvas, {
-            type: "doughnut",
-            data: {
-                labels: (data.assets_by_os || []).map(x => x.operating_system),
-                datasets: [{
-                    data: (data.assets_by_os || []).map(x => x.total),
-                    backgroundColor: [
-                        "#00f59b", // Cyber Emerald Green (Primary)
-                        "#06b6d4", // Electric Cyan
-                        "#eab308", // Amber
-                        "#f97316", // Coral Orange
-                        "#64748b"  // Slate Muted
-                    ],
-                    borderWidth: 2,
-                    borderColor: "#0e111a"
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: "70%",
-                plugins: {
-                    legend: {
-                        position: "bottom",
-                        labels: { color: "#94a3b8", font: { size: 11, family: "Plus Jakarta Sans" }, padding: 14 }
-                    }
-                }
-            }
-        });
-    }
-
-    const riskCanvas = document.getElementById("riskChart");
-    if (riskCanvas) {
-        riskChart = new Chart(riskCanvas, {
-            type: "polarArea",
-            data: {
-                labels: (data.risk_distribution || []).map(x => x.level),
-                datasets: [{
-                    data: (data.risk_distribution || []).map(x => x.total),
-                    backgroundColor: [
-                        "rgba(239, 68, 68, 0.65)", // Critical Red
-                        "rgba(249, 115, 22, 0.65)", // High Orange
-                        "rgba(0, 245, 155, 0.65)"   // Cyber Green
-                    ],
-                    borderWidth: 1,
-                    borderColor: "rgba(255,255,255,0.08)"
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: "bottom",
-                        labels: { color: "#94a3b8", font: { size: 11, family: "Plus Jakarta Sans" }, padding: 14 }
-                    }
-                },
-                scales: {
-                    r: {
-                        grid: { color: "rgba(255, 255, 255, 0.05)" },
-                        ticks: { display: false }
-                    }
-                }
-            }
-        });
-    }
-}
-
-/* ===========================================================
-   ACTIONS (Network Scan & Log Collection)
+   ACTIONS (Network Scan & Log Ingestion)
 =========================================================== */
 async function scanNetwork() {
     const btn = document.getElementById("scanBtn");
-    const statusEl = document.getElementById("scanStatus");
-
     if (btn) {
         btn.disabled = true;
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Scanning...</span>';
     }
-    if (statusEl) statusEl.innerText = "Scanning...";
 
     try {
         const response = await authFetch(API + "/discovery/scan", {
@@ -712,21 +575,15 @@ async function scanNetwork() {
         if (!response.ok) throw new Error("Network scan failed.");
 
         const data = await response.json();
-        const lastScanEl = document.getElementById("lastScan");
-        if (lastScanEl) lastScanEl.innerText = new Date().toLocaleTimeString();
-        if (statusEl) statusEl.innerText = "Completed";
-
         showToast(`${data.assets_discovered} assets discovered.`, "success");
 
         await loadDashboard();
         await loadAssets();
         await loadAlerts();
         await loadLogs();
-        await loadAnalytics();
     } catch (error) {
         console.error(error);
-        if (statusEl) statusEl.innerText = "Failed";
-        showToast("Network scan could not be completed.", "error");
+        showToast("Network scan failed.", "error");
     } finally {
         if (btn) {
             btn.disabled = false;
@@ -746,7 +603,6 @@ async function triggerLogCollection() {
         await loadDashboard();
         await loadAlerts();
         await loadLogs();
-        await loadAnalytics();
     } catch (error) {
         console.error(error);
         showToast("Failed to ingest logs.", "error");
@@ -757,11 +613,15 @@ async function triggerLogCollection() {
    DRAWER CONTROLLER
 =========================================================== */
 function openDrawer() {
-    document.getElementById("drawerOverlay").classList.add("active");
-    document.getElementById("inspectorDrawer").classList.add("active");
+    const overlay = document.getElementById("drawerOverlay");
+    const drawer = document.getElementById("sharpDrawer");
+    if (overlay) overlay.classList.add("active");
+    if (drawer) drawer.classList.add("active");
 }
 
 function closeDrawer() {
-    document.getElementById("drawerOverlay").classList.remove("active");
-    document.getElementById("inspectorDrawer").classList.remove("active");
+    const overlay = document.getElementById("drawerOverlay");
+    const drawer = document.getElementById("sharpDrawer");
+    if (overlay) overlay.classList.remove("active");
+    if (drawer) drawer.classList.remove("active");
 }

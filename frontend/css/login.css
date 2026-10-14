@@ -1,38 +1,37 @@
 /* ===========================================================
-   NEXA XDR PLATFORM - SINGULARITY LOGIN
-   Palette: Obsidian Black & Cyber Emerald Green
+   NEXA XDR PLATFORM - SHARP CORNER GREENLIFY LOGIN
+   Palette: Obsidian Black & Greenlify Emerald Green
 =========================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 :root {
-    --bg-base: #08090d;
-    --bg-surface: #0e111a;
-    --bg-card: rgba(18, 22, 34, 0.85);
-    --accent-green: #00f59b;
-    --accent-emerald: #10b981;
-    --accent-green-dark: #059669;
-    --accent-green-glow: rgba(0, 245, 155, 0.25);
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-active: rgba(0, 245, 155, 0.45);
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
-    --text-inverse: #050811;
+    --bg-base: #060b09;
+    --bg-card: #0c1612;
+    --bg-input: #08120e;
+    --accent-green: #01b574;
+    --accent-green-hover: #00d27a;
+    --accent-green-glow: rgba(1, 181, 116, 0.28);
+    --border-color: #15241d;
+    --text-primary: #ffffff;
+    --text-secondary: #a0aec0;
+    --text-muted: #718096;
+    --text-inverse: #060b09;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    border-radius: 0 !important; /* STRICT SHARP CORNER */
 }
 
 body {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background-color: var(--bg-base);
     background-image: 
-        radial-gradient(circle at 50% 20%, rgba(0, 245, 155, 0.12) 0%, transparent 55%),
-        radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.05) 0%, transparent 45%);
+        radial-gradient(circle at 50% 20%, rgba(1, 181, 116, 0.12) 0%, transparent 60%),
+        radial-gradient(circle at 80% 80%, rgba(0, 181, 216, 0.05) 0%, transparent 50%);
     background-attachment: fixed;
     min-height: 100vh;
     display: flex;
@@ -44,129 +43,115 @@ body {
 
 .login-page {
     width: 100%;
-    max-width: 440px;
-    animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    max-width: 420px;
 }
 
 .login-card {
     background: var(--bg-card);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(0, 245, 155, 0.22);
-    border-radius: 20px;
-    padding: 42px 36px;
+    border: 1px solid var(--border-color);
+    padding: 40px 36px;
     text-align: center;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), inset 0 0 30px rgba(0, 245, 155, 0.03);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
     position: relative;
-    overflow: hidden;
 }
 
 .login-card::before {
     content: '';
     position: absolute;
     top: 0;
-    left: 20%;
-    right: 20%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--accent-green);
 }
 
 .logo {
-    width: 76px;
-    height: 76px;
-    margin: 0 auto 22px;
-    border-radius: 18px;
-    background: linear-gradient(135deg, rgba(0, 245, 155, 0.15), rgba(16, 185, 129, 0.05));
-    border: 1px solid rgba(0, 245, 155, 0.4);
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    background: var(--accent-green);
+    color: var(--text-inverse);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 34px;
-    color: var(--accent-green);
-    box-shadow: 0 0 28px var(--accent-green-glow);
+    font-size: 26px;
+    font-weight: 800;
+    box-shadow: 0 0 24px var(--accent-green-glow);
 }
 
 .login-card h1 {
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: -0.4px;
-    margin-bottom: 6px;
-    color: var(--text-primary);
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    color: #ffffff;
 }
 
-.login-card .brand-sub {
+.brand-sub {
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--accent-green);
     text-transform: uppercase;
-    letter-spacing: 1.2px;
+    letter-spacing: 1.5px;
     margin-bottom: 12px;
     display: inline-block;
     padding: 3px 8px;
-    border-radius: 4px;
-    background: rgba(0, 245, 155, 0.08);
-    border: 1px solid rgba(0, 245, 155, 0.2);
+    background: rgba(1, 181, 116, 0.1);
+    border: 1px solid rgba(1, 181, 116, 0.3);
 }
 
 .subtitle {
     color: var(--text-secondary);
-    font-size: 13px;
-    margin-bottom: 30px;
+    font-size: 12px;
+    margin-bottom: 28px;
     line-height: 1.5;
 }
 
 .input-group {
     position: relative;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }
 
 .input-group i {
     position: absolute;
-    left: 16px;
+    left: 14px;
     top: 50%;
     transform: translateY(-50%);
     color: var(--text-muted);
-    font-size: 14px;
-    transition: color 0.2s;
+    font-size: 13px;
 }
 
 .input-group input {
     width: 100%;
-    padding: 14px 16px 14px 44px;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: 10px;
-    color: var(--text-primary);
-    font-size: 14px;
+    padding: 13px 14px 13px 40px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    color: #ffffff;
+    font-size: 13px;
     font-family: inherit;
-    transition: all 0.2s ease;
+    transition: 0.15s ease;
 }
 
 .input-group input:focus {
     outline: none;
     border-color: var(--accent-green);
-    box-shadow: 0 0 16px var(--accent-green-glow);
-    background: #111420;
-}
-
-.input-group input:focus + i {
-    color: var(--accent-green);
+    background: #0c1813;
 }
 
 button {
     width: 100%;
-    margin-top: 8px;
-    padding: 14px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(135deg, var(--accent-green-dark) 0%, var(--accent-emerald) 100%);
+    margin-top: 10px;
+    padding: 13px;
+    border: 1px solid var(--accent-green);
+    background: var(--accent-green);
     color: var(--text-inverse);
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
     cursor: pointer;
-    box-shadow: 0 0 22px var(--accent-green-glow);
-    transition: all 0.25s ease;
+    box-shadow: 0 0 20px var(--accent-green-glow);
+    transition: 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -174,39 +159,39 @@ button {
 }
 
 button:hover {
-    background: linear-gradient(135deg, var(--accent-emerald) 0%, var(--accent-green) 100%);
-    box-shadow: 0 0 32px rgba(0, 245, 155, 0.45);
-    transform: translateY(-1px);
+    background: var(--accent-green-hover);
+    box-shadow: 0 0 28px rgba(1, 181, 116, 0.45);
 }
 
 button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-    transform: none;
 }
 
 #message {
-    margin-top: 16px;
-    min-height: 20px;
-    font-size: 13px;
-    font-weight: 500;
+    margin-top: 14px;
+    min-height: 18px;
+    font-size: 12px;
+    font-weight: 600;
 }
 
 .secure {
-    margin-top: 24px;
+    margin-top: 22px;
     color: var(--accent-green);
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    font-weight: 500;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .login-footer {
-    margin-top: 28px;
-    padding-top: 18px;
-    border-top: 1px solid var(--border-subtle);
+    margin-top: 26px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
     color: var(--text-muted);
     font-size: 11px;
     line-height: 1.8;
@@ -214,15 +199,4 @@ button:disabled {
 
 .login-footer strong {
     color: var(--text-secondary);
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(16px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }

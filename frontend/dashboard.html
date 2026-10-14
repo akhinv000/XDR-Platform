@@ -3,445 +3,388 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XDR Platform | Singularity Operations Center</title>
+    <title>XDR Platform | Dashboard</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
 
-<!-- ================= TOP HEADER ================= -->
-<header class="header">
-    <div class="header-left">
-        <a href="#dashboard" class="header-logo">
-            <div class="brand-icon">
-                <i class="fa-solid fa-shield-virus"></i>
-            </div>
-            <div class="brand-text">
-                <span>NEXA</span>
-                <span class="brand-badge">Singularity Operations</span>
-            </div>
-        </a>
-
-        <div class="nav-breadcrumbs">
-            <span class="crumb-link">Global</span>
-            <i class="fa-solid fa-angle-right crumb-separator"></i>
-            <span class="crumb-link">Nexa-SOC</span>
-            <i class="fa-solid fa-angle-right crumb-separator"></i>
-            <span class="crumb-active">Primary Site</span>
-        </div>
-    </div>
-
-    <div class="header-right">
-        <div class="system-status-pill">
-            <span class="pulse-dot"></span>
-            <span>Operational</span>
-        </div>
-
-        <button class="time-range-btn" type="button" title="Filter timeframe">
-            <i class="fa-regular fa-clock"></i>
-            <span>Last 24 Hours</span>
-            <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
-        </button>
-
-        <div class="user-profile-badge">
-            <div class="user-avatar">
-                <i class="fa-solid fa-user-shield"></i>
-            </div>
-            <span id="username">Administrator</span>
-        </div>
-
-        <button class="header-action-btn" onclick="logout()" title="Sign Out">
-            <i class="fa-solid fa-power-off"></i>
-        </button>
-    </div>
-</header>
-
-<!-- ================= SUB-NAVIGATION BAR ================= -->
-<div class="sub-navbar">
-    <nav class="sub-nav-tabs">
-        <a href="#dashboard" class="sub-tab active">
-            <i class="fa-solid fa-chart-line"></i>
-            <span>Overview</span>
-        </a>
-        <a href="#alerts" class="sub-tab">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <span>Security Alerts</span>
-        </a>
-        <a href="#assets" class="sub-tab">
-            <i class="fa-solid fa-server"></i>
-            <span>Endpoints & Assets</span>
-        </a>
-        <a href="#analytics" class="sub-tab">
-            <i class="fa-solid fa-chart-pie"></i>
-            <span>Threat Analytics</span>
-        </a>
-        <a href="#logs" class="sub-tab">
-            <i class="fa-solid fa-file-waveform"></i>
-            <span>Security Logs</span>
-        </a>
-    </nav>
-
-    <div class="sub-nav-actions">
-        <button id="scanBtn" class="pill-btn primary" onclick="scanNetwork()" title="Discover network assets">
-            <i class="fa-solid fa-network-wired"></i>
-            <span>Scan Network</span>
-        </button>
-        <button class="pill-btn" onclick="triggerLogCollection()" title="Ingest system logs and trigger detection">
-            <i class="fa-solid fa-cloud-arrow-down" style="color: var(--accent-green);"></i>
-            <span>Ingest & Detect</span>
-        </button>
-    </div>
-</div>
-
-<!-- ================= SLIM ICON SIDEBAR ================= -->
+<!-- ================= LEFT SIDEBAR (Greenlify Style) ================= -->
 <aside class="sidebar">
-    <ul class="sidebar-menu">
-        <li class="sidebar-item">
-            <a href="#dashboard" class="sidebar-link active" title="Operations Overview">
-                <i class="fa-solid fa-table-cells-large"></i>
-            </a>
-        </li>
-        <li class="sidebar-item">
-            <a href="#alerts" class="sidebar-link" title="Threat Alerts">
-                <i class="fa-solid fa-bell"></i>
-            </a>
-        </li>
-        <li class="sidebar-item">
-            <a href="#assets" class="sidebar-link" title="Asset Inventory">
-                <i class="fa-solid fa-computer"></i>
-            </a>
-        </li>
-        <li class="sidebar-item">
-            <a href="#analytics" class="sidebar-link" title="Analytics & Charts">
-                <i class="fa-solid fa-chart-pie"></i>
-            </a>
-        </li>
-        <li class="sidebar-item">
-            <a href="#logs" class="sidebar-link" title="Audit & Event Logs">
-                <i class="fa-solid fa-file-lines"></i>
-            </a>
-        </li>
-    </ul>
+    <div>
+        <a href="#overview" class="sidebar-brand">
+            <div class="sidebar-brand-icon">
+                <i class="fa-solid fa-shapes"></i>
+            </div>
+            <span class="sidebar-brand-title">DASHBOARD</span>
+        </a>
 
-    <div class="sidebar-footer">
-        <a href="javascript:void(0)" onclick="scanNetwork()" class="sidebar-link" title="Quick Scan">
-            <i class="fa-solid fa-radar" style="color: var(--accent-green);"></i>
-        </a>
-        <a href="javascript:void(0)" onclick="logout()" class="sidebar-link" title="Sign Out">
-            <i class="fa-solid fa-right-from-bracket"></i>
-        </a>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="#overview" class="sidebar-link active">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#alerts" class="sidebar-link">
+                    <i class="fa-solid fa-bell"></i>
+                    <span>Threat Alerts</span>
+                </a>
+            </li>
+            <li>
+                <a href="#assets" class="sidebar-link">
+                    <i class="fa-solid fa-server"></i>
+                    <span>Endpoints</span>
+                </a>
+            </li>
+            <li>
+                <a href="#analytics" class="sidebar-link">
+                    <i class="fa-solid fa-chart-column"></i>
+                    <span>Analytics</span>
+                </a>
+            </li>
+            <li>
+                <a href="#logs" class="sidebar-link">
+                    <i class="fa-solid fa-file-lines"></i>
+                    <span>Security Logs</span>
+                </a>
+            </li>
+
+            <li class="sidebar-heading">ACCOUNT PAGES</li>
+
+            <li>
+                <a href="javascript:void(0)" onclick="scanNetwork()" class="sidebar-link">
+                    <i class="fa-solid fa-radar"></i>
+                    <span>Scan Network</span>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)" onclick="triggerLogCollection()" class="sidebar-link">
+                    <i class="fa-solid fa-cloud-arrow-down"></i>
+                    <span>Ingest Logs</span>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)" onclick="logout()" class="sidebar-link">
+                    <i class="fa-solid fa-power-off"></i>
+                    <span>Sign Out</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Help Card from Reference Image -->
+    <div class="sidebar-help-card">
+        <div class="sidebar-help-icon">
+            <i class="fa-solid fa-question"></i>
+        </div>
+        <div class="sidebar-help-title">Need help?</div>
+        <div class="sidebar-help-sub">Please check our security docs & API guide.</div>
+        <button type="button" class="btn-doc" onclick="window.open('/docs', '_blank')">DOCUMENTATION</button>
     </div>
 </aside>
 
-<!-- ================= MAIN CONTENT ================= -->
-<main class="content">
+<!-- ================= MAIN WRAPPER ================= -->
+<div class="main-wrapper">
 
-    <!-- KPI Metrics Grid -->
-    <section class="metrics-grid" id="dashboard">
-        <div class="metric-card accent-green">
-            <div class="metric-header">
-                <span class="metric-title">Active Security Alerts</span>
-                <i class="fa-solid fa-circle-info metric-info-icon" title="Open threat alerts requiring triage"></i>
+    <!-- Top Navbar -->
+    <header class="top-navbar">
+        <div class="breadcrumb-box">
+            <div class="breadcrumb-path">
+                <a href="#">Pages</a> / <span style="color: #ffffff;">Dashboard</span>
             </div>
-            <div class="metric-value-row">
-                <span class="metric-value" id="activeAlerts">0</span>
-                <span class="metric-trend up"><i class="fa-solid fa-arrow-up"></i> +12.4%</span>
-            </div>
-            <div class="metric-footer">
-                <span>Threat detection engine active</span>
-                <span style="color: var(--accent-green);">Live Feed</span>
-            </div>
+            <div class="breadcrumb-title">Dashboard</div>
         </div>
 
-        <div class="metric-card">
-            <div class="metric-header">
-                <span class="metric-title">High & Critical Threats</span>
-                <i class="fa-solid fa-circle-info metric-info-icon" title="Severity High / Critical"></i>
+        <div class="top-navbar-right">
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" class="search-input" id="globalSearch" placeholder="Type here..." onkeyup="searchLogs()">
             </div>
-            <div class="metric-value-row">
-                <span class="metric-value" id="highAlerts" style="color: var(--sev-critical);">0</span>
-                <span class="metric-trend up"><i class="fa-solid fa-triangle-exclamation"></i> Critical</span>
-            </div>
-            <div class="metric-footer">
-                <span>SSH brute-force & privilege escalations</span>
-                <span style="color: var(--sev-critical);">Action Needed</span>
-            </div>
-        </div>
 
-        <div class="metric-card">
-            <div class="metric-header">
-                <span class="metric-title">Monitored Endpoints</span>
-                <i class="fa-solid fa-circle-info metric-info-icon" title="Endpoints discovered and protected"></i>
-            </div>
-            <div class="metric-value-row">
-                <span class="metric-value" id="totalAssets">0</span>
-                <span class="metric-trend good"><i class="fa-solid fa-check"></i> 100%</span>
-            </div>
-            <div class="metric-footer">
-                <span>Status: <strong id="scanStatus" style="color: var(--accent-green);">Ready</strong></span>
-                <span id="lastScan">--</span>
-            </div>
-        </div>
+            <button class="nav-action-btn green" onclick="scanNetwork()" id="scanBtn">
+                <i class="fa-solid fa-network-wired"></i>
+                <span>Scan Network</span>
+            </button>
 
-        <div class="metric-card">
-            <div class="metric-header">
-                <span class="metric-title">Total Security Events</span>
-                <i class="fa-solid fa-circle-info metric-info-icon" title="Aggregated events across systems"></i>
-            </div>
-            <div class="metric-value-row">
-                <span class="metric-value" id="totalLogs">0</span>
-                <span class="metric-trend good"><i class="fa-solid fa-arrow-up"></i> +8.5%</span>
-            </div>
-            <div class="metric-footer">
-                <span>Last Updated: <strong id="currentDate">--</strong></span>
-                <span style="color: var(--accent-green);">Synced</span>
-            </div>
-        </div>
-    </section>
+            <button class="nav-action-btn" onclick="triggerLogCollection()">
+                <i class="fa-solid fa-arrows-rotate"></i>
+                <span>Ingest Logs</span>
+            </button>
 
-    <!-- Prominent Timeline Card (Singularity Style) -->
-    <section class="featured-timeline-card">
-        <div class="timeline-header">
-            <div class="timeline-title-group">
-                <h2>
-                    <i class="fa-solid fa-chart-line" style="color: var(--accent-green);"></i>
-                    <span>Critical + High Alerts Over Time</span>
-                    <span class="timeline-badge">Singularity Telemetry</span>
-                </h2>
+            <div style="display: flex; align-items: center; gap: 8px; margin-left: 8px;">
+                <a href="#" class="nav-icon-link" title="Operator Profile">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+                <span id="username" style="font-size: 13px; font-weight: 700; color: #ffffff;">Administrator</span>
             </div>
-            <div class="timeline-legend">
-                <div class="legend-item"><span class="legend-dot green"></span><span>Brute-Force</span></div>
-                <div class="legend-item"><span class="legend-dot cyan"></span><span>Enumeration</span></div>
-                <div class="legend-item"><span class="legend-dot amber"></span><span>Priv-Esc</span></div>
-                <div class="legend-item"><span class="legend-dot red"></span><span>Critical Exploits</span></div>
-                <div class="legend-item"><span class="legend-dot orange"></span><span>Malware Detection</span></div>
-            </div>
-        </div>
-        <div class="timeline-chart-container">
-            <canvas id="alertsTrendChart"></canvas>
-        </div>
-    </section>
 
-    <!-- Split Analytics Matrix -->
-    <section class="analytics-split-row" id="analytics">
-        <!-- Severity Matrix Table -->
-        <div class="analytics-panel">
-            <div class="panel-header">
-                <div class="panel-title">
-                    <i class="fa-solid fa-layer-group" style="color: var(--accent-green);"></i>
-                    <span>Alerts by Severity</span>
+            <a href="javascript:void(0)" onclick="logout()" class="nav-icon-link" title="Sign Out">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- Page Content -->
+    <div class="page-content" id="overview">
+
+        <!-- ROW 1: 4 METRIC CARDS -->
+        <section class="metrics-row">
+            <div class="metric-card">
+                <div class="metric-info">
+                    <span class="metric-label">Active Threats</span>
+                    <div class="metric-number-row">
+                        <span class="metric-number" id="activeAlerts">0</span>
+                        <span class="metric-trend pos">+55%</span>
+                    </div>
                 </div>
-                <span class="panel-subtitle">SOC Triage</span>
-            </div>
-            <table class="severity-table">
-                <thead>
-                    <tr>
-                        <th>Severity</th>
-                        <th style="text-align: right;">Count</th>
-                    </tr>
-                </thead>
-                <tbody id="severityMatrixBody">
-                    <tr>
-                        <td>
-                            <div class="severity-row-label">
-                                <span class="sev-dot critical"></span>
-                                <span style="font-weight: 600; color: var(--sev-critical);">Critical</span>
-                            </div>
-                        </td>
-                        <td class="severity-count" id="sevCountCritical">3</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="severity-row-label">
-                                <span class="sev-dot high"></span>
-                                <span style="font-weight: 600; color: var(--sev-high);">High</span>
-                            </div>
-                        </td>
-                        <td class="severity-count" id="sevCountHigh">15</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="severity-row-label">
-                                <span class="sev-dot medium"></span>
-                                <span style="font-weight: 600; color: var(--sev-medium);">Medium</span>
-                            </div>
-                        </td>
-                        <td class="severity-count" id="sevCountMedium">42</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="severity-row-label">
-                                <span class="sev-dot low"></span>
-                                <span style="font-weight: 600; color: var(--accent-green);">Low / Informational</span>
-                            </div>
-                        </td>
-                        <td class="severity-count" id="sevCountLow">109</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Donut: Asset OS Breakdown -->
-        <div class="analytics-panel">
-            <div class="panel-header">
-                <div class="panel-title">
-                    <i class="fa-solid fa-chart-pie" style="color: var(--accent-green);"></i>
-                    <span>Asset OS Distribution</span>
+                <div class="metric-icon-box">
+                    <i class="fa-solid fa-wallet"></i>
                 </div>
-                <span class="panel-subtitle">Platform Coverage</span>
             </div>
-            <div class="chart-wrapper">
-                <canvas id="assetChart"></canvas>
-            </div>
-        </div>
 
-        <!-- Polar: Risk Score Distribution -->
-        <div class="analytics-panel">
-            <div class="panel-header">
-                <div class="panel-title">
-                    <i class="fa-solid fa-shield-halved" style="color: var(--accent-green);"></i>
-                    <span>Endpoint Risk Profile</span>
+            <div class="metric-card">
+                <div class="metric-info">
+                    <span class="metric-label">Monitored Assets</span>
+                    <div class="metric-number-row">
+                        <span class="metric-number" id="totalAssets">0</span>
+                        <span class="metric-trend pos">+5%</span>
+                    </div>
                 </div>
-                <span class="panel-subtitle">Vulnerability Index</span>
+                <div class="metric-icon-box">
+                    <i class="fa-solid fa-globe"></i>
+                </div>
             </div>
-            <div class="chart-wrapper">
-                <canvas id="riskChart"></canvas>
-            </div>
-        </div>
-    </section>
 
-    <!-- Security Alerts Table (Live Incident Feed) -->
-    <section class="data-section" id="alerts">
-        <div class="section-top-bar">
-            <div class="section-header">
-                <h2>
-                    <i class="fa-solid fa-triangle-exclamation" style="color: var(--accent-green);"></i>
-                    <span>Live Threat Detection Feed</span>
-                </h2>
-                <p>Real-time security events correlated from system authorization, SSH, and privilege logs</p>
+            <div class="metric-card">
+                <div class="metric-info">
+                    <span class="metric-label">Critical / High Alerts</span>
+                    <div class="metric-number-row">
+                        <span class="metric-number" id="highAlerts" style="color: var(--status-critical);">0</span>
+                        <span class="metric-trend neg">-14%</span>
+                    </div>
+                </div>
+                <div class="metric-icon-box">
+                    <i class="fa-solid fa-file-lines"></i>
+                </div>
             </div>
-            <div class="search-filter-wrapper">
-                <button class="pill-btn primary" onclick="triggerLogCollection()">
+
+            <div class="metric-card">
+                <div class="metric-info">
+                    <span class="metric-label">Total Event Logs</span>
+                    <div class="metric-number-row">
+                        <span class="metric-number" id="totalLogs">0</span>
+                        <span class="metric-trend pos">+8%</span>
+                    </div>
+                </div>
+                <div class="metric-icon-box">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- ROW 2: DUAL FEATURE CARDS (Greenlify Hero & Rocket Card) -->
+        <section class="hero-row">
+            <div class="banner-card">
+                <div class="banner-content">
+                    <span class="banner-tag">Built by Nexa XDR</span>
+                    <h2 class="banner-heading">Autonomous SOC Dashboard</h2>
+                    <p class="banner-desc">The dashboard provides a centralized, user-friendly interface to monitor, analyze, and manage real-time extended detection and response telemetry.</p>
+                    <a class="banner-link" onclick="triggerLogCollection()">
+                        <span>Trigger automated threat evaluation</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="greenlify-box">
+                    <span>Greenlify</span>
+                </div>
+            </div>
+
+            <div class="intel-card">
+                <div>
+                    <span class="banner-tag" style="color: var(--accent-green);">Threat Intelligence</span>
+                    <h3 style="margin-top: 6px;">Work with the Rockets</h3>
+                    <p style="margin-top: 8px;">Autonomous threat mitigation is a modern high-stakes positive-sum game. It is all about who detects and triages the zero-day vector first.</p>
+                </div>
+                <a class="banner-link" onclick="scanNetwork()">
+                    <span>Scan attack surfaces</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- ROW 3: CHARTS ROW (Bar Chart + Area Overview) -->
+        <section class="charts-row" id="analytics">
+            <!-- Left Chart: Bar Chart with mini metrics -->
+            <div class="chart-card">
+                <div class="chart-canvas-container">
+                    <canvas id="barChart"></canvas>
+                </div>
+                <div class="chart-header" style="margin-bottom: 8px;">
+                    <div class="chart-title-group">
+                        <h3>Active Threats</h3>
+                        <p><strong>(+23)</strong> than last week</p>
+                    </div>
+                </div>
+                <div class="mini-metrics-bar">
+                    <div class="mini-metric-item">
+                        <div class="mini-metric-tag"><i class="fa-solid fa-wallet"></i><span>Endpoints</span></div>
+                        <div class="mini-metric-value" id="miniAssets">3</div>
+                        <div class="mini-progress-bar"><div class="mini-progress-fill" style="width: 75%;"></div></div>
+                    </div>
+                    <div class="mini-metric-item">
+                        <div class="mini-metric-tag"><i class="fa-solid fa-rocket"></i><span>Threats</span></div>
+                        <div class="mini-metric-value" id="miniThreats">169</div>
+                        <div class="mini-progress-bar"><div class="mini-progress-fill" style="width: 90%;"></div></div>
+                    </div>
+                    <div class="mini-metric-item">
+                        <div class="mini-metric-tag"><i class="fa-solid fa-cart-shopping"></i><span>Events</span></div>
+                        <div class="mini-metric-value" id="miniLogs">473</div>
+                        <div class="mini-progress-bar"><div class="mini-progress-fill" style="width: 60%;"></div></div>
+                    </div>
+                    <div class="mini-metric-item">
+                        <div class="mini-metric-tag"><i class="fa-solid fa-wrench"></i><span>Risk %</span></div>
+                        <div class="mini-metric-value">70%</div>
+                        <div class="mini-progress-bar"><div class="mini-progress-fill" style="width: 70%;"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Chart: Green & White Spline Area Chart from Image -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title-group">
+                        <h3>Threat Telemetry Overview</h3>
+                        <p><strong>(+5) more</strong> in 2026</p>
+                    </div>
+                    <div style="display: flex; gap: 12px; font-size: 11px; font-weight: 600;">
+                        <span style="color: var(--accent-green);">● Active Detections</span>
+                        <span style="color: #ffffff;">● Baseline Traffic</span>
+                    </div>
+                </div>
+                <div class="chart-canvas-container" style="height: 280px;">
+                    <canvas id="overviewChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ROW 4: THREAT ALERTS TABLE -->
+        <section class="data-card" id="alerts">
+            <div class="data-card-header">
+                <div>
+                    <h3><i class="fa-solid fa-triangle-exclamation" style="color: var(--accent-green);"></i> Active Threat Detections</h3>
+                    <p>Live threat events correlated across auth.log and system authentication daemons</p>
+                </div>
+                <button class="nav-action-btn green" onclick="triggerLogCollection()">
                     <i class="fa-solid fa-rotate"></i>
-                    <span>Refresh & Detect</span>
+                    <span>Refresh & Triage</span>
                 </button>
             </div>
-        </div>
 
-        <div class="table-responsive">
-            <table class="cyber-table">
-                <thead>
-                    <tr>
-                        <th>Severity</th>
-                        <th>Threat Event</th>
-                        <th>Target Host</th>
-                        <th>Status</th>
-                        <th>Reported Timestamp</th>
-                        <th style="text-align: right;">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="alertTable">
-                    <tr><td colspan="6" style="text-align:center; color: var(--text-muted);">Loading alert telemetry...</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <!-- Asset Inventory Table -->
-    <section class="data-section" id="assets">
-        <div class="section-top-bar">
-            <div class="section-header">
-                <h2>
-                    <i class="fa-solid fa-network-wired" style="color: var(--accent-green);"></i>
-                    <span>Monitored Endpoint Inventory</span>
-                </h2>
-                <p>Assets discovered via Nmap scans with port exposure analysis and threat risk scores</p>
+            <div style="overflow-x: auto;">
+                <table class="sharp-table">
+                    <thead>
+                        <tr>
+                            <th>Severity</th>
+                            <th>Threat Event</th>
+                            <th>Target Host</th>
+                            <th>Status</th>
+                            <th>Reported Timestamp</th>
+                            <th style="text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alertTable">
+                        <tr><td colspan="6" style="text-align:center; color: var(--text-muted);">Loading alert telemetry...</td></tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="search-filter-wrapper">
-                <button class="pill-btn" onclick="scanNetwork()">
-                    <i class="fa-solid fa-radar"></i>
-                    <span>Trigger Network Discovery</span>
-                </button>
-            </div>
-        </div>
+        </section>
 
-        <div class="table-responsive">
-            <table class="cyber-table">
-                <thead>
-                    <tr>
-                        <th>Hostname</th>
-                        <th>IP Address</th>
-                        <th>Operating System</th>
-                        <th>Risk Score</th>
-                        <th>Status</th>
-                        <th style="text-align: right;">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="assetTable">
-                    <tr><td colspan="6" style="text-align:center; color: var(--text-muted);">Loading asset inventory...</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <!-- Security Logs Section -->
-    <section class="data-section" id="logs">
-        <div class="section-top-bar">
-            <div class="section-header">
-                <h2>
-                    <i class="fa-solid fa-file-waveform" style="color: var(--accent-green);"></i>
-                    <span>Audit & System Log Feed</span>
-                </h2>
-                <p>Ingested security audit trails from auth.log and authentication daemons</p>
-            </div>
-            <div class="search-filter-wrapper">
-                <div class="cyber-search-box">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="searchLog" class="cyber-search-input"
-                           placeholder="Filter host, source, or message..." onkeyup="searchLogs()">
+        <!-- ROW 5: ENDPOINT INVENTORY TABLE -->
+        <section class="data-card" id="assets">
+            <div class="data-card-header">
+                <div>
+                    <h3><i class="fa-solid fa-server" style="color: var(--accent-green);"></i> Monitored Endpoints & Assets</h3>
+                    <p>Discovered network hosts with port exposure and vulnerability scoring</p>
                 </div>
-                <button class="pill-btn primary" onclick="triggerLogCollection()">
-                    <i class="fa-solid fa-cloud-arrow-down"></i>
-                    <span>Ingest Logs</span>
+                <button class="nav-action-btn" onclick="scanNetwork()">
+                    <i class="fa-solid fa-radar"></i>
+                    <span>Scan Network</span>
                 </button>
             </div>
-        </div>
 
-        <div class="table-responsive">
-            <table class="cyber-table">
-                <thead>
-                    <tr>
-                        <th>Level</th>
-                        <th>Host</th>
-                        <th>Source</th>
-                        <th>Event Message</th>
-                        <th>Timestamp</th>
-                        <th style="text-align: right;">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="logTable">
-                    <tr><td colspan="6" style="text-align:center; color: var(--text-muted);">Loading security logs...</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
+            <div style="overflow-x: auto;">
+                <table class="sharp-table">
+                    <thead>
+                        <tr>
+                            <th>Hostname</th>
+                            <th>IP Address</th>
+                            <th>Operating System</th>
+                            <th>Risk Score</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="assetTable">
+                        <tr><td colspan="6" style="text-align:center; color: var(--text-muted);">Loading endpoint inventory...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-</main>
+        <!-- ROW 6: SECURITY AUDIT LOGS -->
+        <section class="data-card" id="logs">
+            <div class="data-card-header">
+                <div>
+                    <h3><i class="fa-solid fa-file-waveform" style="color: var(--accent-green);"></i> Security Audit Logs</h3>
+                    <p>Raw event log feed ingested from auth.log and syslog daemons</p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="searchLog" class="search-input" style="width: 260px;" placeholder="Filter message, host..." onkeyup="searchLogs()">
+                    <button class="nav-action-btn green" onclick="triggerLogCollection()">
+                        <i class="fa-solid fa-cloud-arrow-down"></i>
+                        <span>Ingest</span>
+                    </button>
+                </div>
+            </div>
 
-<!-- ================= SLIDE-OUT INSPECTOR DRAWER ================= -->
-<div id="drawerOverlay" class="drawer-backdrop" onclick="closeDrawer()"></div>
+            <div style="overflow-x: auto;">
+                <table class="sharp-table">
+                    <thead>
+                        <tr>
+                            <th>Level</th>
+                            <th>Host</th>
+                            <th>Source</th>
+                            <th>Event Message</th>
+                            <th>Timestamp</th>
+                            <th style="text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logTable">
+                        <tr><td colspan="6" style="text-align:center; color: var(--text-muted);">Loading logs...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-<div id="inspectorDrawer" class="inspector-drawer">
-    <div class="drawer-header">
+    </div>
+</div>
+
+<!-- ================= SLIDE-OUT SHARP INSPECTOR DRAWER ================= -->
+<div id="drawerOverlay" class="drawer-overlay" onclick="closeDrawer()"></div>
+
+<div id="sharpDrawer" class="sharp-drawer">
+    <div class="sharp-drawer-header">
         <h3 id="drawerTitle">
             <i class="fa-solid fa-shield-halved" style="color: var(--accent-green);"></i>
             <span>Inspection Details</span>
         </h3>
-        <button class="btn-icon" onclick="closeDrawer()" title="Close Inspector">
+        <button class="sharp-btn-icon" onclick="closeDrawer()" title="Close">
             <i class="fa-solid fa-xmark"></i>
         </button>
     </div>
-    <div class="drawer-body" id="drawerBody">
+    <div class="sharp-drawer-body" id="drawerBody">
         <p style="color: var(--text-muted);">Select an item to inspect.</p>
     </div>
 </div>
