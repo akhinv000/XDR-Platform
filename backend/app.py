@@ -1,6 +1,9 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
 
 from database import engine
 from models import Base
@@ -46,7 +49,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register Routers
+# Register API Routers
 app.include_router(auth_router)
 app.include_router(asset_router)
 app.include_router(dashboard_router)
@@ -55,9 +58,19 @@ app.include_router(discovery_router)
 app.include_router(alert_router)
 app.include_router(analytics_router)
 
+# Mount Frontend static files
+frontend_dir = Path(__file__).parent / "frontend"
+if not frontend_dir.exists():
+    frontend_dir = Path(__file__).parent.parent / "frontend"
+
+if frontend_dir.exists():
+    app.mount("/app", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
+
 
 @app.get("/")
 def home():
+    if frontend_dir.exists():
+        return RedirectResponse(url="/app/login.html")
     return {
         "application": "XDR Platform",
         "status": "Running",

@@ -2,7 +2,7 @@ FROM python:3.13-slim
 
 WORKDIR /app
 
-# Install system dependencies (e.g. nmap for asset discovery)
+# Install system dependencies (nmap for network asset discovery)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     nmap \
     && rm -rf /var/lib/apt/lists/*
@@ -12,6 +12,7 @@ COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY backend .
+COPY frontend /app/frontend
 
 EXPOSE 9000
 

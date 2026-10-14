@@ -4,43 +4,45 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    container_name: nexa-backend
+    container_name: xdr-backend
     ports:
       - "9000:9000"
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-nexa_xdr}
       - OPENSEARCH_HOST=opensearch
       - OPENSEARCH_PORT=9200
-      - OPENSEARCH_USE_SSL=false
+      - OPENSEARCH_USER=admin
+      - OPENSEARCH_PASSWORD=${OPENSEARCH_INITIAL_ADMIN_PASSWORD:-SecOps#XDR2026!}
+      - OPENSEARCH_USE_SSL=true
+      - OPENSEARCH_VERIFY_CERTS=false
     depends_on:
       - postgres
       - opensearch
 
   postgres:
     image: postgres:17
-    container_name: nexa-postgres
+    container_name: xdr-postgres
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       POSTGRES_DB: ${POSTGRES_DB:-nexa_xdr}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - xdr_postgres_data:/var/lib/postgresql/data
       - ../database/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - "5432:5432"
+      - "5439:5432"
 
   opensearch:
     image: opensearchproject/opensearch:2.19.1
-    container_name: nexa-opensearch
+    container_name: xdr-opensearch
     environment:
       - discovery.type=single-node
-      - plugins.security.disabled=true
-      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=${OPENSEARCH_INITIAL_ADMIN_PASSWORD:-AdminPassword123!}
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=${OPENSEARCH_INITIAL_ADMIN_PASSWORD:-SecOps#XDR2026!}
     volumes:
-      - opensearch_data:/usr/share/opensearch/data
+      - xdr_opensearch_data:/usr/share/opensearch/data
     ports:
       - "9200:9200"
 
 volumes:
-  postgres_data:
-  opensearch_data:
+  xdr_postgres_data:
+  xdr_opensearch_data:
