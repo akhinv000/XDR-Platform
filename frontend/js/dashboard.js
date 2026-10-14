@@ -1,5 +1,5 @@
 /* ===========================================================
-   NEXA XDR PLATFORM - SHARP CORNER GREENLIFY CONTROLLER
+   XDR BASE - SHARP CORNER GREENLIFY CONTROLLER
 =========================================================== */
 
 function getApiBaseUrl() {

@@ -1,4 +1,4 @@
-# XDR Platform
+# XDR BASE
 
 An enterprise Extended Detection and Response (XDR) platform providing real-time security monitoring, automated threat alert detection, network asset discovery, and SOC analytics.
 
