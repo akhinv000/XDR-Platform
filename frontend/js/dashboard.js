@@ -1,5 +1,6 @@
 /* ===========================================================
-   XDR BASE - SHARP CORNER GREENLIFY CONTROLLER
+   XDR BASE - SHARP CORNER GREENLIFY SOC CONTROLLER
+   Pure Real Backend Telemetry - Zero Placeholder Data
 =========================================================== */
 
 function getApiBaseUrl() {
@@ -18,8 +19,11 @@ let allAssets = [];
 let allLogs = [];
 let allAlerts = [];
 
-let barChartInstance;
-let overviewChartInstance;
+// Chart Instances
+let alertSeverityChartInstance = null;
+let logSourceChartInstance = null;
+let assetOsChartInstance = null;
+let riskDistChartInstance = null;
 
 /* ===========================================================
    HTML SANITIZATION (PREVENT XSS)
@@ -73,132 +77,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const userEl = document.getElementById("username");
     if (userEl) userEl.innerText = username;
 
-    initCharts();
-
+    // Load All Real Data
     loadDashboard();
+    loadAnalytics();
     loadAssets();
     loadAlerts();
     loadLogs();
 });
-
-/* ===========================================================
-   CHARTS INITIALIZATION (Matching Reference Image)
-=========================================================== */
-function initCharts() {
-    // 1. Bar Chart (Left)
-    const barCanvas = document.getElementById("barChart");
-    if (barCanvas) {
-        const ctxBar = barCanvas.getContext("2d");
-        barChartInstance = new Chart(ctxBar, {
-            type: "bar",
-            data: {
-                labels: ["M", "T", "W", "T", "F", "S", "S", "M", "T"],
-                datasets: [{
-                    label: "Threat Ingestion",
-                    data: [320, 240, 180, 290, 410, 360, 480, 390, 450],
-                    backgroundColor: "#01b574",
-                    borderRadius: 0,
-                    barThickness: 6,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
-                },
-                scales: {
-                    x: {
-                        grid: { display: false },
-                        ticks: { color: "#718096", font: { size: 10, family: "Plus Jakarta Sans" } }
-                    },
-                    y: {
-                        grid: { color: "rgba(255, 255, 255, 0.04)" },
-                        ticks: { color: "#718096", font: { size: 10, family: "JetBrains Mono" } }
-                    }
-                }
-            }
-        });
-    }
-
-    // 2. Sales / Threat Overview Area Chart (Right, from image: dual green + white curves)
-    const overviewCanvas = document.getElementById("overviewChart");
-    if (overviewCanvas) {
-        const ctxOver = overviewCanvas.getContext("2d");
-
-        const greenGradient = ctxOver.createLinearGradient(0, 0, 0, 240);
-        greenGradient.addColorStop(0, "rgba(1, 181, 116, 0.45)");
-        greenGradient.addColorStop(1, "rgba(1, 181, 116, 0.0)");
-
-        const whiteGradient = ctxOver.createLinearGradient(0, 0, 0, 240);
-        whiteGradient.addColorStop(0, "rgba(255, 255, 255, 0.2)");
-        whiteGradient.addColorStop(1, "rgba(255, 255, 255, 0.0)");
-
-        overviewChartInstance = new Chart(ctxOver, {
-            type: "line",
-            data: {
-                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                datasets: [
-                    {
-                        label: "Active Detections",
-                        data: [200, 230, 300, 350, 370, 420, 550, 400, 380, 500, 460, 520],
-                        borderColor: "#01b574",
-                        backgroundColor: greenGradient,
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.45,
-                        pointRadius: 0,
-                        pointHoverRadius: 5,
-                        pointHoverBackgroundColor: "#01b574",
-                    },
-                    {
-                        label: "Baseline Events",
-                        data: [500, 340, 110, 300, 490, 350, 270, 130, 425, 300, 210, 450],
-                        borderColor: "#ffffff",
-                        backgroundColor: whiteGradient,
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.45,
-                        pointRadius: 0,
-                        pointHoverRadius: 4,
-                        pointHoverBackgroundColor: "#ffffff",
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: {
-                    mode: "index",
-                    intersect: false
-                },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: "#08100d",
-                        titleColor: "#ffffff",
-                        bodyColor: "#a0aec0",
-                        borderColor: "#01b574",
-                        borderWidth: 1,
-                        padding: 10,
-                        cornerRadius: 0,
-                        usePointStyle: true
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: { color: "rgba(255, 255, 255, 0.04)" },
-                        ticks: { color: "#718096", font: { size: 11, family: "Plus Jakarta Sans" } }
-                    },
-                    y: {
-                        grid: { color: "rgba(255, 255, 255, 0.04)" },
-                        ticks: { color: "#718096", font: { size: 11, family: "JetBrains Mono" } }
-                    }
-                }
-            }
-        });
-    }
-}
 
 /* ===========================================================
    TOAST NOTIFICATIONS (Sharp Rectangles)
@@ -223,7 +108,7 @@ function showToast(message, type = "info") {
 
     setTimeout(() => {
         toast.remove();
-    }, 3200);
+    }, 3500);
 }
 
 /* ===========================================================
@@ -235,7 +120,7 @@ function logout() {
 }
 
 /* ===========================================================
-   LOAD DASHBOARD STATS
+   LOAD DASHBOARD STATS (GET /dashboard/stats)
 =========================================================== */
 async function loadDashboard() {
     try {
@@ -247,18 +132,8 @@ async function loadDashboard() {
         animateCounter("activeAlerts", data.active_alerts);
         animateCounter("highAlerts", data.high_alerts);
         animateCounter("totalLogs", data.total_logs);
-
-        // Update mini metrics
-        const miniAssets = document.getElementById("miniAssets");
-        if (miniAssets) miniAssets.innerText = data.total_assets;
-
-        const miniThreats = document.getElementById("miniThreats");
-        if (miniThreats) miniThreats.innerText = data.active_alerts;
-
-        const miniLogs = document.getElementById("miniLogs");
-        if (miniLogs) miniLogs.innerText = data.total_logs;
     } catch (error) {
-        console.error(error);
+        console.error("Dashboard stats error:", error);
     }
 }
 
@@ -267,7 +142,7 @@ function animateCounter(id, value) {
     if (!element) return;
 
     const start = Number(element.innerText.replace(/,/g, "")) || 0;
-    const duration = 350;
+    const duration = 300;
     const startTime = performance.now();
 
     function update(time) {
@@ -283,19 +158,198 @@ function animateCounter(id, value) {
 }
 
 /* ===========================================================
-   AUTO REFRESH (30s)
+   LOAD REAL ANALYTICS (GET /analytics/)
+   Populates 4 real charts based strictly on database distributions
 =========================================================== */
-setInterval(() => {
-    if (localStorage.getItem("token")) {
-        loadDashboard();
-        loadAssets();
-        loadAlerts();
-        loadLogs();
+async function loadAnalytics() {
+    try {
+        const response = await authFetch(API + "/analytics/");
+        if (!response.ok) throw new Error("Unable to load analytics.");
+
+        const data = await response.json();
+        renderAnalytics(data);
+    } catch (error) {
+        console.error("Analytics error:", error);
     }
-}, 30000);
+}
+
+function renderAnalytics(data) {
+    const defaultChartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                backgroundColor: "#08100d",
+                titleColor: "#ffffff",
+                bodyColor: "#a0aec0",
+                borderColor: "#01b574",
+                borderWidth: 1,
+                padding: 10,
+                cornerRadius: 0,
+                usePointStyle: true,
+                titleFont: { family: "Plus Jakarta Sans", weight: "700" },
+                bodyFont: { family: "JetBrains Mono" }
+            }
+        },
+        scales: {
+            x: {
+                grid: { color: "rgba(255, 255, 255, 0.03)" },
+                ticks: { color: "#718096", font: { size: 11, family: "Plus Jakarta Sans" } }
+            },
+            y: {
+                beginAtZero: true,
+                grid: { color: "rgba(255, 255, 255, 0.03)" },
+                ticks: {
+                    color: "#718096",
+                    font: { size: 11, family: "JetBrains Mono" },
+                    precision: 0
+                }
+            }
+        }
+    };
+
+    // 1. ALERTS BY SEVERITY (Bar Chart)
+    const alertCanvas = document.getElementById("alertSeverityChart");
+    if (alertCanvas) {
+        const alertsData = data.alerts_by_severity || [];
+        const labels = alertsData.map(a => a.severity || "Unknown");
+        const counts = alertsData.map(a => a.total);
+
+        const colors = labels.map(label => {
+            const l = label.toLowerCase();
+            if (l === "high" || l === "critical") return "#e53e3e";
+            if (l === "medium") return "#eab308";
+            return "#01b574";
+        });
+
+        // Dynamic legend
+        const legendEl = document.getElementById("alertSeverityLegend");
+        if (legendEl) {
+            legendEl.innerHTML = alertsData.map(a => {
+                const l = (a.severity || "").toLowerCase();
+                const color = (l === "high" || l === "critical") ? "#e53e3e" : (l === "medium" ? "#eab308" : "#01b574");
+                return `<span style="color: ${color}; font-size: 11px; font-weight: 700;">● ${escapeHtml(a.severity)}: ${a.total}</span>`;
+            }).join(" &nbsp; ");
+        }
+
+        if (alertSeverityChartInstance) {
+            alertSeverityChartInstance.destroy();
+        }
+
+        const ctx = alertCanvas.getContext("2d");
+        alertSeverityChartInstance = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: labels.length ? labels : ["No Alerts"],
+                datasets: [{
+                    label: "Alert Count",
+                    data: counts.length ? counts : [0],
+                    backgroundColor: colors.length ? colors : ["#01b574"],
+                    borderRadius: 0,
+                    borderWidth: 1,
+                    borderColor: colors.length ? colors : ["#01b574"],
+                    barThickness: 28
+                }]
+            },
+            options: defaultChartOptions
+        });
+    }
+
+    // 2. LOGS BY SOURCE (Bar Chart)
+    const logCanvas = document.getElementById("logSourceChart");
+    if (logCanvas) {
+        const logsData = data.logs_by_source || [];
+        const labels = logsData.map(l => l.source || "System");
+        const counts = logsData.map(l => l.total);
+
+        if (logSourceChartInstance) {
+            logSourceChartInstance.destroy();
+        }
+
+        const ctx = logCanvas.getContext("2d");
+        logSourceChartInstance = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: labels.length ? labels : ["No Logs"],
+                datasets: [{
+                    label: "Events Ingested",
+                    data: counts.length ? counts : [0],
+                    backgroundColor: "#01b574",
+                    borderRadius: 0,
+                    barThickness: 28
+                }]
+            },
+            options: defaultChartOptions
+        });
+    }
+
+    // 3. ENDPOINTS BY OPERATING SYSTEM (Horizontal Bar or Bar Chart)
+    const osCanvas = document.getElementById("assetOsChart");
+    if (osCanvas) {
+        const osData = data.assets_by_os || [];
+        const labels = osData.map(o => o.operating_system || "Unknown");
+        const counts = osData.map(o => o.total);
+
+        if (assetOsChartInstance) {
+            assetOsChartInstance.destroy();
+        }
+
+        const ctx = osCanvas.getContext("2d");
+        assetOsChartInstance = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: labels.length ? labels : ["No Endpoints"],
+                datasets: [{
+                    label: "Endpoints",
+                    data: counts.length ? counts : [0],
+                    backgroundColor: ["#01b574", "#00d27a", "#00b5d8", "#4fd1c5", "#718096"],
+                    borderRadius: 0,
+                    barThickness: 28
+                }]
+            },
+            options: defaultChartOptions
+        });
+    }
+
+    // 4. ASSET RISK DISTRIBUTION (Bar Chart)
+    const riskCanvas = document.getElementById("riskDistChart");
+    if (riskCanvas) {
+        const riskData = data.risk_distribution || [];
+        const labels = riskData.map(r => `${r.level} Risk`);
+        const counts = riskData.map(r => r.total);
+
+        const colors = riskData.map(r => {
+            const l = (r.level || "").toLowerCase();
+            if (l === "high") return "#e53e3e";
+            if (l === "medium") return "#eab308";
+            return "#01b574";
+        });
+
+        if (riskDistChartInstance) {
+            riskDistChartInstance.destroy();
+        }
+
+        const ctx = riskCanvas.getContext("2d");
+        riskDistChartInstance = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: labels.length ? labels : ["No Risk Data"],
+                datasets: [{
+                    label: "Host Count",
+                    data: counts.length ? counts : [0],
+                    backgroundColor: colors.length ? colors : ["#01b574"],
+                    borderRadius: 0,
+                    barThickness: 28
+                }]
+            },
+            options: defaultChartOptions
+        });
+    }
+}
 
 /* ===========================================================
-   LOAD ASSETS
+   LOAD ASSETS (GET /assets/)
 =========================================================== */
 async function loadAssets() {
     try {
@@ -305,7 +359,7 @@ async function loadAssets() {
         allAssets = await response.json();
         renderAssets(allAssets);
     } catch (error) {
-        console.error(error);
+        console.error("Assets load error:", error);
     }
 }
 
@@ -316,7 +370,7 @@ function renderAssets(assets) {
     table.innerHTML = "";
 
     if (!assets || assets.length === 0) {
-        table.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 20px;">No endpoints registered. Click 'Scan Network' to discover devices.</td></tr>`;
+        table.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 24px;">No endpoints registered. Click 'Scan Network' to discover devices.</td></tr>`;
         return;
     }
 
@@ -355,7 +409,7 @@ function showAssetDetails(id) {
 
     document.getElementById("drawerBody").innerHTML = `
         <table class="sharp-drawer-table">
-            <tr><td>Hostname</td><td>${escapeHtml(asset.hostname)}</td></tr>
+            <tr><td>Hostname</td><td><strong>${escapeHtml(asset.hostname)}</strong></td></tr>
             <tr><td>IP Address</td><td>${escapeHtml(asset.ip_address)}</td></tr>
             <tr><td>MAC Address</td><td>${escapeHtml(asset.mac_address || "-")}</td></tr>
             <tr><td>Vendor Hardware</td><td>${escapeHtml(asset.vendor || "-")}</td></tr>
@@ -373,7 +427,7 @@ function showAssetDetails(id) {
 }
 
 /* ===========================================================
-   LOAD ALERTS
+   LOAD ALERTS (GET /alerts/)
 =========================================================== */
 async function loadAlerts() {
     try {
@@ -383,7 +437,7 @@ async function loadAlerts() {
         allAlerts = await response.json();
         renderAlerts(allAlerts);
     } catch (error) {
-        console.error(error);
+        console.error("Alerts load error:", error);
     }
 }
 
@@ -394,7 +448,7 @@ function renderAlerts(alerts) {
     table.innerHTML = "";
 
     if (!alerts || alerts.length === 0) {
-        table.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 20px;">No active security alerts detected.</td></tr>`;
+        table.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 24px;">No active security alerts detected.</td></tr>`;
         return;
     }
 
@@ -438,7 +492,7 @@ function showAlertDetails(id) {
             <tr><td>Target Endpoint</td><td>${escapeHtml(alert.hostname)}</td></tr>
             <tr><td>Investigation Status</td><td><span class="sharp-badge ${alert.status === 'Open' ? 'open' : 'acknowledged'}">${escapeHtml(alert.status)}</span></td></tr>
             <tr><td>Detected Timestamp</td><td>${escapeHtml(dateStr)}</td></tr>
-            <tr><td>Raw Payload / Log</td><td style="color: var(--accent-green); word-break: break-all;">${escapeHtml(alert.description)}</td></tr>
+            <tr><td>Raw Payload / Log</td><td style="color: var(--accent-green); word-break: break-all; font-family: 'JetBrains Mono', monospace; font-size: 11px;">${escapeHtml(alert.description)}</td></tr>
         </table>
         ${alert.status === "Open" ? `
             <div style="margin-top: 24px;">
@@ -462,14 +516,15 @@ async function acknowledgeAlert(alertId) {
         closeDrawer();
         await loadAlerts();
         await loadDashboard();
+        await loadAnalytics();
     } catch (error) {
-        console.error(error);
+        console.error("Acknowledge alert error:", error);
         showToast("Failed to acknowledge alert.", "error");
     }
 }
 
 /* ===========================================================
-   LOAD LOGS
+   LOAD LOGS (GET /logs/)
 =========================================================== */
 async function loadLogs() {
     try {
@@ -479,7 +534,7 @@ async function loadLogs() {
         allLogs = await response.json();
         renderLogs(allLogs);
     } catch (error) {
-        console.error(error);
+        console.error("Logs load error:", error);
     }
 }
 
@@ -490,7 +545,7 @@ function renderLogs(logs) {
     table.innerHTML = "";
 
     if (!logs || logs.length === 0) {
-        table.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 20px;">No logs available. Click 'Ingest' to process events.</td></tr>`;
+        table.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 24px;">No logs available. Click 'Ingest Logs' to process events.</td></tr>`;
         return;
     }
 
@@ -529,12 +584,12 @@ function showLogDetails(index) {
 
     document.getElementById("drawerBody").innerHTML = `
         <table class="sharp-drawer-table">
-            <tr><td>Host Name</td><td>${escapeHtml(log.hostname)}</td></tr>
+            <tr><td>Host Name</td><td><strong>${escapeHtml(log.hostname)}</strong></td></tr>
             <tr><td>Threat Level</td><td><span class="sharp-badge ${(log.level || 'low').toLowerCase()}">${escapeHtml(log.level)}</span></td></tr>
             <tr><td>Log Source</td><td>${escapeHtml(log.source)}</td></tr>
             <tr><td>Category</td><td>${escapeHtml(log.category || "AUTH")}</td></tr>
             <tr><td>Timestamp</td><td>${escapeHtml(log.timestamp ? new Date(log.timestamp).toLocaleString() : "-")}</td></tr>
-            <tr><td>Message Payload</td><td style="word-break: break-all; color: var(--accent-green);">${escapeHtml(log.message)}</td></tr>
+            <tr><td>Message Payload</td><td style="word-break: break-all; color: var(--accent-green); font-family: 'JetBrains Mono', monospace; font-size: 11px;">${escapeHtml(log.message)}</td></tr>
         </table>
     `;
 
@@ -545,7 +600,12 @@ function searchLogs() {
     const input = document.getElementById("searchLog") || document.getElementById("globalSearch");
     if (!input) return;
 
-    const keyword = input.value.toLowerCase();
+    const keyword = input.value.toLowerCase().trim();
+    if (!keyword) {
+        renderLogs(allLogs);
+        return;
+    }
+
     const filtered = allLogs.filter(log =>
         (log.hostname && log.hostname.toLowerCase().includes(keyword)) ||
         (log.source && log.source.toLowerCase().includes(keyword)) ||
@@ -578,21 +638,28 @@ async function scanNetwork() {
         showToast(`${data.assets_discovered} assets discovered.`, "success");
 
         await loadDashboard();
+        await loadAnalytics();
         await loadAssets();
         await loadAlerts();
         await loadLogs();
     } catch (error) {
-        console.error(error);
+        console.error("Scan error:", error);
         showToast("Network scan failed.", "error");
     } finally {
         if (btn) {
             btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-network-wired"></i> <span>Scan Network</span>';
+            btn.innerHTML = '<i class="fa-solid fa-radar"></i> <span>Scan Network</span>';
         }
     }
 }
 
 async function triggerLogCollection() {
+    const btn = document.getElementById("ingestBtn");
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Ingesting...</span>';
+    }
+
     try {
         const response = await authFetch(API + "/logs/collect", { method: "POST" });
         if (!response.ok) throw new Error("Failed to collect logs");
@@ -601,11 +668,17 @@ async function triggerLogCollection() {
         showToast(`Ingested ${data.summary.logs_parsed} events, detected ${data.summary.new_alerts_generated} threat alerts.`, "success");
 
         await loadDashboard();
+        await loadAnalytics();
         await loadAlerts();
         await loadLogs();
     } catch (error) {
-        console.error(error);
+        console.error("Log ingestion error:", error);
         showToast("Failed to ingest logs.", "error");
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> <span>Ingest Logs</span>';
+        }
     }
 }
 
@@ -625,3 +698,16 @@ function closeDrawer() {
     if (overlay) overlay.classList.remove("active");
     if (drawer) drawer.classList.remove("active");
 }
+
+/* ===========================================================
+   AUTO REFRESH (Every 30 Seconds)
+=========================================================== */
+setInterval(() => {
+    if (localStorage.getItem("token")) {
+        loadDashboard();
+        loadAnalytics();
+        loadAssets();
+        loadAlerts();
+        loadLogs();
+    }
+}, 30000);

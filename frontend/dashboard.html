@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XDR BASE | Dashboard</title>
+    <title>XDR BASE | SOC Dashboard</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
 
-<!-- ================= LEFT SIDEBAR (Greenlify Style) ================= -->
+<!-- ================= LEFT SIDEBAR (Greenlify Sharp Style) ================= -->
 <aside class="sidebar">
     <div>
         <a href="#overview" class="sidebar-brand">
             <div class="sidebar-brand-icon">
-                <i class="fa-solid fa-shapes"></i>
+                <i class="fa-solid fa-shield-halved"></i>
             </div>
             <span class="sidebar-brand-title">XDR BASE</span>
         </a>
@@ -22,7 +22,7 @@
         <ul class="sidebar-menu">
             <li>
                 <a href="#overview" class="sidebar-link active">
-                    <i class="fa-solid fa-house"></i>
+                    <i class="fa-solid fa-table-columns"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
@@ -51,7 +51,7 @@
                 </a>
             </li>
 
-            <li class="sidebar-heading">ACCOUNT PAGES</li>
+            <li class="sidebar-heading">SOC OPERATIONS</li>
 
             <li>
                 <a href="javascript:void(0)" onclick="scanNetwork()" class="sidebar-link">
@@ -74,14 +74,13 @@
         </ul>
     </div>
 
-    <!-- Help Card from Reference Image -->
-    <div class="sidebar-help-card">
-        <div class="sidebar-help-icon">
-            <i class="fa-solid fa-question"></i>
+    <!-- Real System Status Box (Sharp 0px) -->
+    <div class="sidebar-status-box">
+        <div class="status-indicator">
+            <span class="status-dot live"></span>
+            <span class="status-title">CORE ONLINE</span>
         </div>
-        <div class="sidebar-help-title">Need help?</div>
-        <div class="sidebar-help-sub">Please check our security docs & API guide.</div>
-        <button type="button" class="btn-doc" onclick="window.open('/docs', '_blank')">DOCUMENTATION</button>
+        <div class="status-detail">FastAPI • PostgreSQL • OpenSearch</div>
     </div>
 </aside>
 
@@ -92,31 +91,31 @@
     <header class="top-navbar">
         <div class="breadcrumb-box">
             <div class="breadcrumb-path">
-                <a href="#">Pages</a> / <span style="color: #ffffff;">Dashboard</span>
+                <span>SOC</span> / <span style="color: #ffffff;">Platform Control</span>
             </div>
-            <div class="breadcrumb-title">Dashboard</div>
+            <div class="breadcrumb-title">XDR BASE Dashboard</div>
         </div>
 
         <div class="top-navbar-right">
             <div class="search-bar">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" class="search-input" id="globalSearch" placeholder="Type here..." onkeyup="searchLogs()">
+                <input type="text" class="search-input" id="globalSearch" placeholder="Search security logs..." onkeyup="searchLogs()">
             </div>
 
-            <button class="nav-action-btn green" onclick="scanNetwork()" id="scanBtn">
-                <i class="fa-solid fa-network-wired"></i>
+            <button class="nav-action-btn green" onclick="scanNetwork()" id="scanBtn" title="Discover network assets">
+                <i class="fa-solid fa-radar"></i>
                 <span>Scan Network</span>
             </button>
 
-            <button class="nav-action-btn" onclick="triggerLogCollection()">
+            <button class="nav-action-btn" onclick="triggerLogCollection()" id="ingestBtn" title="Ingest auth.log and trigger threat detection">
                 <i class="fa-solid fa-arrows-rotate"></i>
                 <span>Ingest Logs</span>
             </button>
 
             <div style="display: flex; align-items: center; gap: 8px; margin-left: 8px;">
-                <a href="#" class="nav-icon-link" title="Operator Profile">
-                    <i class="fa-solid fa-user"></i>
-                </a>
+                <span class="nav-icon-link" title="Operator Profile">
+                    <i class="fa-solid fa-user-shield"></i>
+                </span>
                 <span id="username" style="font-size: 13px; font-weight: 700; color: #ffffff;">Administrator</span>
             </div>
 
@@ -129,152 +128,133 @@
     <!-- Page Content -->
     <div class="page-content" id="overview">
 
-        <!-- ROW 1: 4 METRIC CARDS -->
+        <!-- ROW 1: 4 FUNCTIONAL METRIC CARDS (Strictly Real Backend Data) -->
         <section class="metrics-row">
             <div class="metric-card">
                 <div class="metric-info">
-                    <span class="metric-label">Active Threats</span>
+                    <span class="metric-label">Active Threat Alerts</span>
                     <div class="metric-number-row">
                         <span class="metric-number" id="activeAlerts">0</span>
-                        <span class="metric-trend pos">+55%</span>
                     </div>
+                    <span class="metric-sublabel warn"><i class="fa-solid fa-triangle-exclamation"></i> Triage Pending</span>
                 </div>
                 <div class="metric-icon-box">
-                    <i class="fa-solid fa-wallet"></i>
+                    <i class="fa-solid fa-bell"></i>
                 </div>
             </div>
 
             <div class="metric-card">
                 <div class="metric-info">
-                    <span class="metric-label">Monitored Assets</span>
-                    <div class="metric-number-row">
-                        <span class="metric-number" id="totalAssets">0</span>
-                        <span class="metric-trend pos">+5%</span>
-                    </div>
-                </div>
-                <div class="metric-icon-box">
-                    <i class="fa-solid fa-globe"></i>
-                </div>
-            </div>
-
-            <div class="metric-card">
-                <div class="metric-info">
-                    <span class="metric-label">Critical / High Alerts</span>
+                    <span class="metric-label">High / Critical Alerts</span>
                     <div class="metric-number-row">
                         <span class="metric-number" id="highAlerts" style="color: var(--status-critical);">0</span>
-                        <span class="metric-trend neg">-14%</span>
                     </div>
+                    <span class="metric-sublabel crit"><i class="fa-solid fa-fire"></i> Immediate Attention</span>
                 </div>
-                <div class="metric-icon-box">
-                    <i class="fa-solid fa-file-lines"></i>
+                <div class="metric-icon-box" style="background: var(--status-critical); box-shadow: 0 0 16px rgba(229, 62, 62, 0.35);">
+                    <i class="fa-solid fa-shield-virus"></i>
                 </div>
             </div>
 
             <div class="metric-card">
                 <div class="metric-info">
-                    <span class="metric-label">Total Event Logs</span>
+                    <span class="metric-label">Monitored Endpoints</span>
                     <div class="metric-number-row">
-                        <span class="metric-number" id="totalLogs">0</span>
-                        <span class="metric-trend pos">+8%</span>
+                        <span class="metric-number" id="totalAssets">0</span>
                     </div>
+                    <span class="metric-sublabel green"><i class="fa-solid fa-circle-check"></i> Network Discovered</span>
                 </div>
                 <div class="metric-icon-box">
-                    <i class="fa-solid fa-cart-shopping"></i>
+                    <i class="fa-solid fa-server"></i>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-info">
+                    <span class="metric-label">Ingested Audit Events</span>
+                    <div class="metric-number-row">
+                        <span class="metric-number" id="totalLogs">0</span>
+                    </div>
+                    <span class="metric-sublabel green"><i class="fa-solid fa-database"></i> Telemetry Records</span>
+                </div>
+                <div class="metric-icon-box">
+                    <i class="fa-solid fa-file-waveform"></i>
                 </div>
             </div>
         </section>
 
-        <!-- ROW 2: DUAL FEATURE CARDS (XDR BASE Hero & Rocket Card) -->
-        <section class="hero-row">
-            <div class="banner-card">
-                <div class="banner-content">
-                    <span class="banner-tag">Built for XDR BASE</span>
-                    <h2 class="banner-heading">Autonomous SOC Dashboard</h2>
-                    <p class="banner-desc">The dashboard provides a centralized, user-friendly interface to monitor, analyze, and manage real-time extended detection and response telemetry.</p>
-                    <a class="banner-link" onclick="triggerLogCollection()">
-                        <span>Trigger automated threat evaluation</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-                <div class="greenlify-box">
-                    <span>XDR BASE</span>
-                </div>
+        <!-- ROW 2: REAL FUNCTIONAL ANALYTICS CHARTS (Strictly GET /analytics/) -->
+        <section class="analytics-section" id="analytics">
+            <div class="section-title-box">
+                <div class="section-badge"><i class="fa-solid fa-chart-pie"></i> REAL TELEMETRY ANALYTICS</div>
+                <h2>Security Distribution & Posture</h2>
+                <p>Telemetry distributions computed directly from live assets, alerts, and ingested syslog events</p>
             </div>
 
-            <div class="intel-card">
-                <div>
-                    <span class="banner-tag" style="color: var(--accent-green);">Threat Intelligence</span>
-                    <h3 style="margin-top: 6px;">Work with the Rockets</h3>
-                    <p style="margin-top: 8px;">Autonomous threat mitigation is a modern high-stakes positive-sum game. It is all about who detects and triages the zero-day vector first.</p>
+            <div class="analytics-grid">
+                <!-- Chart 1: Alerts by Severity -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title-group">
+                            <h3>Alerts by Severity</h3>
+                            <p>Active incidents grouped by threat severity level</p>
+                        </div>
+                        <div class="chart-legend-box" id="alertSeverityLegend">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                    <div class="chart-canvas-container">
+                        <canvas id="alertSeverityChart"></canvas>
+                    </div>
                 </div>
-                <a class="banner-link" onclick="scanNetwork()">
-                    <span>Scan attack surfaces</span>
-                    <i class="fa-solid fa-arrow-right"></i>
-                </a>
-            </div>
-        </section>
 
-        <!-- ROW 3: CHARTS ROW (Bar Chart + Area Overview) -->
-        <section class="charts-row" id="analytics">
-            <!-- Left Chart: Bar Chart with mini metrics -->
-            <div class="chart-card">
-                <div class="chart-canvas-container">
-                    <canvas id="barChart"></canvas>
-                </div>
-                <div class="chart-header" style="margin-bottom: 8px;">
-                    <div class="chart-title-group">
-                        <h3>Active Threats</h3>
-                        <p><strong>(+23)</strong> than last week</p>
+                <!-- Chart 2: Security Logs by Origin Daemon -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title-group">
+                            <h3>Audit Logs by Source</h3>
+                            <p>Event breakdown across authentication daemons</p>
+                        </div>
+                    </div>
+                    <div class="chart-canvas-container">
+                        <canvas id="logSourceChart"></canvas>
                     </div>
                 </div>
-                <div class="mini-metrics-bar">
-                    <div class="mini-metric-item">
-                        <div class="mini-metric-tag"><i class="fa-solid fa-wallet"></i><span>Endpoints</span></div>
-                        <div class="mini-metric-value" id="miniAssets">3</div>
-                        <div class="mini-progress-bar"><div class="mini-progress-fill" style="width: 75%;"></div></div>
-                    </div>
-                    <div class="mini-metric-item">
-                        <div class="mini-metric-tag"><i class="fa-solid fa-rocket"></i><span>Threats</span></div>
-                        <div class="mini-metric-value" id="miniThreats">169</div>
-                        <div class="mini-progress-bar"><div class="mini-progress-fill" style="width: 90%;"></div></div>
-                    </div>
-                    <div class="mini-metric-item">
-                        <div class="mini-metric-tag"><i class="fa-solid fa-cart-shopping"></i><span>Events</span></div>
-                        <div class="mini-metric-value" id="miniLogs">473</div>
-                        <div class="mini-progress-bar"><div class="mini-progress-fill" style="width: 60%;"></div></div>
-                    </div>
-                    <div class="mini-metric-item">
-                        <div class="mini-metric-tag"><i class="fa-solid fa-wrench"></i><span>Risk %</span></div>
-                        <div class="mini-metric-value">70%</div>
-                        <div class="mini-progress-bar"><div class="mini-progress-fill" style="width: 70%;"></div></div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Right Chart: Green & White Spline Area Chart from Image -->
-            <div class="chart-card">
-                <div class="chart-header">
-                    <div class="chart-title-group">
-                        <h3>Threat Telemetry Overview</h3>
-                        <p><strong>(+5) more</strong> in 2026</p>
+                <!-- Chart 3: Endpoints by OS -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title-group">
+                            <h3>Endpoints by Operating System</h3>
+                            <p>Distribution of discovered operating systems</p>
+                        </div>
                     </div>
-                    <div style="display: flex; gap: 12px; font-size: 11px; font-weight: 600;">
-                        <span style="color: var(--accent-green);">● Active Detections</span>
-                        <span style="color: #ffffff;">● Baseline Traffic</span>
+                    <div class="chart-canvas-container">
+                        <canvas id="assetOsChart"></canvas>
                     </div>
                 </div>
-                <div class="chart-canvas-container" style="height: 280px;">
-                    <canvas id="overviewChart"></canvas>
+
+                <!-- Chart 4: Endpoint Risk Profile -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title-group">
+                            <h3>Endpoint Risk Distribution</h3>
+                            <p>Asset posture categorized by port vulnerability score</p>
+                        </div>
+                    </div>
+                    <div class="chart-canvas-container">
+                        <canvas id="riskDistChart"></canvas>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- ROW 4: THREAT ALERTS TABLE -->
+        <!-- ROW 3: THREAT ALERTS TABLE -->
         <section class="data-card" id="alerts">
             <div class="data-card-header">
                 <div>
                     <h3><i class="fa-solid fa-triangle-exclamation" style="color: var(--accent-green);"></i> Active Threat Detections</h3>
-                    <p>Live threat events correlated across auth.log and system authentication daemons</p>
+                    <p>Live threat events correlated across auth.log and authentication daemons</p>
                 </div>
                 <button class="nav-action-btn green" onclick="triggerLogCollection()">
                     <i class="fa-solid fa-rotate"></i>
@@ -295,13 +275,13 @@
                         </tr>
                     </thead>
                     <tbody id="alertTable">
-                        <tr><td colspan="6" style="text-align:center; color: var(--text-muted);">Loading alert telemetry...</td></tr>
+                        <tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 24px;">Loading threat alerts...</td></tr>
                     </tbody>
                 </table>
             </div>
         </section>
 
-        <!-- ROW 5: ENDPOINT INVENTORY TABLE -->
+        <!-- ROW 4: ENDPOINT INVENTORY TABLE -->
         <section class="data-card" id="assets">
             <div class="data-card-header">
                 <div>
@@ -327,13 +307,13 @@
                         </tr>
                     </thead>
                     <tbody id="assetTable">
-                        <tr><td colspan="6" style="text-align:center; color: var(--text-muted);">Loading endpoint inventory...</td></tr>
+                        <tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 24px;">Loading endpoint inventory...</td></tr>
                     </tbody>
                 </table>
             </div>
         </section>
 
-        <!-- ROW 6: SECURITY AUDIT LOGS -->
+        <!-- ROW 5: SECURITY AUDIT LOGS -->
         <section class="data-card" id="logs">
             <div class="data-card-header">
                 <div>
@@ -362,7 +342,7 @@
                         </tr>
                     </thead>
                     <tbody id="logTable">
-                        <tr><td colspan="6" style="text-align:center; color: var(--text-muted);">Loading logs...</td></tr>
+                        <tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 24px;">Loading logs...</td></tr>
                     </tbody>
                 </table>
             </div>

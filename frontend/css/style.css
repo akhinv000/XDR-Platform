@@ -194,60 +194,50 @@ body {
     box-shadow: 0 0 14px var(--accent-green-glow);
 }
 
-/* Sidebar Help Card (from image) */
-.sidebar-help-card {
-    background: linear-gradient(135deg, #0d281e 0%, #081711 100%);
-    border: 1px solid var(--accent-green-border);
-    padding: 18px 16px;
-    position: relative;
-    overflow: hidden;
+/* Sidebar Real System Status Box (Sharp 0px) */
+.sidebar-status-box {
+    background: #0c1612;
+    border: 1px solid var(--border-color);
+    padding: 14px;
+    margin-top: 16px;
 }
 
-.sidebar-help-icon {
-    width: 30px;
-    height: 30px;
-    background: var(--accent-green);
-    color: var(--text-inverse);
+.status-indicator {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 12px;
+    gap: 8px;
+    margin-bottom: 6px;
 }
 
-.sidebar-help-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 4px;
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent-green);
+    display: inline-block;
 }
 
-.sidebar-help-sub {
+.status-dot.live {
+    box-shadow: 0 0 10px var(--accent-green);
+    animation: pulseStatus 2s infinite ease-in-out;
+}
+
+@keyframes pulseStatus {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.status-title {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--accent-green);
+    text-transform: uppercase;
+}
+
+.status-detail {
     font-size: 11px;
     color: var(--text-muted);
-    margin-bottom: 14px;
-    line-height: 1.4;
-}
-
-.btn-doc {
-    width: 100%;
-    padding: 9px;
-    background: #060b09;
-    border: 1px solid var(--border-color);
-    color: #ffffff;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    cursor: pointer;
-    text-align: center;
-    transition: var(--transition-fast);
-}
-
-.btn-doc:hover {
-    border-color: var(--accent-green);
-    color: var(--accent-green);
+    font-family: 'JetBrains Mono', monospace;
 }
 
 /* ===========================================================
@@ -440,14 +430,19 @@ body {
     color: #ffffff;
 }
 
-.metric-trend {
-    font-size: 12px;
+.metric-sublabel {
+    font-size: 11px;
     font-weight: 700;
-    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 2px;
 }
 
-.metric-trend.pos { color: var(--accent-green); }
-.metric-trend.neg { color: var(--status-critical); }
+.metric-sublabel.warn { color: var(--status-warning); }
+.metric-sublabel.crit { color: var(--status-critical); }
+.metric-sublabel.green { color: var(--accent-green); }
 
 .metric-icon-box {
     width: 48px;
@@ -462,134 +457,46 @@ body {
 }
 
 /* ===========================================================
-   ROW 2: DUAL FEATURE CARDS (Built by Greenlify / Banner)
+   ROW 2: REAL FUNCTIONAL ANALYTICS SECTION
 =========================================================== */
-.hero-row {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 20px;
-}
-
-.banner-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    padding: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    position: relative;
-    overflow: hidden;
-}
-
-.banner-content {
+.analytics-section {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    max-width: 55%;
+    gap: 16px;
 }
 
-.banner-tag {
+.section-title-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.section-badge {
     font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--text-muted);
-}
-
-.banner-heading {
-    font-size: 18px;
-    font-weight: 700;
-    color: #ffffff;
-}
-
-.banner-desc {
-    font-size: 12px;
-    color: var(--text-secondary);
-    line-height: 1.6;
-}
-
-.banner-link {
-    font-size: 12px;
-    font-weight: 700;
+    font-weight: 800;
     color: var(--accent-green);
-    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    margin-top: 8px;
-    cursor: pointer;
-    transition: var(--transition-fast);
 }
 
-.banner-link:hover {
-    color: var(--accent-green-hover);
-    transform: translateX(3px);
-}
-
-/* The Vibrant Greenlify Box from the reference image */
-.greenlify-box {
-    width: 200px;
-    height: 130px;
-    background: linear-gradient(135deg, #01b574 0%, #008753 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    font-size: 22px;
+.section-title-box h2 {
+    font-size: 18px;
     font-weight: 800;
-    letter-spacing: -0.5px;
-    box-shadow: 0 0 30px var(--accent-green-glow);
-    text-align: center;
-    padding: 16px;
-    position: relative;
-}
-
-.greenlify-box span {
-    position: relative;
-    z-index: 2;
-}
-
-.greenlify-box::before {
-    content: '';
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    top: 10px;
-    right: 10px;
-}
-
-/* Secondary Hero Card */
-.intel-card {
-    background: linear-gradient(rgba(12, 22, 18, 0.92), rgba(8, 16, 13, 0.96)),
-                repeating-linear-gradient(45deg, #0d1e16 0, #0d1e16 10px, #0a1711 10px, #0a1711 20px);
-    border: 1px solid var(--border-color);
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.intel-card h3 {
-    font-size: 16px;
-    font-weight: 700;
     color: #ffffff;
-    margin-bottom: 6px;
+    letter-spacing: -0.2px;
 }
 
-.intel-card p {
+.section-title-box p {
     font-size: 12px;
-    color: var(--text-secondary);
-    line-height: 1.6;
+    color: var(--text-muted);
 }
 
-/* ===========================================================
-   ROW 3: CHARTS ROW (Bar Chart + Area Overview from Image)
-=========================================================== */
-.charts-row {
+.analytics-grid {
     display: grid;
-    grid-template-columns: 1fr 1.6fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
 }
 
@@ -599,84 +506,43 @@ body {
     padding: 22px;
     display: flex;
     flex-direction: column;
+    transition: var(--transition-fast);
+}
+
+.chart-card:hover {
+    border-color: var(--accent-green-border);
 }
 
 .chart-header {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     margin-bottom: 16px;
+    min-height: 38px;
 }
 
 .chart-title-group h3 {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     color: #ffffff;
 }
 
 .chart-title-group p {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-muted);
     margin-top: 2px;
 }
 
-.chart-title-group p strong {
-    color: var(--accent-green);
+.chart-legend-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .chart-canvas-container {
     height: 220px;
     width: 100%;
     position: relative;
-    margin-bottom: 16px;
-}
-
-/* 4 Mini Metrics below the left chart (from reference) */
-.mini-metrics-bar {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    padding-top: 14px;
-    border-top: 1px solid var(--border-color);
-}
-
-.mini-metric-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.mini-metric-tag {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-muted);
-}
-
-.mini-metric-tag i {
-    color: var(--accent-green);
-    font-size: 11px;
-}
-
-.mini-metric-value {
-    font-size: 14px;
-    font-weight: 700;
-    font-family: 'JetBrains Mono', monospace;
-    color: #ffffff;
-}
-
-.mini-progress-bar {
-    width: 100%;
-    height: 3px;
-    background: #142820;
-    margin-top: 4px;
-}
-
-.mini-progress-fill {
-    height: 100%;
-    background: var(--accent-green);
 }
 
 /* ===========================================================
@@ -922,8 +788,7 @@ body {
 =========================================================== */
 @media (max-width: 1200px) {
     .metrics-row { grid-template-columns: repeat(2, 1fr); }
-    .hero-row { grid-template-columns: 1fr; }
-    .charts-row { grid-template-columns: 1fr; }
+    .analytics-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 768px) {
