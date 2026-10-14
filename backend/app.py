@@ -1,24 +1,33 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from database import engine
 from models import Base
-
 from routers.auth import router as auth_router
 from routers.assets import router as asset_router
 from routers.dashboard import router as dashboard_router
 from routers.logs import router as logs_router
-from fastapi.middleware.cors import CORSMiddleware
 from routers.discovery import router as discovery_router
 from routers.alerts import router as alert_router
 from routers.analytics import router as analytics_router
 
-# Create database tables
-Base.metadata.create_all(bind=engine)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Initialize database tables on application startup
+    try:
+        Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        print(f"[Warning] Failed to connect/initialize database on startup: {e}")
+    yield
+
 
 app = FastAPI(
     title="XDR Platform",
     version="1.0.0",
-    description="XDR Platform MVP"
+    description="Enterprise Extended Detection and Response (XDR) Platform",
+    lifespan=lifespan
 )
 
 app.add_middleware(
@@ -37,7 +46,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register Routersdir services
+# Register Routers
 app.include_router(auth_router)
 app.include_router(asset_router)
 app.include_router(dashboard_router)
@@ -51,5 +60,6 @@ app.include_router(analytics_router)
 def home():
     return {
         "application": "XDR Platform",
-        "status": "Running"
+        "status": "Running",
+        "version": "1.0.0"
     }

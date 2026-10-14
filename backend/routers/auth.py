@@ -1,41 +1,43 @@
-from fastapi import APIRouter, HTTPException
-from sqlalchemy import text
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
 
-from database import SessionLocal
-from schemas import LoginRequest
+from database import get_db
+from models import User
+from schemas import LoginRequest, TokenResponse
+from auth_utils import verify_password, create_access_token, get_current_user
 
 router = APIRouter(tags=["Authentication"])
 
 
-@router.post("/login")
-def login(user: LoginRequest):
+@router.post("/login", response_model=TokenResponse)
+def login(user_credentials: LoginRequest, db: Session = Depends(get_db)):
+    """Authenticate a user and return a signed JWT access token."""
+    user = (
+        db.query(User)
+        .filter(User.username == user_credentials.username.strip())
+        .first()
+    )
 
-    db = SessionLocal()
-
-    result = db.execute(
-        text("""
-            SELECT username, password
-            FROM users
-            WHERE username = :username
-        """),
-        {"username": user.username}
-    ).fetchone()
-
-    db.close()
-
-    if result is None:
+    if not user or not verify_password(user_credentials.password, user.password):
         raise HTTPException(
-            status_code=401,
-            detail="Invalid username"
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid username or password",
+            headers={"WWW-Authenticate": "Bearer"},
         )
 
-    if result.password != user.password:
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid password"
-        )
+    token = create_access_token(data={"sub": user.username})
 
     return {
-        "message": "Login Successful",
-        "username": result.username
+        "access_token": token,
+        "token_type": "bearer",
+        "username": user.username,
+    }
+
+
+@router.get("/auth/me")
+def get_me(current_user: User = Depends(get_current_user)):
+    """Return the profile of the currently authenticated user."""
+    return {
+        "id": current_user.id,
+        "username": current_user.username
     }

@@ -1,7 +1,9 @@
-from fastapi import APIRouter
-from sqlalchemy import text
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 
-from database import SessionLocal
+from database import get_db
+from models import Asset, Alert, Log, User
+from auth_utils import get_current_user
 from opensearch_client import client, is_opensearch_available
 
 router = APIRouter(
@@ -11,54 +13,29 @@ router = APIRouter(
 
 
 @router.get("/stats")
-def dashboard_stats():
+def dashboard_stats(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Aggregate core security metrics for the main SOC dashboard."""
+    total_assets = db.query(Asset).count()
+    active_alerts = db.query(Alert).filter(Alert.status == "Open").count()
+    high_alerts = db.query(Alert).filter(Alert.severity == "High", Alert.status == "Open").count()
+    total_logs = db.query(Log).count()
 
-    db = SessionLocal()
+    # Incorporate OpenSearch security logs if running
+    if is_opensearch_available():
+        try:
+            response = client.count(index="security-auditlog-*")
+            os_logs_count = response.get("count", 0)
+            if os_logs_count > 0:
+                total_logs += os_logs_count
+        except Exception:
+            pass
 
-    try:
-        # Assets remain in PostgreSQL
-        total_assets = db.execute(
-            text("SELECT COUNT(*) FROM assets")
-        ).scalar() or 0
-
-        # Read security events from OpenSearch if available
-        if is_opensearch_available():
-            try:
-                response = client.search(
-                    index="security-auditlog-*",
-                    body={
-                        "size": 1000
-                    }
-                )
-
-                logs = response["hits"]["hits"]
-                total_logs = len(logs)
-                active_alerts = total_logs
-                high_alerts = 0
-
-                for hit in logs:
-                    category = hit["_source"].get("audit_category", "")
-                    if category in [
-                        "FAILED_LOGIN",
-                        "SSL_EXCEPTION"
-                    ]:
-                        high_alerts += 1
-
-            except Exception:
-                total_logs = db.execute(text("SELECT COUNT(*) FROM logs")).scalar() or 0
-                active_alerts = db.execute(text("SELECT COUNT(*) FROM alerts WHERE status = 'Open'")).scalar() or 0
-                high_alerts = db.execute(text("SELECT COUNT(*) FROM alerts WHERE severity = 'High'")).scalar() or 0
-        else:
-            total_logs = db.execute(text("SELECT COUNT(*) FROM logs")).scalar() or 0
-            active_alerts = db.execute(text("SELECT COUNT(*) FROM alerts WHERE status = 'Open'")).scalar() or 0
-            high_alerts = db.execute(text("SELECT COUNT(*) FROM alerts WHERE severity = 'High'")).scalar() or 0
-
-        return {
-            "total_assets": total_assets,
-            "active_alerts": active_alerts,
-            "high_alerts": high_alerts,
-            "total_logs": total_logs
-        }
-
-    finally:
-        db.close()
+    return {
+        "total_assets": total_assets,
+        "active_alerts": active_alerts,
+        "high_alerts": high_alerts,
+        "total_logs": total_logs
+    }

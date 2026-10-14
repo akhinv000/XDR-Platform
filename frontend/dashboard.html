@@ -576,13 +576,22 @@
 
     </div>
 
-    <div class="search-box">
+    <div class="search-box" style="display: flex; gap: 12px; align-items: center;">
 
     <input
         type="text"
         id="searchLog"
         placeholder="Search hostname, event, source or severity..."
-        onkeyup="searchLogs()">
+        onkeyup="searchLogs()"
+        style="flex: 1;">
+
+    <button
+        class="scan-btn"
+        onclick="triggerLogCollection()"
+        title="Ingest auth.log and trigger automated threat detection"
+        style="white-space: nowrap; padding: 12px 18px; background: #6366f1; border-radius: 8px; border: none; color: #fff; cursor: pointer; font-weight: 600;">
+        <i class="fa-solid fa-cloud-arrow-down"></i> Ingest & Detect Logs
+    </button>
 
     </div>
 

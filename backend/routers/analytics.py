@@ -1,7 +1,10 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from sqlalchemy import text
+from sqlalchemy.orm import Session
 
-from database import SessionLocal
+from database import get_db
+from models import User
+from auth_utils import get_current_user
 from opensearch_client import client, is_opensearch_available
 
 router = APIRouter(
@@ -11,27 +14,28 @@ router = APIRouter(
 
 
 @router.get("/")
-def analytics():
-
-    db = SessionLocal()
-
-    # Assets by OS (PostgreSQL)
-    assets = db.execute(
+def analytics(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Provide aggregated security distributions for SOC visualizations."""
+    # Assets grouped by OS
+    assets_raw = db.execute(
         text("""
-        SELECT operating_system,
+        SELECT COALESCE(operating_system, 'Unknown') AS operating_system,
                COUNT(*) AS total
         FROM assets
         GROUP BY operating_system
         """)
     ).mappings().all()
 
-    # Risk Distribution (PostgreSQL)
-    risk = db.execute(
+    # Risk distribution based on port risk score
+    risk_raw = db.execute(
         text("""
         SELECT
             CASE
-                WHEN risk_score >= 70 THEN 'High'
-                WHEN risk_score >= 30 THEN 'Medium'
+                WHEN risk_score >= 60 THEN 'High'
+                WHEN risk_score >= 25 THEN 'Medium'
                 ELSE 'Low'
             END AS level,
             COUNT(*) AS total
@@ -43,107 +47,54 @@ def analytics():
     logs = []
     alerts = []
 
+    # Attempt OpenSearch for high-volume logs
     if is_opensearch_available():
         try:
-            # Read audit logs from OpenSearch
             response = client.search(
                 index="security-auditlog-*",
                 body={
-                    "size": 1000,
+                    "size": 0,
                     "aggs": {
                         "sources": {
-                            "terms": {
-                                "field": "audit_request_origin.keyword"
-                            }
+                            "terms": {"field": "audit_request_origin.keyword"}
                         }
                     }
                 }
             )
-
-            # Logs by Source
-            logs = []
-
-            for bucket in response["aggregations"]["sources"]["buckets"]:
-
+            buckets = response.get("aggregations", {}).get("sources", {}).get("buckets", [])
+            for bucket in buckets:
                 logs.append({
                     "source": bucket["key"],
                     "total": bucket["doc_count"]
                 })
-
-            # Alerts by Severity
-            severity_count = {
-                "High": 0,
-                "Medium": 0,
-                "Low": 0
-            }
-
-            for hit in response["hits"]["hits"]:
-
-                category = hit["_source"].get("audit_category", "")
-
-                if category in [
-                    "FAILED_LOGIN",
-                    "SSL_EXCEPTION"
-                ]:
-                    severity_count["High"] += 1
-
-                elif category in [
-                    "INDEX_EVENT",
-                    "COMPLIANCE_INTERNAL_CONFIG_WRITE"
-                ]:
-                    severity_count["Medium"] += 1
-
-                else:
-                    severity_count["Low"] += 1
-
-            alerts = []
-
-            for severity, total in severity_count.items():
-
-                if total > 0:
-
-                    alerts.append({
-                        "severity": severity,
-                        "total": total
-                    })
-
         except Exception:
             pass
 
-    if not logs and not alerts:
-        # Fallback to PostgreSQL
+    # Fallback to PostgreSQL logs & alerts
+    if not logs:
         logs_res = db.execute(
             text("""
-            SELECT source, COUNT(*) AS total
+            SELECT COALESCE(source, 'System') AS source, COUNT(*) AS total
             FROM logs
             GROUP BY source
             ORDER BY total DESC
             LIMIT 10
             """)
         ).mappings().all()
-
         logs = [{"source": r["source"], "total": r["total"]} for r in logs_res]
 
-        alerts_res = db.execute(
-            text("""
-            SELECT severity, COUNT(*) AS total
-            FROM alerts
-            GROUP BY severity
-            """)
-        ).mappings().all()
-
-        alerts = [{"severity": r["severity"], "total": r["total"]} for r in alerts_res]
-
-    db.close()
+    alerts_res = db.execute(
+        text("""
+        SELECT COALESCE(severity, 'Low') AS severity, COUNT(*) AS total
+        FROM alerts
+        GROUP BY severity
+        """)
+    ).mappings().all()
+    alerts = [{"severity": r["severity"], "total": r["total"]} for r in alerts_res]
 
     return {
-
-        "assets_by_os": assets,
-
+        "assets_by_os": [{"operating_system": r["operating_system"], "total": r["total"]} for r in assets_raw],
         "alerts_by_severity": alerts,
-
         "logs_by_source": logs,
-
-        "risk_distribution": risk
-
+        "risk_distribution": [{"level": r["level"], "total": r["total"]} for r in risk_raw]
     }
