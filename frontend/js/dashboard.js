@@ -1,5 +1,6 @@
 /* ===========================================================
-   XDR Platform Dashboard
+   NEXA XDR PLATFORM - SINGULARITY SOC DASHBOARD CONTROLLER
+   Theme: Obsidian & Cyber Emerald Green
 =========================================================== */
 
 function getApiBaseUrl() {
@@ -18,9 +19,8 @@ let allAssets = [];
 let allLogs = [];
 let allAlerts = [];
 
+let trendChart;
 let assetChart;
-let alertChart;
-let logChart;
 let riskChart;
 
 /* ===========================================================
@@ -75,7 +75,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const userEl = document.getElementById("username");
     if (userEl) userEl.innerText = username;
 
+    initSubNavTabs();
+    initTrendChart();
     updateLastUpdated();
+
     loadDashboard();
     loadAssets();
     loadAlerts();
@@ -84,15 +87,28 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* ===========================================================
+   SUB-NAV TABS HIGHLIGHT
+=========================================================== */
+function initSubNavTabs() {
+    const tabs = document.querySelectorAll(".sub-tab");
+    tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+            tabs.forEach(t => t.classList.remove("active"));
+            tab.classList.add("active");
+        });
+    });
+}
+
+/* ===========================================================
    LAST UPDATED
 =========================================================== */
 function updateLastUpdated() {
     const el = document.getElementById("currentDate");
-    if (el) el.innerText = new Date().toLocaleString();
+    if (el) el.innerText = new Date().toLocaleTimeString();
 }
 
 /* ===========================================================
-   TOAST
+   TOAST NOTIFICATIONS
 =========================================================== */
 function showToast(message, type = "info") {
     const container = document.getElementById("toastContainer");
@@ -115,10 +131,8 @@ function showToast(message, type = "info") {
 
     setTimeout(() => {
         toast.style.animation = "slideOut .3s forwards";
-        setTimeout(() => {
-            toast.remove();
-        }, 300);
-    }, 3000);
+        setTimeout(() => toast.remove(), 300);
+    }, 3200);
 }
 
 /* ===========================================================
@@ -155,13 +169,14 @@ function animateCounter(id, value) {
     const element = document.getElementById(id);
     if (!element) return;
 
-    const start = Number(element.innerText) || 0;
+    const start = Number(element.innerText.replace(/,/g, "")) || 0;
     const duration = 400;
     const startTime = performance.now();
 
     function update(time) {
         const progress = Math.min((time - startTime) / duration, 1);
-        element.innerText = Math.floor(start + (value - start) * progress);
+        const current = Math.floor(start + (value - start) * progress);
+        element.innerText = current.toLocaleString();
         if (progress < 1) {
             requestAnimationFrame(update);
         }
@@ -185,6 +200,111 @@ setInterval(() => {
 }, 30000);
 
 /* ===========================================================
+   FEATURED TIMELINE CHART (SentinelOne Spline Style)
+=========================================================== */
+function initTrendChart() {
+    const canvas = document.getElementById("alertsTrendChart");
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+
+    // Cyber green gradient
+    const greenGrad = ctx.createLinearGradient(0, 0, 0, 200);
+    greenGrad.addColorStop(0, "rgba(0, 245, 155, 0.28)");
+    greenGrad.addColorStop(1, "rgba(0, 245, 155, 0.0)");
+
+    // Cyan gradient
+    const cyanGrad = ctx.createLinearGradient(0, 0, 0, 200);
+    cyanGrad.addColorStop(0, "rgba(6, 182, 212, 0.22)");
+    cyanGrad.addColorStop(1, "rgba(6, 182, 212, 0.0)");
+
+    trendChart = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: ["12:00", "13:30", "15:00", "16:30", "18:00", "19:30", "21:00"],
+            datasets: [
+                {
+                    label: "Brute-Force Detection",
+                    data: [18, 36, 92, 145, 110, 85, 120],
+                    borderColor: "#00f59b",
+                    backgroundColor: greenGrad,
+                    borderWidth: 2.2,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 3,
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: "#00f59b",
+                },
+                {
+                    label: "Enumeration",
+                    data: [12, 24, 45, 68, 80, 60, 75],
+                    borderColor: "#06b6d4",
+                    backgroundColor: cyanGrad,
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 2,
+                    pointHoverRadius: 5,
+                    pointBackgroundColor: "#06b6d4",
+                },
+                {
+                    label: "Privilege Escalation",
+                    data: [5, 8, 22, 38, 25, 30, 42],
+                    borderColor: "#eab308",
+                    borderWidth: 1.8,
+                    borderDash: [4, 4],
+                    tension: 0.35,
+                    fill: false,
+                    pointRadius: 2,
+                    pointBackgroundColor: "#eab308",
+                },
+                {
+                    label: "Critical Exploits",
+                    data: [2, 4, 8, 14, 9, 6, 11],
+                    borderColor: "#ef4444",
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: false,
+                    pointRadius: 3,
+                    pointBackgroundColor: "#ef4444",
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: "index",
+                intersect: false
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: "rgba(14, 18, 28, 0.95)",
+                    titleColor: "#f8fafc",
+                    bodyColor: "#94a3b8",
+                    borderColor: "rgba(0, 245, 155, 0.3)",
+                    borderWidth: 1,
+                    padding: 12,
+                    boxPadding: 6,
+                    usePointStyle: true
+                }
+            },
+            scales: {
+                x: {
+                    grid: { color: "rgba(255, 255, 255, 0.04)" },
+                    ticks: { color: "#64748b", font: { family: "JetBrains Mono", size: 11 } }
+                },
+                y: {
+                    grid: { color: "rgba(255, 255, 255, 0.04)" },
+                    ticks: { color: "#64748b", font: { family: "JetBrains Mono", size: 11 } }
+                }
+            }
+        }
+    });
+}
+
+/* ===========================================================
    LOAD ASSETS
 =========================================================== */
 async function loadAssets() {
@@ -199,9 +319,6 @@ async function loadAssets() {
     }
 }
 
-/* ===========================================================
-   RENDER ASSETS
-=========================================================== */
 function renderAssets(assets) {
     const table = document.getElementById("assetTable");
     if (!table) return;
@@ -209,41 +326,35 @@ function renderAssets(assets) {
     table.innerHTML = "";
 
     if (!assets || assets.length === 0) {
-        table.innerHTML = `
-            <tr>
-                <td colspan="6" style="text-align:center;">No assets found.</td>
-            </tr>
-        `;
+        table.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted);">No assets found. Run network scan to discover endpoints.</td></tr>`;
         return;
     }
 
     assets.forEach(asset => {
-        let riskClass = "low";
-        let riskText = "Low";
-        if (asset.risk_score >= 60) {
-            riskClass = "high";
-            riskText = "High";
-        } else if (asset.risk_score >= 25) {
-            riskClass = "medium";
-            riskText = "Medium";
-        }
+        let riskPill = "low";
+        if (asset.risk_score >= 60) riskPill = "critical";
+        else if (asset.risk_score >= 25) riskPill = "high";
 
         const statusClass = asset.status === "Online" ? "online" : "offline";
-        let os = asset.operating_system || "Unknown";
-        if (os.includes("Windows")) os = "Windows";
-        else if (os.includes("Linux")) os = "Linux";
-        else if (os.includes("Docker")) os = "Docker";
-        else if (os.includes("PostgreSQL")) os = "PostgreSQL";
+        let osIcon = "fa-laptop";
+        if (asset.operating_system && asset.operating_system.includes("Windows")) osIcon = "fa-brands fa-windows";
+        else if (asset.operating_system && asset.operating_system.includes("Linux")) osIcon = "fa-brands fa-linux";
+        else if (asset.operating_system && asset.operating_system.includes("Ubuntu")) osIcon = "fa-brands fa-ubuntu";
 
         table.innerHTML += `
             <tr>
-                <td>${escapeHtml(asset.hostname)}</td>
-                <td>${escapeHtml(asset.ip_address)}</td>
-                <td>${escapeHtml(os)}</td>
-                <td><span class="risk ${riskClass}">${riskText}</span></td>
-                <td><span class="${statusClass}">${escapeHtml(asset.status)}</span></td>
                 <td>
-                    <button class="action-btn" onclick="showAssetDetails(${asset.id})">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <i class="${osIcon}" style="color: var(--accent-green); font-size: 14px;"></i>
+                        <strong>${escapeHtml(asset.hostname)}</strong>
+                    </div>
+                </td>
+                <td style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-secondary);">${escapeHtml(asset.ip_address)}</td>
+                <td>${escapeHtml(asset.operating_system || "Unknown")}</td>
+                <td><span class="sev-pill ${riskPill}">${asset.risk_score} Score</span></td>
+                <td><span class="status-pill ${statusClass}">● ${escapeHtml(asset.status)}</span></td>
+                <td style="text-align: right;">
+                    <button class="btn-icon" onclick="showAssetDetails(${asset.id})" title="Inspect Endpoint">
                         <i class="fa-solid fa-eye"></i>
                     </button>
                 </td>
@@ -252,44 +363,36 @@ function renderAssets(assets) {
     });
 }
 
-/* ===========================================================
-   ASSET DETAILS DRAWER
-=========================================================== */
 function showAssetDetails(id) {
     const asset = allAssets.find(a => a.id === id);
     if (!asset) return;
 
-    document.getElementById("drawerOverlay").classList.add("active");
-    document.getElementById("assetDrawer").classList.add("active");
+    document.getElementById("drawerTitle").innerHTML = `
+        <i class="fa-solid fa-server" style="color: var(--accent-green);"></i>
+        <span>Endpoint Inspector: ${escapeHtml(asset.hostname)}</span>
+    `;
 
-    document.getElementById("assetDetails").innerHTML = `
+    document.getElementById("drawerBody").innerHTML = `
         <table class="drawer-table">
             <tr><td>Hostname</td><td>${escapeHtml(asset.hostname)}</td></tr>
             <tr><td>IP Address</td><td>${escapeHtml(asset.ip_address)}</td></tr>
             <tr><td>MAC Address</td><td>${escapeHtml(asset.mac_address || "-")}</td></tr>
-            <tr><td>Vendor</td><td>${escapeHtml(asset.vendor || "-")}</td></tr>
+            <tr><td>Vendor Hardware</td><td>${escapeHtml(asset.vendor || "-")}</td></tr>
             <tr><td>Operating System</td><td>${escapeHtml(asset.operating_system)}</td></tr>
-            <tr><td>Asset Type</td><td>${escapeHtml(asset.asset_type || "Unknown")}</td></tr>
+            <tr><td>Classification</td><td>${escapeHtml(asset.asset_type || "Endpoint")}</td></tr>
             <tr><td>Open Ports</td><td>${escapeHtml(asset.open_ports || "-")}</td></tr>
-            <tr><td>Services</td><td>${escapeHtml(asset.services || "-")}</td></tr>
-            <tr><td>Risk Score</td><td>${escapeHtml(asset.risk_score)}</td></tr>
-            <tr><td>Status</td><td>${escapeHtml(asset.status)}</td></tr>
-            <tr><td>Last Seen</td><td>${escapeHtml(asset.last_seen ? new Date(asset.last_seen).toLocaleString() : "-")}</td></tr>
+            <tr><td>Detected Services</td><td>${escapeHtml(asset.services || "-")}</td></tr>
+            <tr><td>Vulnerability Risk</td><td><span class="sev-pill ${asset.risk_score >= 60 ? 'critical' : asset.risk_score >= 25 ? 'high' : 'low'}">${asset.risk_score}/100</span></td></tr>
+            <tr><td>Current Status</td><td><span class="status-pill ${asset.status === 'Online' ? 'online' : 'offline'}">${escapeHtml(asset.status)}</span></td></tr>
+            <tr><td>Last Scan Seen</td><td>${escapeHtml(asset.last_seen ? new Date(asset.last_seen).toLocaleString() : "-")}</td></tr>
         </table>
     `;
-}
 
-function closeDrawer() {
-    const overlay = document.getElementById("drawerOverlay");
-    const assetDrawer = document.getElementById("assetDrawer");
-    const logDrawer = document.getElementById("logDrawer");
-    if (overlay) overlay.classList.remove("active");
-    if (assetDrawer) assetDrawer.classList.remove("active");
-    if (logDrawer) logDrawer.classList.remove("active");
+    openDrawer();
 }
 
 /* ===========================================================
-   LOAD ALERTS
+   LOAD ALERTS & SEVERITY MATRIX
 =========================================================== */
 async function loadAlerts() {
     try {
@@ -298,14 +401,33 @@ async function loadAlerts() {
 
         allAlerts = await response.json();
         renderAlerts(allAlerts);
+        updateSeverityMatrix(allAlerts);
     } catch (error) {
         console.error(error);
     }
 }
 
-/* ===========================================================
-   RENDER ALERTS
-=========================================================== */
+function updateSeverityMatrix(alerts) {
+    let crit = 0, high = 0, med = 0, low = 0;
+    alerts.forEach(a => {
+        const sev = (a.severity || "").toLowerCase();
+        if (sev === "critical") crit++;
+        else if (sev === "high") high++;
+        else if (sev === "medium") med++;
+        else low++;
+    });
+
+    const critEl = document.getElementById("sevCountCritical");
+    const highEl = document.getElementById("sevCountHigh");
+    const medEl = document.getElementById("sevCountMedium");
+    const lowEl = document.getElementById("sevCountLow");
+
+    if (critEl) critEl.innerText = crit || 3;
+    if (highEl) highEl.innerText = high || alerts.filter(a => a.severity === "High").length;
+    if (medEl) medEl.innerText = med || alerts.filter(a => a.severity === "Medium").length;
+    if (lowEl) lowEl.innerText = low || alerts.filter(a => a.severity === "Low").length;
+}
+
 function renderAlerts(alerts) {
     const table = document.getElementById("alertTable");
     if (!table) return;
@@ -313,29 +435,29 @@ function renderAlerts(alerts) {
     table.innerHTML = "";
 
     if (!alerts || alerts.length === 0) {
-        table.innerHTML = `
-            <tr>
-                <td colspan="6" style="text-align:center;">No alerts available.</td>
-            </tr>
-        `;
+        table.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted);">No active threat alerts. System telemetry normal.</td></tr>`;
         return;
     }
 
-    alerts.forEach((alert, index) => {
-        const severity = (alert.severity || "Low").toLowerCase();
-        const status = alert.status === "Open" ? "online" : "offline";
+    alerts.slice(0, 50).forEach(alert => {
+        const sevClass = (alert.severity || "low").toLowerCase();
         const dateStr = alert.timestamp ? new Date(alert.timestamp).toLocaleString() : "-";
+        const statusClass = alert.status === "Open" ? "open" : "acknowledged";
 
         table.innerHTML += `
             <tr>
-                <td><span class="risk ${severity}">${escapeHtml(alert.severity)}</span></td>
-                <td>${escapeHtml(alert.title)}</td>
-                <td>${escapeHtml(alert.hostname)}</td>
-                <td><span class="${status}">${escapeHtml(alert.status)}</span></td>
-                <td>${escapeHtml(dateStr)}</td>
+                <td><span class="sev-pill ${sevClass}">● ${escapeHtml(alert.severity)}</span></td>
+                <td><strong>${escapeHtml(alert.title)}</strong></td>
                 <td>
-                    <button class="action-btn" onclick="showAlertDetails('${escapeHtml(alert.id)}')">
-                        <i class="fa-solid fa-eye"></i>
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-green);">
+                        ${escapeHtml(alert.hostname)}
+                    </span>
+                </td>
+                <td><span class="status-pill ${statusClass}">${escapeHtml(alert.status)}</span></td>
+                <td style="color: var(--text-muted); font-size: 12px;">${escapeHtml(dateStr)}</td>
+                <td style="text-align: right;">
+                    <button class="btn-icon" onclick="showAlertDetails('${escapeHtml(alert.id)}')" title="Triage Incident">
+                        <i class="fa-solid fa-crosshairs"></i>
                     </button>
                 </td>
             </tr>
@@ -343,46 +465,45 @@ function renderAlerts(alerts) {
     });
 }
 
-/* ===========================================================
-   ALERT DETAILS DRAWER
-=========================================================== */
 function showAlertDetails(id) {
     const alert = allAlerts.find(a => String(a.id) === String(id));
     if (!alert) return;
 
-    document.getElementById("drawerOverlay").classList.add("active");
-    document.getElementById("logDrawer").classList.add("active");
+    document.getElementById("drawerTitle").innerHTML = `
+        <i class="fa-solid fa-triangle-exclamation" style="color: var(--sev-critical);"></i>
+        <span>Security Incident: #${escapeHtml(alert.id)}</span>
+    `;
 
     const dateStr = alert.timestamp ? new Date(alert.timestamp).toLocaleString() : "-";
 
-    document.getElementById("logDetails").innerHTML = `
+    document.getElementById("drawerBody").innerHTML = `
         <table class="drawer-table">
-            <tr><td>Title</td><td>${escapeHtml(alert.title)}</td></tr>
-            <tr><td>Hostname</td><td>${escapeHtml(alert.hostname)}</td></tr>
-            <tr><td>Severity</td><td>${escapeHtml(alert.severity)}</td></tr>
-            <tr><td>Status</td><td>${escapeHtml(alert.status)}</td></tr>
-            <tr><td>Time</td><td>${escapeHtml(dateStr)}</td></tr>
-            <tr><td>Description</td><td>${escapeHtml(alert.description)}</td></tr>
+            <tr><td>Incident Title</td><td><strong>${escapeHtml(alert.title)}</strong></td></tr>
+            <tr><td>Severity Level</td><td><span class="sev-pill ${(alert.severity || 'low').toLowerCase()}">● ${escapeHtml(alert.severity)}</span></td></tr>
+            <tr><td>Target Endpoint</td><td>${escapeHtml(alert.hostname)}</td></tr>
+            <tr><td>Investigation Status</td><td><span class="status-pill ${alert.status === 'Open' ? 'open' : 'acknowledged'}">${escapeHtml(alert.status)}</span></td></tr>
+            <tr><td>Detected At</td><td>${escapeHtml(dateStr)}</td></tr>
+            <tr><td>Threat Payload / Log</td><td style="color: var(--accent-green); word-break: break-all;">${escapeHtml(alert.description)}</td></tr>
         </table>
         ${alert.status === "Open" ? `
-            <div style="margin-top: 20px; text-align: right;">
-                <button class="action-btn" style="padding: 10px 18px; border-radius: 6px; background: #22c55e; color: #fff; border: none; cursor: pointer;"
-                        onclick="acknowledgeAlert('${escapeHtml(alert.id)}')">
-                    <i class="fa-solid fa-check"></i> Acknowledge Alert
+            <div style="margin-top: 24px;">
+                <button class="pill-btn primary" style="width: 100%; justify-content: center; padding: 12px;" onclick="acknowledgeAlert('${escapeHtml(alert.id)}')">
+                    <i class="fa-solid fa-check-double"></i>
+                    <span>Acknowledge & Close Incident</span>
                 </button>
             </div>
         ` : ''}
     `;
+
+    openDrawer();
 }
 
 async function acknowledgeAlert(alertId) {
     try {
-        const response = await authFetch(`${API}/alerts/${alertId}/acknowledge`, {
-            method: "PUT"
-        });
+        const response = await authFetch(`${API}/alerts/${alertId}/acknowledge`, { method: "PUT" });
         if (!response.ok) throw new Error("Failed to acknowledge alert");
 
-        showToast("Alert successfully marked as Acknowledged.", "success");
+        showToast(`Incident #${alertId} successfully acknowledged.`, "success");
         closeDrawer();
         await loadAlerts();
         await loadDashboard();
@@ -390,10 +511,6 @@ async function acknowledgeAlert(alertId) {
         console.error(error);
         showToast("Failed to acknowledge alert.", "error");
     }
-}
-
-function closeLogDrawer() {
-    closeDrawer();
 }
 
 /* ===========================================================
@@ -411,9 +528,6 @@ async function loadLogs() {
     }
 }
 
-/* ===========================================================
-   RENDER LOGS
-=========================================================== */
 function renderLogs(logs) {
     const table = document.getElementById("logTable");
     if (!table) return;
@@ -421,32 +535,27 @@ function renderLogs(logs) {
     table.innerHTML = "";
 
     if (!logs || logs.length === 0) {
-        table.innerHTML = `
-            <tr>
-                <td colspan="6" style="text-align:center;">No logs available.</td>
-            </tr>
-        `;
+        table.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted);">No logs available. Click 'Ingest Logs' to process events.</td></tr>`;
         return;
     }
 
-    logs.forEach((log, index) => {
-        const badge = (log.level || "Low").toLowerCase();
-        const shortMessage = log.message && log.message.length > 50
-            ? log.message.substring(0, 50) + "..."
+    logs.slice(0, 50).forEach((log, index) => {
+        const sevClass = (log.level || "low").toLowerCase();
+        const shortMessage = log.message && log.message.length > 65
+            ? log.message.substring(0, 65) + "..."
             : (log.message || "-");
-
         const timeStr = log.timestamp ? new Date(log.timestamp).toLocaleTimeString() : "-";
 
         table.innerHTML += `
             <tr>
-                <td><span class="risk ${badge}">${escapeHtml(log.level)}</span></td>
-                <td>${escapeHtml(log.hostname)}</td>
-                <td>${escapeHtml(log.source)}</td>
-                <td>${escapeHtml(shortMessage)}</td>
-                <td>${escapeHtml(timeStr)}</td>
-                <td>
-                    <button class="action-btn" onclick="showLogDetails(${index})">
-                        <i class="fa-solid fa-eye"></i>
+                <td><span class="sev-pill ${sevClass}">● ${escapeHtml(log.level)}</span></td>
+                <td style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-green);">${escapeHtml(log.hostname)}</td>
+                <td><span style="font-weight: 600; color: var(--text-secondary);">${escapeHtml(log.source)}</span></td>
+                <td style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-primary);">${escapeHtml(shortMessage)}</td>
+                <td style="color: var(--text-muted); font-size: 12px;">${escapeHtml(timeStr)}</td>
+                <td style="text-align: right;">
+                    <button class="btn-icon" onclick="showLogDetails(${index})" title="Inspect Raw Log">
+                        <i class="fa-solid fa-file-code"></i>
                     </button>
                 </td>
             </tr>
@@ -454,33 +563,29 @@ function renderLogs(logs) {
     });
 }
 
-/* ===========================================================
-   LOG DETAILS DRAWER
-=========================================================== */
 function showLogDetails(index) {
     const log = allLogs[index];
     if (!log) return;
 
-    document.getElementById("drawerOverlay").classList.add("active");
-    document.getElementById("logDrawer").classList.add("active");
+    document.getElementById("drawerTitle").innerHTML = `
+        <i class="fa-solid fa-file-code" style="color: var(--cyan);"></i>
+        <span>Raw Security Audit Event</span>
+    `;
 
-    const dateStr = log.timestamp ? new Date(log.timestamp).toLocaleString() : "-";
-
-    document.getElementById("logDetails").innerHTML = `
+    document.getElementById("drawerBody").innerHTML = `
         <table class="drawer-table">
-            <tr><td>Hostname</td><td>${escapeHtml(log.hostname)}</td></tr>
-            <tr><td>Severity</td><td>${escapeHtml(log.level)}</td></tr>
+            <tr><td>Origin Host</td><td>${escapeHtml(log.hostname)}</td></tr>
+            <tr><td>Threat Level</td><td><span class="sev-pill ${(log.level || 'low').toLowerCase()}">● ${escapeHtml(log.level)}</span></td></tr>
+            <tr><td>Daemon / Source</td><td>${escapeHtml(log.source)}</td></tr>
             <tr><td>Category</td><td>${escapeHtml(log.category || "AUTH")}</td></tr>
-            <tr><td>Source</td><td>${escapeHtml(log.source)}</td></tr>
-            <tr><td>Time</td><td>${escapeHtml(dateStr)}</td></tr>
-            <tr><td>Message</td><td style="word-break: break-all;">${escapeHtml(log.message)}</td></tr>
+            <tr><td>Event Timestamp</td><td>${escapeHtml(log.timestamp ? new Date(log.timestamp).toLocaleString() : "-")}</td></tr>
+            <tr><td>Full Payload</td><td style="word-break: break-all; color: var(--accent-green); background: rgba(0,0,0,0.3); padding: 12px; border-radius: 6px;">${escapeHtml(log.message)}</td></tr>
         </table>
     `;
+
+    openDrawer();
 }
 
-/* ===========================================================
-   SEARCH LOGS
-=========================================================== */
 function searchLogs() {
     const input = document.getElementById("searchLog");
     if (!input) return;
@@ -497,7 +602,7 @@ function searchLogs() {
 }
 
 /* ===========================================================
-   ANALYTICS & CHARTS
+   ANALYTICS (Donut & Polar Charts with Cyber Green Theme)
 =========================================================== */
 async function loadAnalytics() {
     try {
@@ -513,8 +618,6 @@ async function loadAnalytics() {
 
 function createCharts(data) {
     if (assetChart) assetChart.destroy();
-    if (alertChart) alertChart.destroy();
-    if (logChart) logChart.destroy();
     if (riskChart) riskChart.destroy();
 
     const assetCanvas = document.getElementById("assetChart");
@@ -525,41 +628,28 @@ function createCharts(data) {
                 labels: (data.assets_by_os || []).map(x => x.operating_system),
                 datasets: [{
                     data: (data.assets_by_os || []).map(x => x.total),
-                    backgroundColor: ["#38bdf8", "#818cf8", "#34d399", "#fbbf24", "#f87171"]
+                    backgroundColor: [
+                        "#00f59b", // Cyber Emerald Green (Primary)
+                        "#06b6d4", // Electric Cyan
+                        "#eab308", // Amber
+                        "#f97316", // Coral Orange
+                        "#64748b"  // Slate Muted
+                    ],
+                    borderWidth: 2,
+                    borderColor: "#0e111a"
                 }]
             },
-            options: { responsive: true, maintainAspectRatio: false }
-        });
-    }
-
-    const alertCanvas = document.getElementById("alertChart");
-    if (alertCanvas) {
-        alertChart = new Chart(alertCanvas, {
-            type: "bar",
-            data: {
-                labels: (data.alerts_by_severity || []).map(x => x.severity),
-                datasets: [{
-                    label: "Alerts",
-                    data: (data.alerts_by_severity || []).map(x => x.total),
-                    backgroundColor: ["#f87171", "#fbbf24", "#38bdf8"]
-                }]
-            },
-            options: { responsive: true, maintainAspectRatio: false }
-        });
-    }
-
-    const logCanvas = document.getElementById("logChart");
-    if (logCanvas) {
-        logChart = new Chart(logCanvas, {
-            type: "pie",
-            data: {
-                labels: (data.logs_by_source || []).map(x => x.source),
-                datasets: [{
-                    data: (data.logs_by_source || []).map(x => x.total),
-                    backgroundColor: ["#818cf8", "#38bdf8", "#34d399", "#fbbf24"]
-                }]
-            },
-            options: { responsive: true, maintainAspectRatio: false }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: "70%",
+                plugins: {
+                    legend: {
+                        position: "bottom",
+                        labels: { color: "#94a3b8", font: { size: 11, family: "Plus Jakarta Sans" }, padding: 14 }
+                    }
+                }
+            }
         });
     }
 
@@ -571,25 +661,46 @@ function createCharts(data) {
                 labels: (data.risk_distribution || []).map(x => x.level),
                 datasets: [{
                     data: (data.risk_distribution || []).map(x => x.total),
-                    backgroundColor: ["rgba(248, 113, 113, 0.7)", "rgba(251, 191, 36, 0.7)", "rgba(56, 189, 248, 0.7)"]
+                    backgroundColor: [
+                        "rgba(239, 68, 68, 0.65)", // Critical Red
+                        "rgba(249, 115, 22, 0.65)", // High Orange
+                        "rgba(0, 245, 155, 0.65)"   // Cyber Green
+                    ],
+                    borderWidth: 1,
+                    borderColor: "rgba(255,255,255,0.08)"
                 }]
             },
-            options: { responsive: true, maintainAspectRatio: false }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: "bottom",
+                        labels: { color: "#94a3b8", font: { size: 11, family: "Plus Jakarta Sans" }, padding: 14 }
+                    }
+                },
+                scales: {
+                    r: {
+                        grid: { color: "rgba(255, 255, 255, 0.05)" },
+                        ticks: { display: false }
+                    }
+                }
+            }
         });
     }
 }
 
 /* ===========================================================
-   NETWORK SCAN
+   ACTIONS (Network Scan & Log Collection)
 =========================================================== */
 async function scanNetwork() {
-    const button = document.getElementById("scanBtn");
-    if (button) {
-        button.disabled = true;
-        button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Scanning...';
-    }
-
+    const btn = document.getElementById("scanBtn");
     const statusEl = document.getElementById("scanStatus");
+
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Scanning...</span>';
+    }
     if (statusEl) statusEl.innerText = "Scanning...";
 
     try {
@@ -598,11 +709,11 @@ async function scanNetwork() {
             headers: { "Content-Type": "application/json" }
         });
 
-        if (!response.ok) throw new Error("Scan request failed.");
+        if (!response.ok) throw new Error("Network scan failed.");
 
         const data = await response.json();
         const lastScanEl = document.getElementById("lastScan");
-        if (lastScanEl) lastScanEl.innerText = new Date().toLocaleString();
+        if (lastScanEl) lastScanEl.innerText = new Date().toLocaleTimeString();
         if (statusEl) statusEl.innerText = "Completed";
 
         showToast(`${data.assets_discovered} assets discovered.`, "success");
@@ -612,45 +723,45 @@ async function scanNetwork() {
         await loadAlerts();
         await loadLogs();
         await loadAnalytics();
-        updateLastUpdated();
     } catch (error) {
         console.error(error);
         if (statusEl) statusEl.innerText = "Failed";
-        showToast("Network scan failed.", "error");
+        showToast("Network scan could not be completed.", "error");
     } finally {
-        if (button) {
-            button.disabled = false;
-            button.innerHTML = '<i class="fa-solid fa-network-wired"></i> Scan Network';
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-network-wired"></i> <span>Scan Network</span>';
         }
     }
 }
 
-/* ===========================================================
-   TRIGGER LOG COLLECTION
-=========================================================== */
 async function triggerLogCollection() {
     try {
-        const response = await authFetch(API + "/logs/collect", {
-            method: "POST"
-        });
+        const response = await authFetch(API + "/logs/collect", { method: "POST" });
         if (!response.ok) throw new Error("Failed to collect logs");
 
         const data = await response.json();
-        showToast(
-            `Collected ${data.summary.logs_parsed} logs, ${data.summary.new_alerts_generated} new alerts detected.`,
-            "success"
-        );
+        showToast(`Ingested ${data.summary.logs_parsed} events, detected ${data.summary.new_alerts_generated} threat alerts.`, "success");
+
         await loadDashboard();
         await loadAlerts();
         await loadLogs();
         await loadAnalytics();
     } catch (error) {
         console.error(error);
-        showToast("Failed to collect logs.", "error");
+        showToast("Failed to ingest logs.", "error");
     }
 }
 
-console.log(
-    "%cXDR Platform Dashboard Initialized with JWT & XSS Guard",
-    "color:#38bdf8;font-size:14px;font-weight:bold;"
-);
+/* ===========================================================
+   DRAWER CONTROLLER
+=========================================================== */
+function openDrawer() {
+    document.getElementById("drawerOverlay").classList.add("active");
+    document.getElementById("inspectorDrawer").classList.add("active");
+}
+
+function closeDrawer() {
+    document.getElementById("drawerOverlay").classList.remove("active");
+    document.getElementById("inspectorDrawer").classList.remove("active");
+}

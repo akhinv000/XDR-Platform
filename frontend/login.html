@@ -1,110 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>XDR Platform</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XDR Platform | Operations Center Login</title>
     <link rel="stylesheet" href="css/login.css">
-
-    <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-    <title>XDR Platform | Login</title>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
-
 <body>
 
 <div class="login-page">
-
     <div class="login-card">
-
         <div class="logo">
-
-            <i class="fa-solid fa-shield-halved"></i>
-
+            <i class="fa-solid fa-shield-virus"></i>
         </div>
 
-        <h1>XDR Platform</h1>
-
-        <p class="subtitle">
-
-            Enterprise Security Monitoring Platform
-
-        </p>
+        <h1>NEXA XDR</h1>
+        <span class="brand-sub">Singularity Operations Center</span>
+        <p class="subtitle">Autonomous Security & Extended Threat Response</p>
 
         <div class="input-group">
-
+            <input type="text" id="username" placeholder="Username / Operator ID" autocomplete="username">
             <i class="fa-solid fa-user"></i>
-
-            <input
-                type="text"
-                id="username"
-                placeholder="Username">
-
         </div>
 
         <div class="input-group">
-
+            <input type="password" id="password" placeholder="Passcode / Security Token" autocomplete="current-password">
             <i class="fa-solid fa-lock"></i>
-
-            <input
-                type="password"
-                id="password"
-                placeholder="Password">
-
         </div>
 
-        <button onclick="login()">
-
+        <button type="button" onclick="login()">
             <i class="fa-solid fa-right-to-bracket"></i>
-
-            Sign In
-
+            <span>Authenticate to SOC</span>
         </button>
 
         <p id="message"></p>
 
         <div class="secure">
-
-            <i class="fa-solid fa-shield-check"></i>
-
-            Secure Authentication Enabled
-
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Zero-Trust Enterprise Authentication Active</span>
         </div>
 
         <div class="login-footer">
-
-            XDR Platform v1.0
-
-            <br><br>
-
-            Powered by
-
-            <strong>FastAPI</strong>
-
-            •
-
-            <strong>PostgreSQL</strong>
-
-            •
-
-            <strong>OpenSearch</strong>
-
+            NEXA XDR Singularity v2.0
+            <br>
+            Powered by <strong>FastAPI</strong> • <strong>PostgreSQL</strong> • <strong>OpenSearch</strong>
         </div>
-
     </div>
-
 </div>
 
 <script src="js/login.js"></script>
-
 </body>
-
 </html>
