@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>XDR Platform</title>
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <title>XDR Platform | Dashboard</title>
+
+</head>
+
+<body>
+<!-- ================= HEADER ================= -->
+
+<header class="header">
+
+    <div class="header-logo">
+
+        <i class="fa-solid fa-shield-halved"></i>
+
+        <span>XDR Platform</span>
+
+    </div>
+
+    <div class="header-right">
+
+        Enterprise Security Monitoring Dashboard
+
+    </div>
+
+</header>
+
+<!-- ================= MAIN ================= -->
+
+<div class="container">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+<ul>
+
+    <li>
+
+        <a href="#dashboard">
+
+            <i class="fa-solid fa-chart-line"></i>
+
+            <span>Dashboard</span>
+
+        </a>
+
+    </li>
+
+    <li>
+
+        <a href="#alerts">
+
+            <i class="fa-solid fa-bell"></i>
+
+            <span>Security Alerts</span>
+
+        </a>
+
+    </li>
+
+    <li>
+
+        <a href="#assets">
+
+            <i class="fa-solid fa-computer"></i>
+
+            <span>Asset Inventory</span>
+
+        </a>
+
+    </li>
+
+    <li>
+
+        <a href="#analytics">
+
+            <i class="fa-solid fa-chart-pie"></i>
+
+            <span>Analytics</span>
+
+        </a>
+
+    </li>
+
+    <li>
+
+        <a href="#logs">
+
+            <i class="fa-solid fa-file-lines"></i>
+
+            <span>Security Logs</span>
+
+        </a>
+
+    </li>
+
+    <li>
+
+        <a href="#"
+           onclick="logout()">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            <span>Logout</span>
+
+        </a>
+
+    </li>
+
+</ul>
+</aside>
+
+<!-- ================= CONTENT ================= -->
+
+<main class="content">
+
+<section id="dashboard">
+
+    <div class="hero">
+
+        <div class="hero-left">
+
+            <h1>
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                XDR Platform
+
+            </h1>
+
+            <p>
+
+                Enterprise Security Monitoring Dashboard
+
+            </p>
+
+            <div class="hero-user">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+                Welcome,
+
+                <strong id="username"></strong>
+
+            </div>
+
+        </div>
+
+        <div class="hero-right">
+
+            <div class="hero-status-card">
+
+                <span class="status-title">
+
+                    System Status
+
+                </span>
+
+                <span class="status-online">
+
+                    <span class="status-dot"></span>
+
+                    Operational
+
+                </span>
+
+            </div>
+
+            <div class="hero-status-card">
+
+                <span class="status-title">
+
+                    Platform
+
+                </span>
+
+                <span>
+
+                    FastAPI • PostgreSQL • OpenSearch
+
+                </span>
+
+            </div>
+
+            <div class="hero-status-card">
+
+                <span class="status-title">
+
+                    Last Updated
+
+                </span>
+
+                <span id="currentDate">
+
+                    --
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="cards">
+
+    <div class="card">
+
+        <div class="card-icon blue">
+
+            <i class="fa-solid fa-computer"></i>
+
+        </div>
+
+        <div>
+
+            <h2 id="totalAssets">0</h2>
+
+            <small>Total Assets</small>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-icon orange">
+
+            <i class="fa-solid fa-triangle-exclamation"></i>
+
+        </div>
+
+        <div>
+
+            <h2 id="activeAlerts">0</h2>
+
+            <small>Active Alerts</small>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-icon red">
+
+            <i class="fa-solid fa-circle-exclamation"></i>
+
+        </div>
+
+        <div>
+
+            <h2 id="highAlerts">0</h2>
+
+            <small>High Severity</small>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-icon green">
+
+            <i class="fa-solid fa-file-lines"></i>
+
+        </div>
+
+        <div>
+
+            <h2 id="totalLogs">0</h2>
+
+            <small>Log Events</small>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= SECURITY ALERTS ================= -->
+
+<section id="alerts">
+
+    <div class="section-title">
+
+        <div>
+
+            <h2>
+
+                <i class="fa-solid fa-bell"></i>
+
+                Security Alerts
+
+            </h2>
+
+            <p>
+
+                Latest detections generated by XDR Platform
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="table-container">
+
+        <table class="modern-table">
+
+            <thead>
+
+            <tr>
+
+            <th>Severity</th>
+
+            <th>Host</th>
+
+            <th>Source</th>
+
+            <th>Event</th>
+
+            <th>Time</th>
+
+            <th>Action</th>
+
+            </tr>
+
+            </thead>
+
+            <tbody id="alertTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<!-- ================= ASSET INVENTORY ================= -->
+
+<section id="assets">
+
+    <div class="section-title">
+
+        <div>
+
+            <h2>
+
+                <i class="fa-solid fa-computer"></i>
+
+                Asset Inventory
+
+            </h2>
+
+            <p>
+
+                Endpoints discovered and monitored by XDR Platform
+
+            </p>
+
+        </div>
+
+        <div class="scan-panel">
+
+            <button
+                id="scanBtn"
+                class="scan-btn"
+                onclick="scanNetwork()">
+
+                <i class="fa-solid fa-network-wired"></i>
+
+                <span>Scan Network</span>
+
+            </button>
+
+            <div class="scan-info">
+
+                <div class="scan-item">
+
+                    <span class="label">
+
+                        Last Scan
+
+                    </span>
+
+                    <strong id="lastScan">
+
+                        Never
+
+                    </strong>
+
+                </div>
+
+                <div class="scan-item">
+
+                    <span class="label">
+
+                        Status
+
+                    </span>
+
+                    <strong
+                        id="scanStatus"
+                        class="status-ready">
+
+                        🟢 Ready
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="table-container">
+
+        <table class="asset-table modern-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Host</th>
+
+                    <th>IP Address</th>
+
+                    <th>Operating System</th>
+
+                    <th>Risk</th>
+
+                    <th>Status</th>
+
+                    <th></th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="assetTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<!-- ================= SECURITY ANALYTICS ================= -->
+
+<section id="analytics">
+
+    <div class="section-title">
+
+        <div>
+
+            <h2>
+
+                <i class="fa-solid fa-chart-pie"></i>
+
+                Security Analytics
+
+            </h2>
+
+            <p>
+
+                Live visualization of assets, alerts and log activity
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="charts">
+
+        <div class="chart-card">
+
+            <h3>
+
+                Assets by Operating System
+
+            </h3>
+
+            <canvas id="assetChart"></canvas>
+
+        </div>
+
+        <div class="chart-card">
+
+            <h3>
+
+                Alerts by Severity
+
+            </h3>
+
+            <canvas id="alertChart"></canvas>
+
+        </div>
+
+        <div class="chart-card">
+
+            <h3>
+
+                Logs by Source
+
+            </h3>
+
+            <canvas id="logChart"></canvas>
+
+        </div>
+
+        <div class="chart-card">
+
+            <h3>
+
+                Risk Distribution
+
+            </h3>
+
+            <canvas id="riskChart"></canvas>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= SECURITY LOGS ================= -->
+
+<section id="logs">
+
+    <div class="section-title">
+
+        <div>
+
+            <h2>
+
+                <i class="fa-solid fa-file-lines"></i>
+
+                Recent Security Logs
+
+            </h2>
+
+            <p>
+
+                Recent events collected from OpenSearch
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="search-box">
+
+    <input
+        type="text"
+        id="searchLog"
+        placeholder="Search hostname, event, source or severity..."
+        onkeyup="searchLogs()">
+
+    </div>
+
+    <div class="table-container">
+
+        <table class="modern-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Severity</th>
+
+                    <th>Host</th>
+
+                    <th>Source</th>
+
+                    <th>Event</th>
+
+                    <th>Time</th>
+
+                    <th></th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="logTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<!-- ================= ASSET DETAILS ================= -->
+
+<div id="drawerOverlay"
+     class="drawer-overlay"
+     onclick="closeDrawer()">
+
+</div>
+
+<div id="assetDrawer"
+     class="asset-drawer">
+
+    <div class="drawer-header">
+
+        <h2>
+
+            <i class="fa-solid fa-computer"></i>
+
+            Asset Details
+
+        </h2>
+
+        <button
+            type="button"
+            onclick="closeDrawer()">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+
+    <div id="assetDetails">
+
+        <div class="empty-drawer">
+
+            <i class="fa-solid fa-computer fa-3x"></i>
+
+            <p>
+
+                Select an asset to view detailed information.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= LOG DETAILS ================= -->
+
+<div id="logDrawer"
+     class="asset-drawer">
+
+    <div class="drawer-header">
+
+        <h2>
+
+            <i class="fa-solid fa-file-lines"></i>
+
+            Log Details
+
+        </h2>
+
+        <button
+            type="button"
+            onclick="closeLogDrawer()">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+
+    <div id="logDetails">
+
+        <div class="empty-drawer">
+
+            <i class="fa-solid fa-file-lines fa-3x"></i>
+
+            <p>
+
+                Select a log entry to inspect.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= TOAST ================= -->
+
+<div id="toastContainer">
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="footer">
+
+    <div class="footer-logo">
+
+        <i class="fa-solid fa-shield-halved"></i>
+
+        <span>XDR Platform</span>
+
+    </div>
+
+    <p>
+
+        Enterprise Security Monitoring Platform
+
+    </p>
+
+    <div class="footer-stack">
+
+        <span>FastAPI</span>
+
+        <span>PostgreSQL</span>
+
+        <span>OpenSearch</span>
+
+    </div>
+
+    <div class="footer-copy">
+
+        XDR Platform v1.0
+
+    </div>
+
+</footer>
+
+</main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="js/dashboard.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+backend/venv/
+venv/
+env/
+ENV/
+*.log
+!backend/logcollector/auth.log
+
+# Environment files
+.env
+*.env
+backend/.env
+!*.env.example
+
+# Databases & local state
+*.sqlite3
+*.db
+
+# Operating System
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.bak

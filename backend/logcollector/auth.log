@@ -1,0 +1,473 @@
+2026-06-29T21:35:01.999041+05:30 kali CRON[23900]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-29T21:35:02.008170+05:30 kali CRON[23900]: pam_unix(cron:session): session closed for user root
+2026-06-29T21:39:01.028081+05:30 kali CRON[25822]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-29T21:39:01.032887+05:30 kali CRON[25822]: pam_unix(cron:session): session closed for user root
+2026-06-29T21:45:01.050535+05:30 kali CRON[28761]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-29T21:45:01.057692+05:30 kali CRON[28761]: pam_unix(cron:session): session closed for user root
+2026-06-29T22:25:01.266744+05:30 kali CRON[31211]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-29T22:25:01.274928+05:30 kali CRON[31211]: pam_unix(cron:session): session closed for user root
+2026-06-29T22:29:20.061522+05:30 kali xfce4-screensaver-dialog: gkr-pam: unlocked login keyring
+2026-06-29T22:29:20.065829+05:30 kali xfce4-screensaver-dialog: pam_unix(xfce4-screensaver:account): setuid failed: Operation not permitted
+2026-06-29T22:30:29.844927+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt update
+2026-06-29T22:30:29.851175+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-29T22:31:42.145083+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-29T22:35:01.326197+05:30 kali CRON[36432]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-29T22:35:01.335168+05:30 kali CRON[36432]: pam_unix(cron:session): session closed for user root
+2026-06-29T22:35:41.483573+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt upgrade -y
+2026-06-29T22:35:41.484048+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-29T22:39:01.350510+05:30 kali CRON[38404]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-29T22:39:01.355140+05:30 kali CRON[38404]: pam_unix(cron:session): session closed for user root
+2026-06-29T22:45:01.374757+05:30 kali CRON[41353]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-29T22:45:01.384080+05:30 kali CRON[41353]: pam_unix(cron:session): session closed for user root
+2026-06-29T22:48:35.421804+05:30 kali xfce4-screensaver-dialog: gkr-pam: unlocked login keyring
+2026-06-29T22:48:35.424638+05:30 kali xfce4-screensaver-dialog: pam_unix(xfce4-screensaver:account): setuid failed: Operation not permitted
+2026-06-29T22:48:44.259546+05:30 kali sudo:     kali : TTY=pts/3 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/su
+2026-06-29T22:48:44.266240+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-29T22:48:44.275801+05:30 kali su[43377]: (to root) root on pts/4
+2026-06-29T22:48:44.276938+05:30 kali su[43377]: pam_unix(su:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-29T22:48:52.874227+05:30 kali sudo:     root : TTY=pts/4 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt update
+2026-06-29T22:48:52.874851+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-29T22:48:55.365043+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-29T22:48:55.384830+05:30 kali sudo:     root : TTY=pts/4 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt install zaproxy -y
+2026-06-29T22:48:55.385068+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-29T22:49:22.258864+05:30 kali sudo:     kali : TTY=pts/6 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/su
+2026-06-29T22:49:22.261907+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-29T22:49:22.272729+05:30 kali su[43787]: (to root) root on pts/7
+2026-06-29T22:49:22.273530+05:30 kali su[43787]: pam_unix(su:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-29T22:49:24.122242+05:30 kali sudo:     root : TTY=pts/7 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt update
+2026-06-29T22:49:24.124696+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-29T22:49:26.142689+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-29T22:49:26.170463+05:30 kali sudo:     root : TTY=pts/7 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt install nikto -y
+2026-06-29T22:49:26.172278+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-29T22:55:01.413138+05:30 kali CRON[46896]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-29T22:55:01.426633+05:30 kali CRON[46896]: pam_unix(cron:session): session closed for user root
+2026-06-29T22:55:58.425929+05:30 kali xfce4-screensaver-dialog: gkr-pam: unlocked login keyring
+2026-06-29T22:55:58.437226+05:30 kali xfce4-screensaver-dialog: pam_unix(xfce4-screensaver:account): setuid failed: Operation not permitted
+2026-06-29T23:01:23.217918+05:30 kali xfce4-screensaver-dialog: gkr-pam: unlocked login keyring
+2026-06-29T23:01:23.222644+05:30 kali xfce4-screensaver-dialog: pam_unix(xfce4-screensaver:account): setuid failed: Operation not permitted
+2026-06-29T23:05:01.455817+05:30 kali CRON[52069]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-29T23:05:01.469108+05:30 kali CRON[52069]: pam_unix(cron:session): session closed for user root
+2026-06-29T23:06:29.127764+05:30 kali xfce4-screensaver-dialog: gkr-pam: unlocked login keyring
+2026-06-29T23:06:29.132792+05:30 kali xfce4-screensaver-dialog: pam_unix(xfce4-screensaver:account): setuid failed: Operation not permitted
+2026-06-29T23:09:01.497852+05:30 kali CRON[54177]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-29T23:09:01.507281+05:30 kali CRON[54177]: pam_unix(cron:session): session closed for user root
+2026-06-29T23:12:09.306180+05:30 kali xfce4-screensaver-dialog: gkr-pam: unlocked login keyring
+2026-06-29T23:12:09.310033+05:30 kali xfce4-screensaver-dialog: pam_unix(xfce4-screensaver:account): setuid failed: Operation not permitted
+2026-06-29T23:15:01.522848+05:30 kali CRON[57344]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-29T23:15:01.528048+05:30 kali CRON[57344]: pam_unix(cron:session): session closed for user root
+2026-06-29T23:17:01.542022+05:30 kali CRON[58321]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-29T23:17:01.553530+05:30 kali CRON[58321]: pam_unix(cron:session): session closed for user root
+2026-06-29T23:25:01.590303+05:30 kali CRON[62177]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-29T23:25:01.595219+05:30 kali CRON[62177]: pam_unix(cron:session): session closed for user root
+2026-06-29T23:35:01.644603+05:30 kali CRON[67768]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-29T23:35:01.652728+05:30 kali CRON[67768]: pam_unix(cron:session): session closed for user root
+2026-06-29T23:39:01.668221+05:30 kali CRON[69702]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-29T23:39:01.672042+05:30 kali CRON[69702]: pam_unix(cron:session): session closed for user root
+2026-06-29T23:41:02.908473+05:30 kali xfce4-screensaver-dialog: gkr-pam: unlocked login keyring
+2026-06-29T23:41:02.916445+05:30 kali xfce4-screensaver-dialog: pam_unix(xfce4-screensaver:account): setuid failed: Operation not permitted
+2026-06-29T23:45:01.720958+05:30 kali CRON[72804]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-29T23:45:01.728524+05:30 kali CRON[72804]: pam_unix(cron:session): session closed for user root
+2026-06-29T23:45:39.323438+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-29T23:45:40.581808+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-29T23:45:41.587640+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt upgrade -y
+2026-06-29T23:45:41.588088+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-29T23:45:51.520838+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-29T23:50:04.560304+05:30 kali sudo:     kali : TTY=pts/5 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/du -xh / --max-depth=1
+2026-06-29T23:50:04.570916+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-29T23:50:31.680667+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-29T23:50:36.804445+05:30 kali sudo:     kali : TTY=pts/5 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/su
+2026-06-29T23:50:36.805230+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-29T23:50:36.813036+05:30 kali su[75616]: (to root) root on pts/8
+2026-06-29T23:50:36.813465+05:30 kali su[75616]: pam_unix(su:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-29T23:50:45.105317+05:30 kali sudo:     root : TTY=pts/8 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/du -xh /home --max-depth=1
+2026-06-29T23:50:45.105575+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-29T23:50:45.158931+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-29T23:50:45.175030+05:30 kali sudo:     root : TTY=pts/8 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/du -xh /var --max-depth=1
+2026-06-29T23:50:45.175632+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-29T23:50:50.031970+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-29T23:50:57.269061+05:30 kali sudo:     root : TTY=pts/8 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt clean
+2026-06-29T23:50:57.269403+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-29T23:50:57.291068+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-29T23:50:57.306094+05:30 kali sudo:     root : TTY=pts/8 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt autoclean
+2026-06-29T23:50:57.306514+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-29T23:50:57.318152+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-29T23:50:57.333467+05:30 kali sudo:     root : TTY=pts/8 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt autoremove -y
+2026-06-29T23:50:57.333901+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-29T23:55:01.757265+05:30 kali CRON[77800]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-29T23:55:01.764792+05:30 kali CRON[77800]: pam_unix(cron:session): session closed for user root
+2026-06-29T23:59:01.801540+05:30 kali CRON[92155]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-29T23:59:01.812937+05:30 kali CRON[92155]: pam_unix(cron:session): session closed for user root
+2026-06-30T00:00:01.380148+05:30 kali runuser: pam_unix(runuser:session): session opened for user kali(uid=1000) by kali(uid=0)
+2026-06-30T00:00:01.826347+05:30 kali CRON[93019]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T00:00:01.829652+05:30 kali CRON[93019]: pam_unix(cron:session): session closed for user root
+2026-06-30T00:00:01.950652+05:30 kali runuser: pam_unix(runuser:session): session closed for user kali
+2026-06-30T00:00:02.190466+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:00:12.675735+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:00:19.093776+05:30 kali su[75616]: pam_unix(su:session): session closed for user root
+2026-06-30T00:00:19.106816+05:30 kali su[43377]: pam_unix(su:session): session closed for user root
+2026-06-30T00:00:19.114440+05:30 kali su[3585]: pam_unix(su:session): session closed for user root
+2026-06-30T00:00:19.154169+05:30 kali su[43787]: pam_unix(su:session): session closed for user root
+2026-06-30T00:00:19.194367+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:00:19.240812+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:00:19.267126+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:00:19.269553+05:30 kali systemd-logind[561]: The system will reboot now!
+2026-06-30T00:00:19.273539+05:30 kali systemd-logind[561]: System is rebooting.
+2026-06-30T00:00:19.318131+05:30 kali ssh-agent[1852]: exiting on signal 1
+2026-06-29T23:26:10.154574+05:30 kali systemd-logind[550]: New seat seat0.
+2026-06-29T23:26:11.654262+05:30 kali systemd-logind[550]: Watching system buttons on /dev/input/event0 (AT Translated Set 2 keyboard)
+2026-06-29T23:26:11.711775+05:30 kali systemd-logind[550]: Watching system buttons on /dev/input/event2 (Sleep Button)
+2026-06-29T23:26:11.723988+05:30 kali systemd-logind[550]: Watching system buttons on /dev/input/event1 (Power Button)
+2026-06-30T00:01:20.030706+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session opened for user lightdm(uid=106) by (uid=0)
+2026-06-30T00:01:20.071745+05:30 kali systemd-logind[550]: New session 'c1' of user 'lightdm' with class 'greeter' and type 'x11'.
+2026-06-30T00:01:20.273871+05:30 kali (systemd): pam_unix(systemd-user:session): session opened for user lightdm(uid=106) by lightdm(uid=0)
+2026-06-30T00:01:20.288407+05:30 kali systemd-logind[550]: New session '1' of user 'lightdm' with class 'manager-early' and type 'unspecified'.
+2026-06-30T00:01:20.974433+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session opened for user lightdm(uid=106) by (uid=0)
+2026-06-30T00:01:39.109658+05:30 kali unix_chkpwd[1709]: password check failed for user (kali)
+2026-06-30T00:01:39.111243+05:30 kali lightdm: pam_unix(lightdm:auth): authentication failure; logname= uid=0 euid=0 tty=:0 ruser= rhost=  user=kali
+2026-06-30T00:01:43.215906+05:30 kali lightdm: gkr-pam: unable to locate daemon control file
+2026-06-30T00:01:43.216833+05:30 kali lightdm: gkr-pam: stashed password to try later in open session
+2026-06-30T00:01:43.408540+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session closed for user lightdm
+2026-06-30T00:01:43.411622+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session closed for user lightdm
+2026-06-30T00:01:43.450406+05:30 kali systemd-logind[550]: Removed session c1.
+2026-06-30T00:01:43.455509+05:30 kali lightdm: pam_unix(lightdm:session): session opened for user kali(uid=1000) by kali(uid=0)
+2026-06-30T00:01:43.495461+05:30 kali systemd-logind[550]: New session '2' of user 'kali' with class 'user' and type 'x11'.
+2026-06-30T00:01:43.621568+05:30 kali (systemd): pam_unix(systemd-user:session): session opened for user kali(uid=1000) by kali(uid=0)
+2026-06-30T00:01:43.627418+05:30 kali systemd-logind[550]: New session '3' of user 'kali' with class 'manager' and type 'unspecified'.
+2026-06-30T00:01:44.019747+05:30 kali lightdm: gkr-pam: unlocked login keyring
+2026-06-30T00:01:53.893701+05:30 kali (sd-pam): pam_unix(systemd-user:session): session closed for user lightdm
+2026-06-30T00:01:53.894617+05:30 kali systemd-logind[550]: Removed session 1.
+2026-06-30T00:01:57.447060+05:30 kali sudo:     kali : TTY=pts/0 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/su
+2026-06-30T00:01:57.450194+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T00:01:57.494866+05:30 kali su[3092]: (to root) root on pts/1
+2026-06-30T00:01:57.496183+05:30 kali su[3092]: pam_unix(su:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-30T00:02:03.126528+05:30 kali CRON[3170]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T00:02:03.138417+05:30 kali CRON[3170]: pam_unix(cron:session): session closed for user root
+2026-06-30T00:02:03.149494+05:30 kali CRON[3174]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T00:02:03.156914+05:30 kali CRON[3174]: pam_unix(cron:session): session closed for user root
+2026-06-30T00:02:06.567104+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt update
+2026-06-30T00:02:06.570031+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-30T00:02:33.703030+05:30 kali sudo:     kali : TTY=pts/3 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt clean
+2026-06-30T00:02:33.703782+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T00:02:33.774456+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:02:33.795422+05:30 kali sudo:     kali : TTY=pts/3 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt autoclean
+2026-06-30T00:02:33.796163+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T00:02:34.919933+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:02:34.936921+05:30 kali sudo:     kali : TTY=pts/3 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt autoremove -y
+2026-06-30T00:02:34.937569+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T00:02:35.690524+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:04:03.463083+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:04:03.482640+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt install nikto -y
+2026-06-30T00:04:03.483156+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-30T00:04:04.166352+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:04:06.706340+05:30 kali sudo:     kali : TTY=pts/3 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt clean
+2026-06-30T00:04:06.706851+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T00:04:06.724700+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:04:06.739882+05:30 kali sudo:     kali : TTY=pts/3 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt autoclean
+2026-06-30T00:04:06.740909+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T00:04:07.851166+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:04:07.875794+05:30 kali sudo:     kali : TTY=pts/3 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt autoremove -y
+2026-06-30T00:04:07.877248+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T00:04:08.581565+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:04:13.977439+05:30 kali sudo:     kali : TTY=pts/3 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt clean
+2026-06-30T00:04:13.978613+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T00:04:13.991922+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:04:14.008840+05:30 kali sudo:     kali : TTY=pts/3 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt autoclean
+2026-06-30T00:04:14.010136+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T00:04:15.183573+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:04:15.201227+05:30 kali sudo:     kali : TTY=pts/3 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt autoremove -y
+2026-06-30T00:04:15.201551+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T00:04:16.291738+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:05:01.177917+05:30 kali CRON[5012]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T00:05:01.183441+05:30 kali CRON[5012]: pam_unix(cron:session): session closed for user root
+2026-06-30T00:06:49.785582+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/du -sh /var/log
+2026-06-30T00:06:49.786202+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-30T00:06:49.813153+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:06:55.673772+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/journalctl --vacuum-time=7d
+2026-06-30T00:06:55.673983+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-30T00:06:55.740067+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:06:55.757527+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/rm -f /var/log/auth.log.2.gz /var/log/cron.log.2.gz /var/log/kern.log.2.gz /var/log/macchanger.log.1.gz /var/log/macchanger.log.2.gz /var/log/syslog.2.gz /var/log/user.log.2.gz
+2026-06-30T00:06:55.757695+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-30T00:06:55.761912+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:06:55.778575+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/find /var/log -type f -name *.1 -delete
+2026-06-30T00:06:55.778857+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-30T00:06:55.791946+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:07:39.197515+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/du -sh /var/lib/snapd
+2026-06-30T00:07:39.197711+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-30T00:07:39.202167+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:08:01.447511+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/find / -type f -size +1G
+2026-06-30T00:08:01.448592+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-30T00:08:39.153487+05:30 kali sudo:     kali : TTY=pts/3 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/du -xh / --max-depth=2
+2026-06-30T00:08:39.160344+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T00:09:01.214477+05:30 kali CRON[7292]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T00:09:01.219414+05:30 kali CRON[7292]: pam_unix(cron:session): session closed for user root
+2026-06-30T00:09:14.375852+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:09:14.377377+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:09:56.769018+05:30 kali sudo:     kali : TTY=pts/3 ; PWD=/home/kali ; USER=root ; COMMAND=/opt/splunk/bin/splunk stop
+2026-06-30T00:09:56.769624+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T00:09:56.791879+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:09:56.808895+05:30 kali sudo:     kali : TTY=pts/3 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/rm -rf /opt/splunk
+2026-06-30T00:09:56.809962+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T00:09:57.603229+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:10:06.245725+05:30 kali sudo:     kali : TTY=pts/3 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt purge splunk
+2026-06-30T00:10:06.246400+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T00:10:14.718891+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:10:14.740066+05:30 kali sudo:     kali : TTY=pts/3 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt autoremove
+2026-06-30T00:10:14.740425+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T00:10:15.573163+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:10:18.337581+05:30 kali sudo:     kali : TTY=pts/3 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt autoremove --purge -y
+2026-06-30T00:10:18.338256+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T00:10:18.967876+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:10:22.081946+05:30 kali sudo:     kali : TTY=pts/3 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt clean
+2026-06-30T00:10:22.083680+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T00:10:22.109278+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:10:22.125643+05:30 kali sudo:     kali : TTY=pts/3 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt autoremove --purge -y
+2026-06-30T00:10:22.125928+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T00:10:23.224683+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:10:23.238655+05:30 kali sudo:     kali : TTY=pts/3 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/journalctl --vacuum-time=7d
+2026-06-30T00:10:23.239828+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T00:10:23.248872+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:11:01.903788+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt update
+2026-06-30T00:11:01.905032+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-30T00:11:03.972965+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:11:03.989528+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt install zaproxy -y
+2026-06-30T00:11:03.989696+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-30T00:15:01.254230+05:30 kali CRON[10415]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T00:15:01.265778+05:30 kali CRON[10415]: pam_unix(cron:session): session closed for user root
+2026-06-30T00:15:32.497588+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:16:46.390610+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt update
+2026-06-30T00:16:46.390947+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-30T00:16:48.360788+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:16:48.378421+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/apt install nikto -y
+2026-06-30T00:16:48.378743+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-30T00:16:48.991724+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:17:01.281086+05:30 kali CRON[11586]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T00:17:01.286721+05:30 kali CRON[11586]: pam_unix(cron:session): session closed for user root
+2026-06-30T00:19:48.878327+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/nmap -A 192.168.1.100
+2026-06-30T00:19:48.878644+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-30T00:20:02.045595+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-06-30T00:25:01.305058+05:30 kali CRON[15705]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T00:25:01.313435+05:30 kali CRON[15705]: pam_unix(cron:session): session closed for user root
+2026-06-30T00:35:01.332898+05:30 kali CRON[20570]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T00:35:01.339018+05:30 kali CRON[20570]: pam_unix(cron:session): session closed for user root
+2026-06-30T00:39:01.358330+05:30 kali CRON[22540]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T00:39:01.362714+05:30 kali CRON[22540]: pam_unix(cron:session): session closed for user root
+2026-06-30T00:45:01.407248+05:30 kali CRON[26237]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T00:45:01.421426+05:30 kali CRON[26237]: pam_unix(cron:session): session closed for user root
+2026-06-30T00:55:01.446827+05:30 kali CRON[31082]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T00:55:01.456222+05:30 kali CRON[31082]: pam_unix(cron:session): session closed for user root
+2026-06-30T18:52:10.866527+05:30 kali systemd-logind[577]: New seat seat0.
+2026-06-30T18:52:11.342293+05:30 kali systemd-logind[577]: Watching system buttons on /dev/input/event0 (AT Translated Set 2 keyboard)
+2026-06-30T18:52:11.359449+05:30 kali systemd-logind[577]: Watching system buttons on /dev/input/event2 (Sleep Button)
+2026-06-30T18:52:11.401016+05:30 kali systemd-logind[577]: Watching system buttons on /dev/input/event1 (Power Button)
+2026-06-30T18:52:26.495573+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session opened for user lightdm(uid=106) by (uid=0)
+2026-06-30T18:52:26.721259+05:30 kali systemd-logind[577]: New session 'c1' of user 'lightdm' with class 'greeter' and type 'x11'.
+2026-06-30T18:52:27.114216+05:30 kali (systemd): pam_unix(systemd-user:session): session opened for user lightdm(uid=106) by lightdm(uid=0)
+2026-06-30T18:52:27.138424+05:30 kali systemd-logind[577]: New session '1' of user 'lightdm' with class 'manager-early' and type 'unspecified'.
+2026-06-30T18:52:29.348794+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session opened for user lightdm(uid=106) by (uid=0)
+2026-06-30T18:52:57.976828+05:30 kali lightdm: gkr-pam: unable to locate daemon control file
+2026-06-30T18:52:57.977163+05:30 kali lightdm: gkr-pam: stashed password to try later in open session
+2026-06-30T18:52:58.195488+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session closed for user lightdm
+2026-06-30T18:52:58.196044+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session closed for user lightdm
+2026-06-30T18:52:58.233505+05:30 kali systemd-logind[577]: Removed session c1.
+2026-06-30T18:52:58.239755+05:30 kali lightdm: pam_unix(lightdm:session): session opened for user kali(uid=1000) by kali(uid=0)
+2026-06-30T18:52:58.280243+05:30 kali systemd-logind[577]: New session '2' of user 'kali' with class 'user' and type 'x11'.
+2026-06-30T18:52:58.370670+05:30 kali (systemd): pam_unix(systemd-user:session): session opened for user kali(uid=1000) by kali(uid=0)
+2026-06-30T18:52:58.378795+05:30 kali systemd-logind[577]: New session '3' of user 'kali' with class 'manager' and type 'unspecified'.
+2026-06-30T18:52:58.746870+05:30 kali lightdm: gkr-pam: unlocked login keyring
+2026-06-30T18:53:08.675634+05:30 kali systemd-logind[577]: Removed session 1.
+2026-06-30T18:53:22.077047+05:30 kali sudo:     kali : TTY=pts/0 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/su
+2026-06-30T18:53:22.080313+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-06-30T18:53:22.104919+05:30 kali su[3125]: (to root) root on pts/1
+2026-06-30T18:53:22.105253+05:30 kali su[3125]: pam_unix(su:session): session opened for user root(uid=0) by kali(uid=0)
+2026-06-30T18:55:01.300394+05:30 kali CRON[4491]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T18:55:01.313229+05:30 kali CRON[4491]: pam_unix(cron:session): session closed for user root
+2026-06-30T19:05:01.344568+05:30 kali CRON[10399]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T19:05:01.355593+05:30 kali CRON[10399]: pam_unix(cron:session): session closed for user root
+2026-06-30T19:09:01.371524+05:30 kali CRON[12367]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T19:09:01.376009+05:30 kali CRON[12367]: pam_unix(cron:session): session closed for user root
+2026-06-30T19:15:01.434318+05:30 kali CRON[15340]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T19:15:01.444234+05:30 kali CRON[15340]: pam_unix(cron:session): session closed for user root
+2026-06-30T19:17:01.457236+05:30 kali CRON[16314]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T19:17:01.467809+05:30 kali CRON[16314]: pam_unix(cron:session): session closed for user root
+2026-06-30T19:19:45.850182+05:30 kali xfce4-screensaver-dialog: pam_unix(xfce4-screensaver:auth): conversation failed
+2026-06-30T19:19:45.850369+05:30 kali xfce4-screensaver-dialog: pam_unix(xfce4-screensaver:auth): auth could not identify password for [kali]
+2026-06-30T19:24:01.853641+05:30 kali xfce4-screensaver-dialog: pam_unix(xfce4-screensaver:auth): conversation failed
+2026-06-30T19:24:01.871433+05:30 kali xfce4-screensaver-dialog: pam_unix(xfce4-screensaver:auth): auth could not identify password for [kali]
+2026-06-30T19:25:01.495815+05:30 kali CRON[20543]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T19:25:01.503815+05:30 kali CRON[20543]: pam_unix(cron:session): session closed for user root
+2026-06-30T19:31:52.850450+05:30 kali xfce4-screensaver-dialog: pam_unix(xfce4-screensaver:auth): conversation failed
+2026-06-30T19:31:52.851594+05:30 kali xfce4-screensaver-dialog: pam_unix(xfce4-screensaver:auth): auth could not identify password for [kali]
+2026-06-30T19:35:01.539709+05:30 kali CRON[25587]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T19:35:01.551740+05:30 kali CRON[25587]: pam_unix(cron:session): session closed for user root
+2026-06-30T19:39:01.574871+05:30 kali CRON[27546]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T19:39:01.579584+05:30 kali CRON[27546]: pam_unix(cron:session): session closed for user root
+2026-06-30T20:35:01.632205+05:30 kali CRON[33875]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T20:35:01.643310+05:30 kali CRON[33875]: pam_unix(cron:session): session closed for user root
+2026-06-30T20:39:01.661217+05:30 kali CRON[35834]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T20:39:01.666903+05:30 kali CRON[35834]: pam_unix(cron:session): session closed for user root
+2026-06-30T20:45:01.688035+05:30 kali CRON[38796]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T20:45:01.705485+05:30 kali CRON[38796]: pam_unix(cron:session): session closed for user root
+2026-06-30T20:55:01.759336+05:30 kali CRON[43675]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T20:55:01.771328+05:30 kali CRON[43675]: pam_unix(cron:session): session closed for user root
+2026-06-30T21:05:01.794133+05:30 kali CRON[48551]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T21:05:01.802806+05:30 kali CRON[48551]: pam_unix(cron:session): session closed for user root
+2026-06-30T21:09:01.820358+05:30 kali CRON[50502]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T21:09:01.828640+05:30 kali CRON[50502]: pam_unix(cron:session): session closed for user root
+2026-06-30T21:15:01.844580+05:30 kali CRON[53473]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T21:15:01.854286+05:30 kali CRON[53473]: pam_unix(cron:session): session closed for user root
+2026-06-30T21:17:01.870811+05:30 kali CRON[54444]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T21:17:01.883953+05:30 kali CRON[54444]: pam_unix(cron:session): session closed for user root
+2026-06-30T21:25:01.916399+05:30 kali CRON[58367]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-06-30T21:25:01.925817+05:30 kali CRON[58367]: pam_unix(cron:session): session closed for user root
+2026-07-01T18:23:14.088959+05:30 kali systemd-logind[577]: New seat seat0.
+2026-07-01T18:23:14.947360+05:30 kali systemd-logind[577]: Watching system buttons on /dev/input/event2 (Sleep Button)
+2026-07-01T18:23:15.063150+05:30 kali systemd-logind[577]: Watching system buttons on /dev/input/event1 (Power Button)
+2026-07-01T18:23:15.063257+05:30 kali systemd-logind[577]: Watching system buttons on /dev/input/event0 (AT Translated Set 2 keyboard)
+2026-07-01T18:23:19.623707+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session opened for user lightdm(uid=106) by (uid=0)
+2026-07-01T18:23:19.666020+05:30 kali systemd-logind[577]: New session 'c1' of user 'lightdm' with class 'greeter' and type 'x11'.
+2026-07-01T18:23:19.865554+05:30 kali (systemd): pam_unix(systemd-user:session): session opened for user lightdm(uid=106) by lightdm(uid=0)
+2026-07-01T18:23:19.871012+05:30 kali systemd-logind[577]: New session '1' of user 'lightdm' with class 'manager-early' and type 'unspecified'.
+2026-07-01T18:23:20.712276+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session opened for user lightdm(uid=106) by (uid=0)
+2026-07-01T18:23:31.396079+05:30 kali lightdm: gkr-pam: unable to locate daemon control file
+2026-07-01T18:23:31.397777+05:30 kali lightdm: gkr-pam: stashed password to try later in open session
+2026-07-01T18:23:32.167992+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session closed for user lightdm
+2026-07-01T18:23:32.191370+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session closed for user lightdm
+2026-07-01T18:23:32.388825+05:30 kali systemd-logind[577]: Removed session c1.
+2026-07-01T18:23:32.389711+05:30 kali lightdm: pam_unix(lightdm:session): session opened for user kali(uid=1000) by kali(uid=0)
+2026-07-01T18:23:32.656098+05:30 kali systemd-logind[577]: New session '2' of user 'kali' with class 'user' and type 'x11'.
+2026-07-01T18:23:32.860672+05:30 kali (systemd): pam_unix(systemd-user:session): session opened for user kali(uid=1000) by kali(uid=0)
+2026-07-01T18:23:32.876177+05:30 kali systemd-logind[577]: New session '3' of user 'kali' with class 'manager' and type 'unspecified'.
+2026-07-01T18:23:33.564864+05:30 kali lightdm: gkr-pam: unlocked login keyring
+2026-07-01T18:23:42.893089+05:30 kali systemd-logind[577]: Removed session 1.
+2026-07-01T18:23:53.244642+05:30 kali sudo:     kali : TTY=pts/0 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/su
+2026-07-01T18:23:53.245663+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-07-01T18:23:53.265177+05:30 kali su[3093]: (to root) root on pts/1
+2026-07-01T18:23:53.265652+05:30 kali su[3093]: pam_unix(su:session): session opened for user root(uid=0) by kali(uid=0)
+2026-07-01T18:25:01.391985+05:30 kali CRON[3826]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T18:25:01.411122+05:30 kali CRON[3826]: pam_unix(cron:session): session closed for user root
+2026-07-01T18:35:01.441432+05:30 kali CRON[8761]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T18:35:01.447123+05:30 kali CRON[8761]: pam_unix(cron:session): session closed for user root
+2026-07-01T18:39:01.469893+05:30 kali CRON[10714]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T18:39:01.473526+05:30 kali CRON[10714]: pam_unix(cron:session): session closed for user root
+2026-07-01T18:45:01.501113+05:30 kali CRON[13709]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T18:45:01.508607+05:30 kali CRON[13709]: pam_unix(cron:session): session closed for user root
+2026-07-01T18:55:01.560481+05:30 kali CRON[20238]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T18:55:01.570448+05:30 kali CRON[20238]: pam_unix(cron:session): session closed for user root
+2026-07-01T18:58:00.427852+05:30 kali xfce4-screensaver-dialog: gkr-pam: unlocked login keyring
+2026-07-01T18:58:00.491896+05:30 kali xfce4-screensaver-dialog: pam_unix(xfce4-screensaver:account): setuid failed: Operation not permitted
+2026-07-01T19:05:01.596765+05:30 kali CRON[26445]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T19:05:01.601296+05:30 kali CRON[26445]: pam_unix(cron:session): session closed for user root
+2026-07-01T19:09:01.619007+05:30 kali CRON[29395]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T19:09:01.623449+05:30 kali CRON[29395]: pam_unix(cron:session): session closed for user root
+2026-07-01T19:15:01.663453+05:30 kali CRON[32358]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T19:15:01.672607+05:30 kali CRON[32358]: pam_unix(cron:session): session closed for user root
+2026-07-01T19:17:01.689403+05:30 kali CRON[33328]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T19:17:01.701176+05:30 kali CRON[33328]: pam_unix(cron:session): session closed for user root
+2026-07-01T19:25:01.727965+05:30 kali CRON[37217]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T19:25:01.736796+05:30 kali CRON[37217]: pam_unix(cron:session): session closed for user root
+2026-07-01T19:35:01.773518+05:30 kali CRON[42071]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T19:35:01.781274+05:30 kali CRON[42071]: pam_unix(cron:session): session closed for user root
+2026-07-01T19:39:01.817822+05:30 kali CRON[44009]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T19:39:01.824803+05:30 kali CRON[44009]: pam_unix(cron:session): session closed for user root
+2026-07-01T19:45:01.855615+05:30 kali CRON[46954]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T19:45:01.862477+05:30 kali CRON[46954]: pam_unix(cron:session): session closed for user root
+2026-07-01T19:55:01.886380+05:30 kali CRON[51789]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T19:55:01.895361+05:30 kali CRON[51789]: pam_unix(cron:session): session closed for user root
+2026-07-01T20:05:01.945989+05:30 kali CRON[56628]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T20:05:01.956258+05:30 kali CRON[56628]: pam_unix(cron:session): session closed for user root
+2026-07-01T20:09:01.973968+05:30 kali CRON[58575]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T20:09:01.979836+05:30 kali CRON[58575]: pam_unix(cron:session): session closed for user root
+2026-07-01T20:15:02.003421+05:30 kali CRON[61532]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T20:15:02.011080+05:30 kali CRON[61532]: pam_unix(cron:session): session closed for user root
+2026-07-01T20:17:01.038231+05:30 kali CRON[62499]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T20:17:01.044476+05:30 kali CRON[62499]: pam_unix(cron:session): session closed for user root
+2026-07-01T20:25:01.075844+05:30 kali CRON[66381]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T20:25:01.084504+05:30 kali CRON[66381]: pam_unix(cron:session): session closed for user root
+2026-07-01T20:35:01.140975+05:30 kali CRON[71220]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T20:35:01.148743+05:30 kali CRON[71220]: pam_unix(cron:session): session closed for user root
+2026-07-01T20:39:01.168127+05:30 kali CRON[73180]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T20:39:01.173435+05:30 kali CRON[73180]: pam_unix(cron:session): session closed for user root
+2026-07-01T20:45:01.201929+05:30 kali CRON[76128]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T20:45:01.205232+05:30 kali CRON[76128]: pam_unix(cron:session): session closed for user root
+2026-07-01T20:55:01.280878+05:30 kali CRON[80978]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T20:55:01.289420+05:30 kali CRON[80978]: pam_unix(cron:session): session closed for user root
+2026-07-01T21:05:01.433296+05:30 kali CRON[85829]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T21:05:01.444661+05:30 kali CRON[85829]: pam_unix(cron:session): session closed for user root
+2026-07-01T21:09:01.473501+05:30 kali CRON[87782]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T21:09:01.480916+05:30 kali CRON[87782]: pam_unix(cron:session): session closed for user root
+2026-07-01T21:15:01.503432+05:30 kali CRON[90731]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T21:15:01.513114+05:30 kali CRON[90731]: pam_unix(cron:session): session closed for user root
+2026-07-01T21:17:01.524797+05:30 kali CRON[91704]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T21:17:01.536921+05:30 kali CRON[91704]: pam_unix(cron:session): session closed for user root
+2026-07-01T23:42:53.036733+05:30 kali systemd-logind[574]: New seat seat0.
+2026-07-01T23:42:53.513408+05:30 kali systemd-logind[574]: Watching system buttons on /dev/input/event1 (Power Button)
+2026-07-01T23:42:53.513643+05:30 kali systemd-logind[574]: Watching system buttons on /dev/input/event2 (Sleep Button)
+2026-07-01T23:42:53.518470+05:30 kali systemd-logind[574]: Watching system buttons on /dev/input/event2 (Sleep Button)
+2026-07-01T23:42:53.527834+05:30 kali systemd-logind[574]: Watching system buttons on /dev/input/event1 (Power Button)
+2026-07-01T23:42:53.620604+05:30 kali systemd-logind[574]: Watching system buttons on /dev/input/event0 (AT Translated Set 2 keyboard)
+2026-07-01T23:42:58.463696+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session opened for user lightdm(uid=106) by (uid=0)
+2026-07-01T23:42:58.504875+05:30 kali systemd-logind[574]: New session 'c1' of user 'lightdm' with class 'greeter' and type 'x11'.
+2026-07-01T23:42:58.657028+05:30 kali (systemd): pam_unix(systemd-user:session): session opened for user lightdm(uid=106) by lightdm(uid=0)
+2026-07-01T23:42:58.661606+05:30 kali systemd-logind[574]: New session '1' of user 'lightdm' with class 'manager-early' and type 'unspecified'.
+2026-07-01T23:42:59.490691+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session opened for user lightdm(uid=106) by (uid=0)
+2026-07-01T23:43:09.683278+05:30 kali lightdm: pam_unix(lightdm:auth): authentication failure; logname= uid=0 euid=0 tty=:0 ruser= rhost=  user=kali
+2026-07-01T23:43:13.982295+05:30 kali lightdm: gkr-pam: unable to locate daemon control file
+2026-07-01T23:43:13.983213+05:30 kali lightdm: gkr-pam: stashed password to try later in open session
+2026-07-01T23:43:14.354681+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session closed for user lightdm
+2026-07-01T23:43:14.357401+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session closed for user lightdm
+2026-07-01T23:43:14.417450+05:30 kali systemd-logind[574]: Removed session c1.
+2026-07-01T23:43:14.426199+05:30 kali lightdm: pam_unix(lightdm:session): session opened for user kali(uid=1000) by kali(uid=0)
+2026-07-01T23:43:14.487371+05:30 kali systemd-logind[574]: New session '2' of user 'kali' with class 'user' and type 'x11'.
+2026-07-01T23:43:14.685927+05:30 kali (systemd): pam_unix(systemd-user:session): session opened for user kali(uid=1000) by kali(uid=0)
+2026-07-01T23:43:14.693134+05:30 kali systemd-logind[574]: New session '3' of user 'kali' with class 'manager' and type 'unspecified'.
+2026-07-01T23:43:15.133573+05:30 kali lightdm: gkr-pam: unlocked login keyring
+2026-07-01T23:43:24.972028+05:30 kali systemd-logind[574]: Removed session 1.
+2026-07-01T23:43:57.379946+05:30 kali sudo:     kali : TTY=pts/0 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/cp /var/log/auth.log /home/kali/auth.log
+2026-07-01T23:43:57.380875+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-07-01T23:43:57.396375+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-07-01T23:44:01.764776+05:30 kali sudo:     kali : TTY=pts/0 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/cp /var/log/auth.log /home/kali/auth.log
+2026-07-01T23:44:01.765567+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-07-01T23:44:01.774480+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-07-01T23:45:01.212480+05:30 kali CRON[3978]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T23:45:01.224477+05:30 kali CRON[3978]: pam_unix(cron:session): session closed for user root
+2026-07-01T23:55:01.247475+05:30 kali CRON[8831]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-01T23:55:01.254538+05:30 kali CRON[8831]: pam_unix(cron:session): session closed for user root
+2026-07-01T23:57:18.323849+05:30 kali xfce4-screensaver-dialog: gkr-pam: unlocked login keyring
+2026-07-01T23:57:18.326540+05:30 kali xfce4-screensaver-dialog: pam_unix(xfce4-screensaver:account): setuid failed: Operation not permitted
+2026-07-02T00:01:19.029881+05:30 kali systemd-logind[572]: New seat seat0.
+2026-07-02T00:01:19.690600+05:30 kali systemd-logind[572]: Watching system buttons on /dev/input/event0 (AT Translated Set 2 keyboard)
+2026-07-02T00:01:19.691714+05:30 kali systemd-logind[572]: Watching system buttons on /dev/input/event2 (Sleep Button)
+2026-07-02T00:01:19.693323+05:30 kali systemd-logind[572]: Watching system buttons on /dev/input/event1 (Power Button)
+2026-07-02T00:01:26.196118+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session opened for user lightdm(uid=106) by (uid=0)
+2026-07-02T00:01:26.242946+05:30 kali systemd-logind[572]: New session 'c1' of user 'lightdm' with class 'greeter' and type 'x11'.
+2026-07-02T00:01:26.460223+05:30 kali (systemd): pam_unix(systemd-user:session): session opened for user lightdm(uid=106) by lightdm(uid=0)
+2026-07-02T00:01:26.464695+05:30 kali systemd-logind[572]: New session '1' of user 'lightdm' with class 'manager-early' and type 'unspecified'.
+2026-07-02T00:01:27.244939+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session opened for user lightdm(uid=106) by (uid=0)
+2026-07-02T00:01:58.033676+05:30 kali lightdm: gkr-pam: unable to locate daemon control file
+2026-07-02T00:01:58.039531+05:30 kali lightdm: gkr-pam: stashed password to try later in open session
+2026-07-02T00:01:58.281069+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session closed for user lightdm
+2026-07-02T00:01:58.282422+05:30 kali lightdm: pam_unix(lightdm-greeter:session): session closed for user lightdm
+2026-07-02T00:01:58.317964+05:30 kali systemd-logind[572]: Removed session c1.
+2026-07-02T00:01:58.323486+05:30 kali lightdm: pam_unix(lightdm:session): session opened for user kali(uid=1000) by kali(uid=0)
+2026-07-02T00:01:58.363709+05:30 kali systemd-logind[572]: New session '2' of user 'kali' with class 'user' and type 'x11'.
+2026-07-02T00:01:58.502870+05:30 kali (systemd): pam_unix(systemd-user:session): session opened for user kali(uid=1000) by kali(uid=0)
+2026-07-02T00:01:58.512549+05:30 kali systemd-logind[572]: New session '3' of user 'kali' with class 'manager' and type 'unspecified'.
+2026-07-02T00:01:59.010347+05:30 kali lightdm: gkr-pam: unlocked login keyring
+2026-07-02T00:02:08.574757+05:30 kali systemd-logind[572]: Removed session 1.
+2026-07-02T00:02:26.169631+05:30 kali sudo:     kali : TTY=pts/0 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/su
+2026-07-02T00:02:26.171442+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=1000)
+2026-07-02T00:02:26.190226+05:30 kali su[3215]: (to root) root on pts/1
+2026-07-02T00:02:26.191958+05:30 kali su[3215]: pam_unix(su:session): session opened for user root(uid=0) by kali(uid=0)
+2026-07-02T00:02:41.383322+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/cp /var/log/auth.log /media/sf_Shared/
+2026-07-02T00:02:41.385884+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-07-02T00:02:41.391726+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-07-02T00:04:35.316203+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/cp /var/log/auth.log
+2026-07-02T00:04:35.316434+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-07-02T00:04:35.321635+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-07-02T00:05:01.325298+05:30 kali CRON[4632]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+2026-07-02T00:05:01.336230+05:30 kali CRON[4632]: pam_unix(cron:session): session closed for user root
+2026-07-02T00:05:30.917114+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/cp /var/log/auth.log /root/auth.log
+2026-07-02T00:05:30.917570+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
+2026-07-02T00:05:30.927004+05:30 kali sudo: pam_unix(sudo:session): session closed for user root
+2026-07-02T00:07:28.230702+05:30 kali sudo:     root : TTY=pts/1 ; PWD=/home/kali ; USER=root ; COMMAND=/usr/bin/cp /var/log/auth.log /media/sf_Projects/
+2026-07-02T00:07:28.231000+05:30 kali sudo: pam_unix(sudo:session): session opened for user root(uid=0) by kali(uid=0)
