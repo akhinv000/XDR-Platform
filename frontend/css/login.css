@@ -1,37 +1,54 @@
 /* ===========================================================
-   XDR BASE - SHARP CORNER GREENLIFY LOGIN
-   Palette: Obsidian Black & Greenlify Emerald Green
+   XDR BASE - SHARP CORNER REDIS BRAND PALETTE LOGIN
+   Palette:
+     - Firefly (#091A23)           - Deep Canvas & Background (60%)
+     - Big Stone (#163341)         - Surface & Elevated Containers (60%)
+     - Red Orange (#FF4438)        - Primary Brand Accent & Actions (30%)
+     - Nevada (#5C707A)            - Structural Borders & Muted Accents (30%)
+     - Chartreuse Yellow (#DCFF1E) - Tertiary Electric Accent (10%)
 =========================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 :root {
-    --bg-base: #060b09;
-    --bg-card: #0c1612;
-    --bg-input: #08120e;
-    --accent-green: #01b574;
-    --accent-green-hover: #00d27a;
-    --accent-green-glow: rgba(1, 181, 116, 0.28);
-    --border-color: #15241d;
+    --font-primary: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: 'Space Mono', 'JetBrains Mono', monospace;
+
+    --bg-base: #091A23;
+    --bg-card: #122834;
+    --bg-card-elevated: #163341;
+    --bg-input: #0a1b24;
+    
+    --brand-primary: #FF4438;
+    --brand-primary-hover: #ff5c52;
+    --brand-primary-glow: rgba(255, 68, 56, 0.35);
+    
+    --accent-tertiary: #DCFF1E;
+    --accent-tertiary-hover: #e8ff47;
+    --accent-tertiary-glow: rgba(220, 255, 30, 0.28);
+    
+    --border-color: rgba(92, 112, 122, 0.3);
+    --border-focus: #FF4438;
+    
     --text-primary: #ffffff;
-    --text-secondary: #a0aec0;
-    --text-muted: #718096;
-    --text-inverse: #060b09;
+    --text-secondary: #d1dde3;
+    --text-muted: #82959f;
+    --text-inverse: #091A23;
+    --status-healthy: #00d27a;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    border-radius: 0 !important; /* STRICT SHARP CORNER */
 }
 
 body {
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--font-primary);
     background-color: var(--bg-base);
     background-image: 
-        radial-gradient(circle at 50% 20%, rgba(1, 181, 116, 0.12) 0%, transparent 60%),
-        radial-gradient(circle at 80% 80%, rgba(0, 181, 216, 0.05) 0%, transparent 50%);
+        radial-gradient(circle at 50% 20%, rgba(255, 68, 56, 0.08) 0%, transparent 60%),
+        radial-gradient(circle at 80% 80%, rgba(22, 51, 65, 0.5) 0%, transparent 50%);
     background-attachment: fixed;
     min-height: 100vh;
     display: flex;
@@ -49,10 +66,12 @@ body {
 .login-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
+    border-radius: 14px;
     padding: 40px 36px;
     text-align: center;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
     position: relative;
+    overflow: hidden;
 }
 
 .login-card::before {
@@ -62,21 +81,22 @@ body {
     left: 0;
     width: 100%;
     height: 3px;
-    background: var(--accent-green);
+    background: linear-gradient(90deg, var(--brand-primary) 0%, var(--accent-tertiary) 100%);
 }
 
 .logo {
     width: 60px;
     height: 60px;
     margin: 0 auto 20px;
-    background: var(--accent-green);
-    color: var(--text-inverse);
+    background: var(--brand-primary);
+    color: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 26px;
     font-weight: 800;
-    box-shadow: 0 0 24px var(--accent-green-glow);
+    border-radius: 10px;
+    box-shadow: 0 0 24px var(--brand-primary-glow);
 }
 
 .login-card h1 {
@@ -90,14 +110,15 @@ body {
 .brand-sub {
     font-size: 11px;
     font-weight: 700;
-    color: var(--accent-green);
+    color: var(--accent-tertiary);
     text-transform: uppercase;
     letter-spacing: 1.5px;
     margin-bottom: 12px;
     display: inline-block;
     padding: 3px 8px;
-    background: rgba(1, 181, 116, 0.1);
-    border: 1px solid rgba(1, 181, 116, 0.3);
+    border-radius: 4px;
+    background: rgba(220, 255, 30, 0.12);
+    border: 1px solid rgba(220, 255, 30, 0.35);
 }
 
 .subtitle {
@@ -126,6 +147,7 @@ body {
     padding: 13px 14px 13px 40px;
     background: var(--bg-input);
     border: 1px solid var(--border-color);
+    border-radius: 8px;
     color: #ffffff;
     font-size: 13px;
     font-family: inherit;
@@ -134,23 +156,24 @@ body {
 
 .input-group input:focus {
     outline: none;
-    border-color: var(--accent-green);
-    background: #0c1813;
+    border-color: var(--brand-primary);
+    background: #0d222e;
 }
 
 button {
     width: 100%;
     margin-top: 10px;
     padding: 13px;
-    border: 1px solid var(--accent-green);
-    background: var(--accent-green);
-    color: var(--text-inverse);
+    border: 1px solid var(--brand-primary);
+    background: var(--brand-primary);
+    color: #ffffff;
     font-size: 13px;
     font-weight: 800;
     letter-spacing: 0.8px;
     text-transform: uppercase;
+    border-radius: 8px;
     cursor: pointer;
-    box-shadow: 0 0 20px var(--accent-green-glow);
+    box-shadow: 0 0 20px var(--brand-primary-glow);
     transition: 0.2s ease;
     display: flex;
     align-items: center;
@@ -159,8 +182,8 @@ button {
 }
 
 button:hover {
-    background: var(--accent-green-hover);
-    box-shadow: 0 0 28px rgba(1, 181, 116, 0.45);
+    background: var(--brand-primary-hover);
+    box-shadow: 0 0 28px rgba(255, 68, 56, 0.5);
 }
 
 button:disabled {
@@ -177,7 +200,7 @@ button:disabled {
 
 .secure {
     margin-top: 22px;
-    color: var(--accent-green);
+    color: var(--status-healthy);
     display: flex;
     justify-content: center;
     align-items: center;

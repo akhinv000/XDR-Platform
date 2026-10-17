@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XDR BASE | SOC Dashboard</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css?v=4.6">
+    <link rel="stylesheet" href="css/green.css?v=4.6">
 </head>
 <body>
 
@@ -21,41 +25,68 @@
 
         <ul class="sidebar-menu">
             <li>
-                <a href="#overview" class="sidebar-link active">
-                    <i class="fa-solid fa-table-columns"></i>
-                    <span>Dashboard</span>
+                <a href="javascript:void(0)" onclick="switchWorkbenchView('all')" class="sidebar-link active" id="sideLinkAll">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>All Workspaces</span>
                 </a>
             </li>
             <li>
-                <a href="#alerts" class="sidebar-link">
-                    <i class="fa-solid fa-bell"></i>
-                    <span>Threat Alerts</span>
+                <a href="javascript:void(0)" onclick="switchWorkbenchView('overview')" class="sidebar-link" id="sideLinkOverview">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Command Center</span>
                 </a>
             </li>
             <li>
-                <a href="#assets" class="sidebar-link">
+                <a href="javascript:void(0)" onclick="switchWorkbenchView('incidents')" class="sidebar-link" id="sideLinkIncidents">
+                    <i class="fa-solid fa-shield-virus"></i>
+                    <span>Incidents & Cases</span>
+                    <span class="sidebar-badge" id="tabCountIncidents">0</span>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)" onclick="switchWorkbenchView('alerts')" class="sidebar-link" id="sideLinkAlerts">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span>Threat Detections</span>
+                    <span class="sidebar-badge" id="tabCountAlerts">0</span>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)" onclick="switchWorkbenchView('endpoints')" class="sidebar-link" id="sideLinkEndpoints">
                     <i class="fa-solid fa-server"></i>
-                    <span>Endpoints</span>
+                    <span>Fleet & Endpoints</span>
                 </a>
             </li>
             <li>
-                <a href="#analytics" class="sidebar-link">
-                    <i class="fa-solid fa-chart-column"></i>
-                    <span>Analytics</span>
+                <a href="javascript:void(0)" onclick="switchWorkbenchView('firewall')" class="sidebar-link" id="sideLinkFirewall">
+                    <i class="fa-solid fa-ban"></i>
+                    <span>Firewall Blocklist</span>
                 </a>
             </li>
             <li>
-                <a href="#logs" class="sidebar-link">
-                    <i class="fa-solid fa-file-lines"></i>
-                    <span>Security Logs</span>
+                <a href="javascript:void(0)" onclick="switchWorkbenchView('connect')" class="sidebar-link" id="sideLinkConnect">
+                    <i class="fa-solid fa-network-wired"></i>
+                    <span>Deploy Agents</span>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)" onclick="switchWorkbenchView('logs')" class="sidebar-link" id="sideLinkLogs">
+                    <i class="fa-solid fa-file-waveform"></i>
+                    <span>Audit Feed & Stream</span>
                 </a>
             </li>
 
             <li class="sidebar-heading">SOC OPERATIONS</li>
 
             <li>
+                <a href="javascript:void(0)" onclick="openSoarModal()" class="sidebar-link" id="sideLinkSoar">
+                    <i class="fa-solid fa-robot"></i>
+                    <span>SOAR Playbooks</span>
+                    <span class="sidebar-badge" id="sideSoarBadge" style="background: rgba(220, 255, 30, 0.15); color: var(--accent-tertiary); border: 1px solid rgba(220, 255, 30, 0.35);">4 Active</span>
+                </a>
+            </li>
+            <li>
                 <a href="javascript:void(0)" onclick="scanNetwork()" class="sidebar-link">
-                    <i class="fa-solid fa-radar"></i>
+                    <i class="fa-solid fa-satellite-dish"></i>
                     <span>Scan Network</span>
                 </a>
             </li>
@@ -87,108 +118,314 @@
 <!-- ================= MAIN WRAPPER ================= -->
 <div class="main-wrapper">
 
-    <!-- Top Navbar -->
+    <!-- Consolidated SOC Header (Clean, High Visibility, Uncluttered) -->
     <header class="top-navbar">
-        <div class="breadcrumb-box">
-            <div class="breadcrumb-path">
-                <span>SOC</span> / <span style="color: #ffffff;">Platform Control</span>
+        <div class="top-navbar-left">
+            <div class="nav-title-box">
+                <div class="status-dot live"></div>
+                <span class="nav-title">SOC Console</span>
             </div>
-            <div class="breadcrumb-title">XDR BASE Dashboard</div>
+            <div class="hud-defcon-badge" id="defconBadge">
+                <span class="hud-pulse-dot"></span>
+                <span id="defconText">DEFCON 3: ELEVATED (10 HIGH)</span>
+            </div>
+            <span id="activeViewLabel" style="display: none;"></span>
+        </div>
+
+        <div class="top-navbar-center">
+            <div class="nav-live-telemetry">
+                <span><i class="fa-regular fa-clock" style="color: var(--text-muted); margin-right: 4px;"></i> UTC <strong id="clockUtc">--:--:--</strong></span>
+                <span class="nav-sep">•</span>
+                <span class="nav-live-pill"><i class="fa-solid fa-bolt"></i> <span id="hudEps">184 EPS</span></span>
+            </div>
         </div>
 
         <div class="top-navbar-right">
             <div class="search-bar">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" class="search-input" id="globalSearch" placeholder="Search security logs..." onkeyup="searchLogs()">
+                <input type="text" class="search-input" id="globalSearch" placeholder="Search logs..." onkeyup="searchLogs()">
             </div>
 
-            <button class="nav-action-btn green" onclick="scanNetwork()" id="scanBtn" title="Discover network assets">
-                <i class="fa-solid fa-radar"></i>
-                <span>Scan Network</span>
+            <!-- Single primary CTA -->
+            <button class="nav-btn-primary" onclick="document.getElementById('connect').scrollIntoView({behavior: 'smooth'})" title="Connect a new endpoint or network device">
+                <i class="fa-solid fa-plus"></i>
+                <span>Connect Agent</span>
             </button>
 
-            <button class="nav-action-btn" onclick="triggerLogCollection()" id="ingestBtn" title="Ingest auth.log and trigger threat detection">
-                <i class="fa-solid fa-arrows-rotate"></i>
-                <span>Ingest Logs</span>
-            </button>
-
-            <div style="display: flex; align-items: center; gap: 8px; margin-left: 8px;">
-                <span class="nav-icon-link" title="Operator Profile">
-                    <i class="fa-solid fa-user-shield"></i>
-                </span>
-                <span id="username" style="font-size: 13px; font-weight: 700; color: #ffffff;">Administrator</span>
+            <!-- Quiet utility toolbelt buttons -->
+            <div class="nav-icon-group">
+                <button class="nav-icon-btn" onclick="openSoarModal()" title="Autonomous SOAR Playbooks & SecOps Automation">
+                    <i class="fa-solid fa-robot" style="color: var(--accent-tertiary);"></i>
+                </button>
+                <button class="nav-icon-btn active" id="sfxToggleBtn" onclick="toggleSfx()" title="Tactical Audio: Enabled (Click to Mute)">
+                    <i class="fa-solid fa-volume-high"></i>
+                </button>
+                <button class="nav-icon-btn" id="hudSyncBtn" onclick="forceSync()" title="Force Live Telemetry Sync">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                </button>
+                <button class="nav-icon-btn" onclick="openExecutiveReport()" title="Generate Executive Incident Dossier">
+                    <i class="fa-solid fa-file-shield" style="color: var(--brand-primary);"></i>
+                </button>
             </div>
 
-            <a href="javascript:void(0)" onclick="logout()" class="nav-icon-link" title="Sign Out">
-                <i class="fa-solid fa-right-from-bracket"></i>
-            </a>
+            <!-- Operator Profile & Logout -->
+            <div class="nav-user-chip">
+                <i class="fa-solid fa-user-shield" style="color: var(--brand-primary);"></i>
+                <span id="username">Admin</span>
+                <a href="javascript:void(0)" onclick="logout()" class="nav-signout-link" title="Sign Out">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
+            </div>
         </div>
     </header>
 
     <!-- Page Content -->
     <div class="page-content" id="overview">
 
-        <!-- ROW 1: 4 FUNCTIONAL METRIC CARDS (Strictly Real Backend Data) -->
-        <section class="metrics-row">
+        <!-- ROW 1: 4 UNIFIED METRIC & VELOCITY CARDS (Redis Enterprise Box Design) -->
+        <section class="metrics-row" data-workspace="overview">
             <div class="metric-card">
-                <div class="metric-info">
-                    <span class="metric-label">Active Threat Alerts</span>
-                    <div class="metric-number-row">
-                        <span class="metric-number" id="activeAlerts">0</span>
-                    </div>
-                    <span class="metric-sublabel warn"><i class="fa-solid fa-triangle-exclamation"></i> Triage Pending</span>
+                <div class="metric-card-header">
+                    <span class="metric-card-title">Active Threat Alerts</span>
+                    <span class="kpi-mini-pill speed" title="Mean Time to Detect (MTTD)"><i class="fa-solid fa-bolt"></i> MTTD 38s</span>
                 </div>
-                <div class="metric-icon-box">
-                    <i class="fa-solid fa-bell"></i>
+                <div class="metric-card-body">
+                    <div class="metric-info-col">
+                        <div class="metric-number-row">
+                            <span class="metric-number" id="activeAlerts">0</span>
+                        </div>
+                        <div class="metric-kv-list">
+                            <div class="metric-kv-row">
+                                <span class="metric-k">Triage In-Flight</span>
+                                <span class="metric-v warn"><i class="fa-solid fa-triangle-exclamation"></i> Pending</span>
+                            </div>
+                            <div class="metric-kv-row">
+                                <span class="metric-k">Target SLA</span>
+                                <span class="metric-v">&lt; 60s Target</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="metric-radial-gauge" data-percent="88" title="Triage Coverage: 88%">
+                        <svg viewBox="0 0 60 60" class="radial-svg">
+                            <circle class="radial-bg" cx="30" cy="30" r="24"></circle>
+                            <circle class="radial-progress stroke-yellow" cx="30" cy="30" r="24" stroke-dasharray="150.8" stroke-dashoffset="18.1"></circle>
+                        </svg>
+                        <div class="radial-center">
+                            <span class="radial-val text-yellow">88%</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="metric-card">
-                <div class="metric-info">
-                    <span class="metric-label">High / Critical Alerts</span>
-                    <div class="metric-number-row">
-                        <span class="metric-number" id="highAlerts" style="color: var(--status-critical);">0</span>
-                    </div>
-                    <span class="metric-sublabel crit"><i class="fa-solid fa-fire"></i> Immediate Attention</span>
+                <div class="metric-card-header">
+                    <span class="metric-card-title">High / Critical Alerts</span>
+                    <span class="kpi-mini-pill sla" title="Mean Time to Contain (MTTR)"><i class="fa-solid fa-circle-check"></i> MTTR 3.4m</span>
                 </div>
-                <div class="metric-icon-box" style="background: var(--status-critical); box-shadow: 0 0 16px rgba(229, 62, 62, 0.35);">
-                    <i class="fa-solid fa-shield-virus"></i>
+                <div class="metric-card-body">
+                    <div class="metric-info-col">
+                        <div class="metric-number-row">
+                            <span class="metric-number" id="highAlerts" style="color: var(--status-critical);">0</span>
+                        </div>
+                        <div class="metric-kv-list">
+                            <div class="metric-kv-row">
+                                <span class="metric-k">Containment</span>
+                                <span class="metric-v crit"><i class="fa-solid fa-fire"></i> Immediate</span>
+                            </div>
+                            <div class="metric-kv-row">
+                                <span class="metric-k">Target SLA</span>
+                                <span class="metric-v">&lt; 15m Target</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="metric-radial-gauge" data-percent="94" title="Containment Rate: 94%">
+                        <svg viewBox="0 0 60 60" class="radial-svg">
+                            <circle class="radial-bg" cx="30" cy="30" r="24"></circle>
+                            <circle class="radial-progress stroke-crit" cx="30" cy="30" r="24" stroke-dasharray="150.8" stroke-dashoffset="9.0"></circle>
+                        </svg>
+                        <div class="radial-center">
+                            <span class="radial-val text-crit">94%</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="metric-card">
-                <div class="metric-info">
-                    <span class="metric-label">Monitored Endpoints</span>
-                    <div class="metric-number-row">
-                        <span class="metric-number" id="totalAssets">0</span>
-                    </div>
-                    <span class="metric-sublabel green"><i class="fa-solid fa-circle-check"></i> Network Discovered</span>
+                <div class="metric-card-header">
+                    <span class="metric-card-title">Monitored Endpoints</span>
+                    <span class="kpi-mini-pill health" title="Fleet Defense Posture"><i class="fa-solid fa-shield-heart"></i> 97.2%</span>
                 </div>
-                <div class="metric-icon-box">
-                    <i class="fa-solid fa-server"></i>
+                <div class="metric-card-body">
+                    <div class="metric-info-col">
+                        <div class="metric-number-row">
+                            <span class="metric-number" id="totalAssets">0</span>
+                        </div>
+                        <div class="metric-kv-list">
+                            <div class="metric-kv-row">
+                                <span class="metric-k">Zero-Trust</span>
+                                <span class="metric-v green"><i class="fa-solid fa-circle-check"></i> Verified</span>
+                            </div>
+                            <div class="metric-kv-row">
+                                <span class="metric-k">EDR Fleet</span>
+                                <span class="metric-v">100% Synced</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="metric-radial-gauge" data-percent="97" title="Endpoint Health: 97.2%">
+                        <svg viewBox="0 0 60 60" class="radial-svg">
+                            <circle class="radial-bg" cx="30" cy="30" r="24"></circle>
+                            <circle class="radial-progress stroke-cyan" cx="30" cy="30" r="24" stroke-dasharray="150.8" stroke-dashoffset="4.5"></circle>
+                        </svg>
+                        <div class="radial-center">
+                            <span class="radial-val text-cyan">97%</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="metric-card">
-                <div class="metric-info">
-                    <span class="metric-label">Ingested Audit Events</span>
-                    <div class="metric-number-row">
-                        <span class="metric-number" id="totalLogs">0</span>
-                    </div>
-                    <span class="metric-sublabel green"><i class="fa-solid fa-database"></i> Telemetry Records</span>
+                <div class="metric-card-header">
+                    <span class="metric-card-title">Ingested Audit Events</span>
+                    <span class="kpi-mini-pill auto" title="Live Telemetry Ingestion Velocity"><i class="fa-solid fa-tower-broadcast"></i> 184 EPS</span>
                 </div>
-                <div class="metric-icon-box">
-                    <i class="fa-solid fa-file-waveform"></i>
+                <div class="metric-card-body">
+                    <div class="metric-info-col">
+                        <div class="metric-number-row">
+                            <span class="metric-number" id="totalLogs">0</span>
+                        </div>
+                        <div class="metric-kv-list">
+                            <div class="metric-kv-row">
+                                <span class="metric-k">Pipeline</span>
+                                <span class="metric-v green"><i class="fa-solid fa-database"></i> 100% Auto</span>
+                            </div>
+                            <div class="metric-kv-row">
+                                <span class="metric-k">Correlator</span>
+                                <span class="metric-v">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="metric-radial-gauge" data-percent="100" title="Ingestion Pipeline: 100%">
+                        <svg viewBox="0 0 60 60" class="radial-svg">
+                            <circle class="radial-bg" cx="30" cy="30" r="24"></circle>
+                            <circle class="radial-progress stroke-green" cx="30" cy="30" r="24" stroke-dasharray="150.8" stroke-dashoffset="0"></circle>
+                        </svg>
+                        <div class="radial-center">
+                            <span class="radial-val text-green">100%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MITRE ATT&CK FRAMEWORK TACTICAL NAVIGATOR -->
+        <section class="mitre-matrix-section tactical-frame" data-workspace="overview">
+            <div class="mitre-header">
+                <div class="mitre-header-title">
+                    <i class="fa-solid fa-crosshairs" style="color: var(--brand-primary);"></i>
+                    <span>MITRE ATT&CK® Enterprise Threat Matrix</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 11px; color: var(--text-muted);">Filter:</span>
+                    <button class="filter-chip active" id="mitreFilterAll" onclick="filterByMitreTactic('ALL')">All Tactics</button>
+                    <button class="filter-chip" id="mitreCollapseBtn" onclick="toggleMitreMatrix()" title="Expand / Collapse MITRE Matrix" style="display: inline-flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-chevron-down" id="mitreCollapseIcon"></i>
+                        <span id="mitreCollapseText">Expand Matrix</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="mitre-matrix-grid collapsed" id="mitreMatrixGrid">
+                <!-- Populated dynamically via JS with live counts -->
+                <div class="mitre-tactic-card" onclick="filterByMitreTactic('Initial Access')">
+                    <div class="mitre-tactic-name">Initial Access</div>
+                    <div class="mitre-tactic-footer">
+                        <span class="mitre-tactic-id">TA0001</span>
+                        <span class="mitre-tactic-count" id="mitre-count-initial-access">0</span>
+                    </div>
+                </div>
+                <div class="mitre-tactic-card" onclick="filterByMitreTactic('Execution')">
+                    <div class="mitre-tactic-name">Execution</div>
+                    <div class="mitre-tactic-footer">
+                        <span class="mitre-tactic-id">TA0002</span>
+                        <span class="mitre-tactic-count" id="mitre-count-execution">0</span>
+                    </div>
+                </div>
+                <div class="mitre-tactic-card" onclick="filterByMitreTactic('Persistence')">
+                    <div class="mitre-tactic-name">Persistence</div>
+                    <div class="mitre-tactic-footer">
+                        <span class="mitre-tactic-id">TA0003</span>
+                        <span class="mitre-tactic-count" id="mitre-count-persistence">0</span>
+                    </div>
+                </div>
+                <div class="mitre-tactic-card" onclick="filterByMitreTactic('Privilege Escalation')">
+                    <div class="mitre-tactic-name">Privilege Escalation</div>
+                    <div class="mitre-tactic-footer">
+                        <span class="mitre-tactic-id">TA0004</span>
+                        <span class="mitre-tactic-count" id="mitre-count-privilege-escalation">0</span>
+                    </div>
+                </div>
+                <div class="mitre-tactic-card" onclick="filterByMitreTactic('Defense Evasion')">
+                    <div class="mitre-tactic-name">Defense Evasion</div>
+                    <div class="mitre-tactic-footer">
+                        <span class="mitre-tactic-id">TA0005</span>
+                        <span class="mitre-tactic-count" id="mitre-count-defense-evasion">0</span>
+                    </div>
+                </div>
+                <div class="mitre-tactic-card" onclick="filterByMitreTactic('Credential Access')">
+                    <div class="mitre-tactic-name">Credential Access</div>
+                    <div class="mitre-tactic-footer">
+                        <span class="mitre-tactic-id">TA0006</span>
+                        <span class="mitre-tactic-count" id="mitre-count-credential-access">0</span>
+                    </div>
+                </div>
+                <div class="mitre-tactic-card" onclick="filterByMitreTactic('Discovery')">
+                    <div class="mitre-tactic-name">Discovery</div>
+                    <div class="mitre-tactic-footer">
+                        <span class="mitre-tactic-id">TA0007</span>
+                        <span class="mitre-tactic-count" id="mitre-count-discovery">0</span>
+                    </div>
+                </div>
+                <div class="mitre-tactic-card" onclick="filterByMitreTactic('Lateral Movement')">
+                    <div class="mitre-tactic-name">Lateral Movement</div>
+                    <div class="mitre-tactic-footer">
+                        <span class="mitre-tactic-id">TA0008</span>
+                        <span class="mitre-tactic-count" id="mitre-count-lateral-movement">0</span>
+                    </div>
+                </div>
+                <div class="mitre-tactic-card" onclick="filterByMitreTactic('Command & Control')">
+                    <div class="mitre-tactic-name">Command & Control</div>
+                    <div class="mitre-tactic-footer">
+                        <span class="mitre-tactic-id">TA0011</span>
+                        <span class="mitre-tactic-count" id="mitre-count-command-control">0</span>
+                    </div>
+                </div>
+                <div class="mitre-tactic-card" onclick="filterByMitreTactic('Impact')">
+                    <div class="mitre-tactic-name">Impact</div>
+                    <div class="mitre-tactic-footer">
+                        <span class="mitre-tactic-id">TA0040</span>
+                        <span class="mitre-tactic-count" id="mitre-count-impact">0</span>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- ROW 2: REAL FUNCTIONAL ANALYTICS CHARTS (Strictly GET /analytics/) -->
-        <section class="analytics-section" id="analytics">
-            <div class="section-title-box">
-                <div class="section-badge"><i class="fa-solid fa-chart-pie"></i> REAL TELEMETRY ANALYTICS</div>
-                <h2>Security Distribution & Posture</h2>
-                <p>Telemetry distributions computed directly from live assets, alerts, and ingested syslog events</p>
+        <section class="analytics-section" id="analytics" data-workspace="overview">
+            <!-- SENTINELONE / ELASTIC STYLE: 24-HOUR THREAT VELOCITY & TELEMETRY TIMELINE -->
+            <div class="timeline-card" style="margin-bottom: 20px;">
+                <div class="timeline-header">
+                    <div class="timeline-title-group">
+                        <h3><i class="fa-solid fa-chart-area" style="color: var(--brand-primary);"></i> 24-Hour Threat Velocity & Telemetry Timeline</h3>
+                        <p>Real-time correlation of event ingestion throughput versus detected threat spikes</p>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 14px; font-size: 11px; font-family: 'JetBrains Mono';">
+                        <span style="display: flex; align-items: center; gap: 5px; color: var(--accent-tertiary);"><span style="width: 10px; height: 10px; background: var(--accent-tertiary);"></span> Ingested Events</span>
+                        <span style="display: flex; align-items: center; gap: 5px; color: var(--status-critical);"><span style="width: 10px; height: 10px; background: var(--status-critical);"></span> Threat Spikes</span>
+                    </div>
+                </div>
+                <div class="timeline-canvas-box">
+                    <canvas id="timelineChart"></canvas>
+                </div>
             </div>
 
             <div class="analytics-grid">
@@ -247,19 +484,152 @@
                     </div>
                 </div>
             </div>
+
+            <!-- PALO ALTO CORTEX XDR STYLE: TOP IMPACTED ENTITIES & ADVERSARY SCORECARD -->
+            <div class="entity-scorecard-grid">
+                <!-- Card 1: Top Targeted Endpoints -->
+                <div class="entity-scorecard">
+                    <div class="scorecard-header">
+                        <div class="scorecard-title-group">
+                            <i class="fa-solid fa-server"></i>
+                            <h4>Top Targeted Endpoints</h4>
+                        </div>
+                        <span style="font-size: 10px; color: var(--text-muted); font-family: 'JetBrains Mono';">FLEET ASSETS</span>
+                    </div>
+                    <div class="scorecard-list" id="topTargetedHostsList">
+                        <div style="color: var(--text-muted); font-size: 11px; text-align: center; padding: 12px;">Evaluating host telemetry...</div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Top Adversary IPs -->
+                <div class="entity-scorecard">
+                    <div class="scorecard-header">
+                        <div class="scorecard-title-group">
+                            <i class="fa-solid fa-skull-crossbones" style="color: var(--status-critical);"></i>
+                            <h4>Top Threat Source IPs</h4>
+                        </div>
+                        <span style="font-size: 10px; color: var(--text-muted); font-family: 'JetBrains Mono';">ATTACK ORIGIN</span>
+                    </div>
+                    <div class="scorecard-list" id="topAdversaryIpsList">
+                        <div style="color: var(--text-muted); font-size: 11px; text-align: center; padding: 12px;">Aggregating adversary IPs...</div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Top Triggered MITRE Techniques -->
+                <div class="entity-scorecard">
+                    <div class="scorecard-header">
+                        <div class="scorecard-title-group">
+                            <i class="fa-solid fa-crosshairs"></i>
+                            <h4>Top MITRE® Techniques</h4>
+                        </div>
+                        <span style="font-size: 10px; color: var(--text-muted); font-family: 'JetBrains Mono';">ATT&CK MATRIX</span>
+                    </div>
+                    <div class="scorecard-list" id="topMitreTechniquesList">
+                        <div style="color: var(--text-muted); font-size: 11px; text-align: center; padding: 12px;">Profiling attack techniques...</div>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <!-- ROW 3: THREAT ALERTS TABLE -->
-        <section class="data-card" id="alerts">
+        <!-- REAL-TIME TELEMETRY BLACKBOX STREAM TERMINAL -->
+        <section class="soc-terminal-section tactical-frame" id="terminal" data-workspace="logs">
+            <div class="terminal-header">
+                <div class="terminal-title-group">
+                    <span class="terminal-title">
+                        <i class="fa-solid fa-terminal" style="color: var(--accent-tertiary);"></i>
+                        SOC Telemetry Stream & Heuristic Blackbox
+                    </span>
+                    <span class="terminal-live-tag">
+                        <span class="hud-pulse-dot" style="background:var(--accent-tertiary); box-shadow:0 0 6px var(--accent-tertiary);"></span>
+                        LIVE CORRELATOR
+                    </span>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="hud-btn active" id="terminalAutoScrollBtn" onclick="toggleTerminalAutoScroll()">
+                        <i class="fa-solid fa-arrows-down-to-line"></i> <span id="autoScrollText">Auto-Scroll: ON</span>
+                    </button>
+                    <button class="hud-btn" onclick="clearTerminalLogs()">
+                        <i class="fa-solid fa-trash-can"></i> Clear
+                    </button>
+                    <button class="hud-btn" onclick="copyTerminalLogs()">
+                        <i class="fa-regular fa-copy"></i> Copy Stream
+                    </button>
+                    <button class="hud-btn" id="terminalCollapseBtn" onclick="toggleTerminalCollapse()" title="Collapse / Expand Terminal">
+                        <i class="fa-solid fa-chevron-up" id="terminalCollapseIcon"></i> <span id="terminalCollapseText">Minimize</span>
+                    </button>
+                </div>
+            </div>
+            <div class="terminal-viewport" id="terminalBody">
+                <div class="terminal-line"><span class="t-time">[BOOT]</span> <span class="t-tag-info">[CORE]</span> <span class="t-msg">Autonomous correlation engine initialized. Ingestion pipeline ready.</span></div>
+            </div>
+        </section>
+
+        <!-- ROW 3: INCIDENTS & CASE MANAGEMENT -->
+        <section class="data-card tactical-frame" id="incidents" data-workspace="incidents">
             <div class="data-card-header">
                 <div>
-                    <h3><i class="fa-solid fa-triangle-exclamation" style="color: var(--accent-green);"></i> Active Threat Detections</h3>
+                    <h3><i class="fa-solid fa-shield-virus" style="color: var(--status-critical);"></i> Correlated Incidents & Attack Campaigns</h3>
+                    <p>Multi-stage threat incidents correlated automatically using MITRE ATT&CK heuristics</p>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="nav-action-btn green" onclick="loadIncidents()">
+                        <i class="fa-solid fa-rotate"></i>
+                        <span>Refresh Cases</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-filter-bar" id="incidentFilterBar">
+                <span style="font-size: 11px; color: var(--text-muted); margin-right: 4px;">Status Triage:</span>
+                <button class="filter-chip active" onclick="filterIncidents('ALL', this)">All Cases (<span id="incCountAll">0</span>)</button>
+                <button class="filter-chip" onclick="filterIncidents('CRITICAL', this)">Critical (<span id="incCountCrit">0</span>)</button>
+                <button class="filter-chip" onclick="filterIncidents('HIGH', this)">High (<span id="incCountHigh">0</span>)</button>
+                <button class="filter-chip" onclick="filterIncidents('INVESTIGATING', this)">Investigating (<span id="incCountInv">0</span>)</button>
+                <button class="filter-chip" onclick="filterIncidents('CONTAINED', this)">Contained (<span id="incCountCont">0</span>)</button>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="sharp-table">
+                    <thead>
+                        <tr>
+                            <th>Severity</th>
+                            <th>Attack Phase</th>
+                            <th>Incident Title</th>
+                            <th>Host</th>
+                            <th>Attacker Source IP</th>
+                            <th>MITRE Technique</th>
+                            <th>Status</th>
+                            <th>Alerts</th>
+                            <th style="text-align: right;">Containment & Triage</th>
+                        </tr>
+                    </thead>
+                    <tbody id="incidentTable">
+                        <tr><td colspan="9" style="text-align:center; color: var(--text-muted); padding: 24px;">Loading incidents...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ROW 4: THREAT ALERTS TABLE -->
+        <section class="data-card tactical-frame" id="alerts" data-workspace="alerts">
+            <div class="data-card-header">
+                <div>
+                    <h3><i class="fa-solid fa-triangle-exclamation" style="color: var(--status-critical);"></i> Active Threat Detections</h3>
                     <p>Live threat events correlated across auth.log and authentication daemons</p>
                 </div>
                 <button class="nav-action-btn green" onclick="triggerLogCollection()">
                     <i class="fa-solid fa-rotate"></i>
                     <span>Refresh & Triage</span>
                 </button>
+            </div>
+
+            <div class="table-filter-bar" id="alertFilterBar">
+                <span style="font-size: 11px; color: var(--text-muted); margin-right: 4px;">Severity Triage:</span>
+                <button class="filter-chip active" onclick="filterAlerts('ALL', this)">All Threats (<span id="alertCountAll">0</span>)</button>
+                <button class="filter-chip" onclick="filterAlerts('OPEN', this)">Open (<span id="alertCountOpen">0</span>)</button>
+                <button class="filter-chip" onclick="filterAlerts('CRITICAL', this)">Critical (<span id="alertCountCrit">0</span>)</button>
+                <button class="filter-chip" onclick="filterAlerts('HIGH', this)">High (<span id="alertCountHigh">0</span>)</button>
+                <button class="filter-chip" onclick="filterAlerts('MEDIUM', this)">Medium (<span id="alertCountMed">0</span>)</button>
             </div>
 
             <div style="overflow-x: auto;">
@@ -282,10 +652,10 @@
         </section>
 
         <!-- ROW 4: ENDPOINT INVENTORY TABLE -->
-        <section class="data-card" id="assets">
+        <section class="data-card" id="assets" data-workspace="endpoints">
             <div class="data-card-header">
                 <div>
-                    <h3><i class="fa-solid fa-server" style="color: var(--accent-green);"></i> Monitored Endpoints & Assets</h3>
+                    <h3><i class="fa-solid fa-server" style="color: var(--status-info);"></i> Monitored Endpoints & Assets</h3>
                     <p>Discovered network hosts with port exposure and vulnerability scoring</p>
                 </div>
                 <button class="nav-action-btn" onclick="scanNetwork()">
@@ -313,19 +683,164 @@
             </div>
         </section>
 
-        <!-- ROW 5: SECURITY AUDIT LOGS -->
-        <section class="data-card" id="logs">
+        <!-- ROW 5: FIREWALL CONTAINMENT BLOCKLIST -->
+        <section class="data-card" id="blocklist" data-workspace="firewall">
             <div class="data-card-header">
                 <div>
-                    <h3><i class="fa-solid fa-file-waveform" style="color: var(--accent-green);"></i> Security Audit Logs</h3>
-                    <p>Raw event log feed ingested from auth.log and syslog daemons</p>
+                    <h3><i class="fa-solid fa-ban" style="color: var(--status-critical);"></i> Perimeter Firewall Blocklist</h3>
+                    <p>Malicious source IPs isolated from perimeter networks and synchronized across endpoint firewalls</p>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="nav-action-btn" onclick="exportBlocklistFeed()" title="Open plaintext feed for pfSense / Fortigate">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        <span>Plaintext Feed</span>
+                    </button>
+                    <button class="nav-action-btn green" onclick="loadBlocklist()">
+                        <i class="fa-solid fa-rotate"></i>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="sharp-table">
+                    <thead>
+                        <tr>
+                            <th>Blocked IP Address</th>
+                            <th>Trigger Reason / Incident</th>
+                            <th>Enforced By</th>
+                            <th>Blocked Timestamp</th>
+                            <th>Enforcement Status</th>
+                            <th style="text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="blocklistTable">
+                        <tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 24px;">No active IP blocks.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ROW 6: CONNECT SYSTEMS & ENDPOINT INTEGRATION -->
+        <section class="data-card" id="connect" data-workspace="connect">
+            <div class="data-card-header">
+                <div>
+                    <h3><i class="fa-solid fa-network-wired" style="color: var(--brand-primary);"></i> Connect Systems & Network Telemetry</h3>
+                    <p>Onboard Linux servers, Windows workstations, and network firewalls to stream real-time telemetry</p>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="nav-action-btn" onclick="simulateAgentConnection()" title="Simulate a remote endpoint sending live telemetry">
+                        <i class="fa-solid fa-play"></i>
+                        <span>Simulate Endpoint</span>
+                    </button>
+                    <button class="nav-action-btn green" onclick="loadConnectedAgents()">
+                        <i class="fa-solid fa-rotate"></i>
+                        <span>Refresh Agents</span>
+                    </button>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 24px;">
+                <!-- Card 1: Linux Installer -->
+                <div style="background: var(--bg-card-subtle); border: 1px solid var(--border-color); padding: 16px;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <i class="fa-brands fa-linux" style="font-size: 20px; color: var(--accent-tertiary);"></i>
+                        <h4 style="font-size: 14px; font-weight: 700; color: #fff;">Linux Endpoint / Server</h4>
+                    </div>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">One-line auto-installer: deploys background systemd agent, tails auth.log, & enables containment.</p>
+                    <div class="sharp-code-box">
+                        <span id="linuxInstallCmd">curl -sSL http://127.0.0.1:9000/api/v1/agent/install.sh | sudo bash</span>
+                        <button class="sharp-btn-icon" onclick="copyToClipboard('linuxInstallCmd')" title="Copy Command"><i class="fa-regular fa-copy"></i></button>
+                    </div>
+                </div>
+
+                <!-- Card 2: Windows Installer -->
+                <div style="background: var(--bg-card-subtle); border: 1px solid var(--border-color); padding: 16px;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <i class="fa-brands fa-windows" style="font-size: 20px; color: var(--status-info);"></i>
+                        <h4 style="font-size: 14px; font-weight: 700; color: #fff;">Windows Workstation / Server</h4>
+                    </div>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">PowerShell 1-liner: captures Event IDs 4625/4688 & executes Windows Firewall isolation.</p>
+                    <div class="sharp-code-box">
+                        <span id="winInstallCmd">irm http://127.0.0.1:9000/api/v1/agent/install.ps1 | iex</span>
+                        <button class="sharp-btn-icon" onclick="copyToClipboard('winInstallCmd')" title="Copy Command"><i class="fa-regular fa-copy"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Network Devices & Syslog -->
+            <div style="background: var(--bg-card-subtle); border: 1px solid var(--border-color); padding: 16px; margin-bottom: 24px;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                    <i class="fa-solid fa-server" style="font-size: 18px; color: var(--status-warning);"></i>
+                    <h4 style="font-size: 14px; font-weight: 700; color: #fff;">Network Routers, Firewalls & WAF (Syslog)</h4>
+                </div>
+                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">Forward logs from pfSense, Fortigate, or rsyslog daemon via HTTP POST webhook to <code style="color:var(--accent-tertiary);">http://127.0.0.1:9000/api/v1/agent/syslog</code></p>
+                <div class="sharp-code-box">
+                    <span id="syslogConfigSnippet"># /etc/rsyslog.d/xdr.conf: *.* action(type="omhttp" server="127.0.0.1" restpath="api/v1/agent/syslog" port="9000")</span>
+                    <button class="sharp-btn-icon" onclick="copyToClipboard('syslogConfigSnippet')" title="Copy Snippet"><i class="fa-regular fa-copy"></i></button>
+                </div>
+            </div>
+
+            <h4 style="font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 12px;"><i class="fa-solid fa-tower-broadcast" style="color: var(--accent-tertiary);"></i> Live Connected Endpoint Agents</h4>
+            <div style="overflow-x: auto;">
+                <table class="sharp-table">
+                    <thead>
+                        <tr>
+                            <th>Agent ID</th>
+                            <th>Hostname</th>
+                            <th>IP Address</th>
+                            <th>Operating System</th>
+                            <th>Status</th>
+                            <th>Last Heartbeat</th>
+                            <th style="text-align: right;">Containment</th>
+                        </tr>
+                    </thead>
+                    <tbody id="agentTable">
+                        <tr><td colspan="7" style="text-align:center; color: var(--text-muted); padding: 24px;">Loading connected agents...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ROW 7: SECURITY AUDIT LOGS & KQL THREAT HUNTING -->
+        <section class="data-card" id="logs" data-workspace="logs">
+            <div class="data-card-header">
+                <div>
+                    <h3><i class="fa-solid fa-file-waveform" style="color: var(--accent-tertiary);"></i> Security Audit Logs & Threat Hunting</h3>
+                    <p>Fielded KQL threat hunting query bar and raw telemetry stream ingested from endpoint daemons</p>
                 </div>
                 <div style="display: flex; gap: 10px;">
-                    <input type="text" id="searchLog" class="search-input" style="width: 260px;" placeholder="Filter message, host..." onkeyup="searchLogs()">
                     <button class="nav-action-btn green" onclick="triggerLogCollection()">
                         <i class="fa-solid fa-cloud-arrow-down"></i>
-                        <span>Ingest</span>
+                        <span>Ingest Logs</span>
                     </button>
+                </div>
+            </div>
+
+            <!-- KQL Fielded Threat Hunting Query Bar -->
+            <div class="kql-hunt-box">
+                <div class="kql-hunt-row">
+                    <div class="kql-input-wrap">
+                        <span class="kql-icon"><i class="fa-solid fa-crosshairs"></i> KQL</span>
+                        <input type="text" id="kqlHuntInput" class="kql-hunt-input" placeholder="Fielded hunt: host:SRV-ALPHA level:CRITICAL ip:198.51.100.23 message:sudo" onkeydown="handleKqlKey(event)">
+                        <button class="kql-btn-clear" onclick="clearKqlHunt()" title="Clear Query"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <button class="nav-action-btn green" onclick="executeKqlHunt()">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>Execute Hunt</span>
+                    </button>
+                </div>
+                <div class="kql-presets-row">
+                    <span class="kql-preset-label">Tactical Presets:</span>
+                    <button class="kql-preset-chip" onclick="applyKqlPreset('message:powershell OR bash')"><i class="fa-solid fa-terminal"></i> Script Exec (T1059)</button>
+                    <button class="kql-preset-chip" onclick="applyKqlPreset('level:CRITICAL')"><i class="fa-solid fa-fire"></i> Critical Events</button>
+                    <button class="kql-preset-chip" onclick="applyKqlPreset('message:Failed password')"><i class="fa-solid fa-key"></i> Failed Auth / Brute Force</button>
+                    <button class="kql-preset-chip" onclick="applyKqlPreset('ip:198.51.100')"><i class="fa-solid fa-skull"></i> C2 External IP</button>
+                    <button class="kql-preset-chip" onclick="applyKqlPreset('message:sudo')"><i class="fa-solid fa-lock-open"></i> Root Escalation</button>
+                    <button class="kql-preset-chip reset" onclick="clearKqlHunt()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+                </div>
+                <div id="kqlStatusBanner" class="kql-status-banner" style="display:none;">
+                    <span id="kqlStatusText">KQL Hunt matched 0 events.</span>
                 </div>
             </div>
 
@@ -357,7 +872,7 @@
 <div id="sharpDrawer" class="sharp-drawer">
     <div class="sharp-drawer-header">
         <h3 id="drawerTitle">
-            <i class="fa-solid fa-shield-halved" style="color: var(--accent-green);"></i>
+            <i class="fa-solid fa-shield-halved" style="color: var(--brand-primary);"></i>
             <span>Inspection Details</span>
         </h3>
         <button class="sharp-btn-icon" onclick="closeDrawer()" title="Close">
@@ -369,12 +884,148 @@
     </div>
 </div>
 
+<!-- ================= EXECUTIVE SOC REPORT MODAL ================= -->
+<div id="socReportModal" class="soc-modal-overlay" onclick="closeExecutiveReport(event)">
+    <div class="soc-modal-box" onclick="event.stopPropagation()">
+        <div class="soc-modal-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <i class="fa-solid fa-file-shield" style="font-size: 18px; color: var(--brand-primary);"></i>
+                <h3 style="font-size: 14px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 0.08em;">
+                    XDR BASE | Executive Security Posture & Threat Dossier
+                </h3>
+            </div>
+            <button class="sharp-btn-icon" onclick="closeExecutiveReport()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="soc-modal-body" id="socReportContent">
+            <!-- Dynamically populated -->
+        </div>
+        <div class="soc-modal-footer">
+            <button class="nav-action-btn" onclick="printExecutiveReport()">
+                <i class="fa-solid fa-print"></i> <span>Print / Save PDF</span>
+            </button>
+            <button class="nav-action-btn green" onclick="downloadReportJson()">
+                <i class="fa-solid fa-download"></i> <span>Export Dossier (JSON)</span>
+            </button>
+            <button class="nav-action-btn" onclick="closeExecutiveReport()">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- ================= VISUAL PROCESS TREE / ATTACK STORYLINE MODAL ================= -->
+<div id="storylineModal" class="soc-modal-overlay" onclick="closeStorylineModal(event)">
+    <div class="soc-modal-box storyline-modal-box" onclick="event.stopPropagation()">
+        <div class="soc-modal-header">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div class="storyline-modal-badge">
+                    <i class="fa-solid fa-network-wired"></i>
+                </div>
+                <div>
+                    <h3 style="font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 0.05em; text-transform: uppercase;" id="storylineModalTitle">
+                        Attack Storyline & Process Causality View
+                    </h3>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 2px;" id="storylineModalSubtitle">
+                        Causal execution tree tracing attack execution from entry binary to active payload
+                    </p>
+                </div>
+            </div>
+            <button class="sharp-btn-icon" onclick="closeStorylineModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="soc-modal-body" style="padding: 0; display: flex; flex-direction: column; overflow: hidden; height: 75vh;">
+            <!-- Storyline KPI summary strip -->
+            <div class="storyline-kpi-bar" id="storylineKpis">
+                <!-- Dynamically populated -->
+            </div>
+            <!-- Storyline Split Body: Process Hierarchy on left, Node Forensic Inspector on right -->
+            <div class="storyline-split-body">
+                <div class="storyline-tree-pane" id="storylineTreePane">
+                    <!-- Process tree dynamically rendered -->
+                </div>
+                <div class="storyline-inspector-pane" id="storylineInspectorPane">
+                    <div class="storyline-inspector-placeholder">
+                        <i class="fa-solid fa-arrow-pointer" style="font-size: 24px; color: var(--text-muted); margin-bottom: 8px;"></i>
+                        <p style="font-size: 12px; color: var(--text-muted);">Click any process node to inspect deep forensic attributes, open sockets, and command line arguments.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="soc-modal-footer">
+            <div style="display: flex; align-items: center; gap: 8px; margin-right: auto;">
+                <span class="process-legend-dot active"></span> <span style="font-size: 11px; color: var(--text-muted); margin-right: 12px;">Active Running</span>
+                <span class="process-legend-dot terminated"></span> <span style="font-size: 11px; color: var(--text-muted); margin-right: 12px;">Terminated</span>
+                <span class="process-legend-dot malicious"></span> <span style="font-size: 11px; color: var(--text-muted);">Malicious Threat</span>
+            </div>
+            <button class="nav-action-btn" onclick="closeStorylineModal()">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- ================= AUTOMATED SOAR PLAYBOOK ENGINE MODAL ================= -->
+<div id="soarModal" class="soc-modal-overlay" onclick="closeSoarModal(event)">
+    <div class="soc-modal-box soar-modal-box" onclick="event.stopPropagation()">
+        <div class="soc-modal-header">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div class="soar-modal-badge">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <div>
+                    <h3 style="font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 0.05em; text-transform: uppercase;">
+                        Autonomous SOAR Playbook Engine & Rule-to-Action Manager
+                    </h3>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
+                        Autonomous containment pipelines executing zero-touch mitigation upon event correlation
+                    </p>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="soar-engine-badge"><span class="hud-pulse-dot" style="background: var(--accent-tertiary);"></span> SOAR ENGINE LIVE</span>
+                <button class="sharp-btn-icon" onclick="closeSoarModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+        <div class="soc-modal-body" style="padding: 20px; overflow-y: auto;">
+            <!-- SOAR Operational KPI Strip -->
+            <div class="soar-kpi-grid">
+                <div class="soar-kpi-card">
+                    <div class="soar-kpi-num" id="soarActiveCount" style="color: var(--accent-tertiary);">4</div>
+                    <div class="soar-kpi-label">Active Playbooks</div>
+                </div>
+                <div class="soar-kpi-card">
+                    <div class="soar-kpi-num" id="soarExecutionCount" style="color: var(--brand-primary);">12</div>
+                    <div class="soar-kpi-label">Auto Containments Fired</div>
+                </div>
+                <div class="soar-kpi-card">
+                    <div class="soar-kpi-num" style="color: #00d27a;">1.2s</div>
+                    <div class="soar-kpi-label">Avg Execution Latency</div>
+                </div>
+                <div class="soar-kpi-card">
+                    <div class="soar-kpi-num" style="color: #00b5d8;">100%</div>
+                    <div class="soar-kpi-label">Zero-Touch Automation Rate</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <h4 style="font-size: 12px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.5px;">Configured Autonomous Playbooks</h4>
+                    <button class="nav-action-btn green" style="padding: 4px 10px; font-size: 11px;" onclick="loadPlaybooks()">
+                        <i class="fa-solid fa-rotate"></i> Refresh Playbooks
+                    </button>
+                </div>
+                <div id="playbooksListContainer" class="playbooks-grid">
+                    <!-- Dynamically populated from /playbooks -->
+                </div>
+            </div>
+        </div>
+        <div class="soc-modal-footer">
+            <button class="nav-action-btn" onclick="closeSoarModal()">Close</button>
+        </div>
+    </div>
+</div>
+
 <!-- Toast Container -->
 <div id="toastContainer"></div>
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="js/dashboard.js"></script>
+<script src="js/dashboard.js?v=4.5"></script>
 
 </body>
 </html>

@@ -76,7 +76,11 @@ def get_alerts(
             "severity": r.severity or "Low",
             "title": r.title or "Security Event",
             "description": r.description or "",
-            "status": r.status or "Open"
+            "status": r.status or "Open",
+            "mitre_tactic": getattr(r, "mitre_tactic", "Unknown") or "Unknown",
+            "mitre_technique": getattr(r, "mitre_technique", "Unknown") or "Unknown",
+            "source_ip": getattr(r, "source_ip", "") or "",
+            "incident_id": getattr(r, "incident_id", None)
         }
         for r in db_alerts
     ]
