@@ -15,10 +15,11 @@ CREATE TABLE IF NOT EXISTS assets (
     operating_system VARCHAR(100),
     os_guess VARCHAR(255),
     asset_type VARCHAR(50),
-    status VARCHAR(20) DEFAULT 'Online',
+    status VARCHAR(30) DEFAULT 'Online',
     open_ports TEXT,
     services TEXT,
     risk_score INTEGER DEFAULT 0,
+    agent_id VARCHAR(100),
     first_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -39,7 +40,60 @@ CREATE TABLE IF NOT EXISTS alerts (
     severity VARCHAR(20),
     title VARCHAR(100),
     description TEXT,
-    status VARCHAR(20) DEFAULT 'Open'
+    status VARCHAR(20) DEFAULT 'Open',
+    mitre_tactic VARCHAR(100) DEFAULT 'Unknown',
+    mitre_technique VARCHAR(100) DEFAULT 'Unknown',
+    source_ip VARCHAR(50) DEFAULT '',
+    incident_id INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS incidents (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    severity VARCHAR(20) DEFAULT 'Medium',
+    status VARCHAR(30) DEFAULT 'New',
+    mitre_tactic VARCHAR(100) DEFAULT 'General',
+    mitre_technique VARCHAR(100) DEFAULT 'General',
+    hostname VARCHAR(100) DEFAULT 'Multiple',
+    source_ip VARCHAR(50) DEFAULT '',
+    alert_count INTEGER DEFAULT 1,
+    analyst_notes TEXT DEFAULT '',
+    assigned_to VARCHAR(100) DEFAULT 'SOC Operator',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS blocked_ips (
+    id SERIAL PRIMARY KEY,
+    ip_address VARCHAR(50) UNIQUE NOT NULL,
+    reason VARCHAR(255) DEFAULT 'Manual SOC block',
+    blocked_by VARCHAR(100) DEFAULT 'SOC Operator',
+    status VARCHAR(20) DEFAULT 'Active',
+    blocked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS agent_endpoints (
+    id SERIAL PRIMARY KEY,
+    agent_id VARCHAR(100) UNIQUE NOT NULL,
+    hostname VARCHAR(100) NOT NULL,
+    ip_address VARCHAR(50) NOT NULL,
+    operating_system VARCHAR(100) DEFAULT 'Unknown',
+    os_version VARCHAR(100) DEFAULT '',
+    status VARCHAR(30) DEFAULT 'Online',
+    api_key VARCHAR(100) NOT NULL,
+    first_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_heartbeat TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    pending_commands TEXT DEFAULT '[]'
+);
+
+CREATE TABLE IF NOT EXISTS containment_actions (
+    id SERIAL PRIMARY KEY,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    action_type VARCHAR(50) NOT NULL,
+    target VARCHAR(100) NOT NULL,
+    performed_by VARCHAR(100) DEFAULT 'SOC Operator',
+    details TEXT DEFAULT '',
+    status VARCHAR(20) DEFAULT 'Executed'
 );
 
 -- Default Admin User (Default password: admin123)

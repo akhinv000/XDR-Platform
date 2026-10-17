@@ -14,6 +14,12 @@ from routers.logs import router as logs_router
 from routers.discovery import router as discovery_router
 from routers.alerts import router as alert_router
 from routers.analytics import router as analytics_router
+from routers.incidents import router as incident_router
+from routers.response import router as response_router
+from routers.agent import router as agent_router
+from routers.threat_intel import router as threat_intel_router
+from routers.storyline import router as storyline_router
+from routers.playbooks import router as playbooks_router
 
 
 @asynccontextmanager
@@ -57,6 +63,12 @@ app.include_router(logs_router)
 app.include_router(discovery_router)
 app.include_router(alert_router)
 app.include_router(analytics_router)
+app.include_router(incident_router)
+app.include_router(response_router)
+app.include_router(agent_router)
+app.include_router(threat_intel_router)
+app.include_router(storyline_router)
+app.include_router(playbooks_router)
 
 # Mount Frontend static files
 frontend_dir = Path(__file__).parent / "frontend"

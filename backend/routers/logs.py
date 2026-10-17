@@ -121,3 +121,71 @@ def ingest_single_log(
         "log_id": new_log.id,
         "alerts_triggered": new_alerts
     }
+
+
+@router.get("/hunt")
+def hunt_logs(
+    q: str = "",
+    limit: int = 150,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    KQL / Fielded Threat Hunting Query Parser.
+    Supports syntax:
+      hostname:web-srv-01
+      level:Critical / severity:High
+      ip:192.168.1.50
+      source:auth.log
+      message:powershell
+      Free-text terms
+    """
+    import re
+    from sqlalchemy import or_, and_
+
+    raw_query = q.strip()
+    query_obj = db.query(Log)
+
+    if raw_query:
+        tokens = re.findall(r'(?:(\w+):(?:"([^"]+)"|(\S+)))|(?:"([^"]+)"|(\S+))', raw_query)
+        filters = []
+
+        for host_k, val_q, val_raw, free_q, free_raw in tokens:
+            key = host_k.lower() if host_k else ""
+            val = val_q or val_raw or free_q or free_raw or ""
+            if not val:
+                continue
+
+            if key in ["host", "hostname"]:
+                filters.append(Log.hostname.ilike(f"%{val}%"))
+            elif key in ["level", "severity"]:
+                filters.append(Log.level.ilike(f"%{val}%"))
+            elif key in ["source", "src"]:
+                filters.append(Log.source.ilike(f"%{val}%"))
+            elif key in ["message", "msg", "payload"]:
+                filters.append(Log.message.ilike(f"%{val}%"))
+            elif key in ["ip", "source_ip", "src_ip"]:
+                filters.append(Log.message.ilike(f"%{val}%"))
+            else:
+                filters.append(or_(
+                    Log.message.ilike(f"%{val}%"),
+                    Log.hostname.ilike(f"%{val}%")
+                ))
+
+        if filters:
+            query_obj = query_obj.filter(and_(*filters))
+
+    logs = query_obj.order_by(Log.id.desc()).limit(limit).all()
+
+    return [
+        {
+            "id": str(r.id),
+            "timestamp": r.timestamp.isoformat() if r.timestamp else "",
+            "hostname": r.hostname or "System",
+            "level": r.level or "Low",
+            "category": "HUNT_MATCH",
+            "source": r.source or "System",
+            "message": r.message or ""
+        }
+        for r in logs
+    ]
