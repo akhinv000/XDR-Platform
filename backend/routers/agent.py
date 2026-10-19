@@ -1,9 +1,8 @@
-import os
 import json
 import uuid
 import secrets
 from datetime import datetime, timezone
-from typing import Optional, List, Dict, Any
+from typing import Optional, List
 from pydantic import BaseModel
 from fastapi import APIRouter, Depends, HTTPException, Header, Request, status
 from fastapi.responses import PlainTextResponse, FileResponse
@@ -11,7 +10,7 @@ from sqlalchemy.orm import Session
 from pathlib import Path
 
 from database import get_db
-from models import AgentEndpoint, Asset, Log, Alert, User
+from models import AgentEndpoint, Asset, Log, User
 from auth_utils import get_current_user
 from alerts.detector import detect_alerts
 from alerts.updater import update_alerts

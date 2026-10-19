@@ -3,11 +3,11 @@ Visual Process Tree & Attack Storyline (Root Cause Analysis) for XDR BASE
 Generates parent-child execution causality trees matching SentinelOne Storyline
 and Palo Alto Cortex XDR Causality View.
 """
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
-from models import Incident, Alert, Log, User
+from models import Incident, User
 from auth_utils import get_current_user
 
 router = APIRouter(prefix="/storyline", tags=["Attack Storyline & Root Cause Analysis"])

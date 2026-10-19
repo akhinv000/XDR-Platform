@@ -19,11 +19,6 @@ class BlockIPRequest(BaseModel):
     reason: Optional[str] = "SOC Threat Containment"
 
 
-class QuarantineRequest(BaseModel):
-    asset_id: int
-    reason: Optional[str] = "Compromised Host Containment"
-
-
 @router.post("/quarantine/{asset_id}")
 def quarantine_asset(
     asset_id: int,
@@ -57,7 +52,7 @@ def quarantine_asset(
         action_type="QUARANTINE_HOST",
         target=f"{asset.hostname} ({asset.ip_address})",
         performed_by=current_user.username,
-        details=f"Host isolated from internal network. Status updated to Quarantined.",
+        details="Host isolated from internal network. Status updated to Quarantined.",
         status="Executed"
     )
     db.add(action)

@@ -10,31 +10,70 @@ function getApiBaseUrl() {
 
 const API = getApiBaseUrl();
 
-function showToast(message, type = "info") {
-    const toast = document.createElement("div");
-    toast.className = `toast ${type}`;
-    toast.innerText = message;
-    document.body.appendChild(toast);
+// Live UTC HUD Clock
+function updateClock() {
+    const clock = document.getElementById("hudClock");
+    if (!clock) return;
+    const now = new Date();
+    clock.innerText = "UTC " + now.toUTCString().split(" ")[4];
+}
+setInterval(updateClock, 1000);
+updateClock();
 
-    setTimeout(() => {
-        toast.remove();
-    }, 3000);
+// Toggle Password Visibility
+function togglePasswordVisibility() {
+    const pw = document.getElementById("password");
+    const icon = document.getElementById("pwToggleIcon");
+    if (!pw || !icon) return;
+    if (pw.type === "password") {
+        pw.type = "text";
+        icon.className = "fa-solid fa-eye-slash";
+    } else {
+        pw.type = "password";
+        icon.className = "fa-solid fa-eye";
+    }
 }
 
+// Quick Credentials Autofill
+function fillQuickCreds() {
+    const u = document.getElementById("username");
+    const p = document.getElementById("password");
+    if (u) u.value = "admin";
+    if (p) p.value = "admin123";
+    const msg = document.getElementById("message");
+    if (msg) {
+        msg.style.color = "#C084FC";
+        msg.innerText = "Default credentials loaded. Press Authenticate to enter.";
+    }
+}
+
+// Enter Key Submission Listener
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        const u = document.getElementById("username");
+        const p = document.getElementById("password");
+        if (document.activeElement === u || document.activeElement === p || !document.activeElement) {
+            login();
+        }
+    }
+});
+
+// Primary Login Authentication Function
 async function login() {
     const username = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value.trim();
     const message = document.getElementById("message");
-    const button = document.querySelector("button");
+    const button = document.querySelector(".btn-authenticate") || document.querySelector("button");
 
     if (username === "" || password === "") {
-        message.style.color = "#ff5c5c";
-        message.innerText = "Please enter your username and password.";
+        message.style.color = "#FF4438";
+        message.innerText = "Please specify operator identity and passcode.";
         return;
     }
 
     button.disabled = true;
-    button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing In...';
+    const originalContent = button.innerHTML;
+    button.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> <span>Verifying Security Token...</span>';
 
     try {
         const response = await fetch(API + "/login", {
@@ -51,8 +90,8 @@ async function login() {
         const data = await response.json();
 
         if (response.ok) {
-            message.style.color = "#22c55e";
-            message.innerText = "Authentication successful.";
+            message.style.color = "#00d27a";
+            message.innerHTML = '<i class="fa-solid fa-check-circle"></i> Token verified. Granting SOC Access...';
 
             // Store JWT access token and user metadata
             localStorage.setItem("token", data.access_token);
@@ -60,17 +99,17 @@ async function login() {
 
             setTimeout(() => {
                 window.location.href = "dashboard.html";
-            }, 800);
+            }, 600);
         } else {
-            message.style.color = "#ff5c5c";
-            message.innerText = data.detail || "Invalid username or password.";
+            message.style.color = "#FF4438";
+            message.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + (data.detail || "Authentication rejected: Invalid credentials.");
         }
     } catch (error) {
         console.error("Login Error:", error);
-        message.style.color = "#ff5c5c";
-        message.innerText = "Connection failed. Please ensure the backend server is running.";
+        message.style.color = "#FF4438";
+        message.innerHTML = '<i class="fa-solid fa-plug-circle-xmark"></i> Connection failed: Backend API (port 9000) unreachable.';
     } finally {
         button.disabled = false;
-        button.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
+        button.innerHTML = originalContent;
     }
 }

@@ -3,24 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XDR BASE | SOC Dashboard</title>
+    <title>XDR ShieldX | SOC Dashboard</title>
+    <!-- Favicon Suite (SVG, Multi-size PNGs, ICO) -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=6.3">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png?v=6.3">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png?v=6.3">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png?v=6.3">
+    <link rel="shortcut icon" href="favicon.ico?v=6.3">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css?v=4.6">
-    <link rel="stylesheet" href="css/green.css?v=4.6">
+    <link rel="stylesheet" href="css/style.css?v=6.7">
 </head>
 <body>
 
 <!-- ================= LEFT SIDEBAR (Greenlify Sharp Style) ================= -->
 <aside class="sidebar">
-    <div>
+    <div class="sidebar-nav-container">
         <a href="#overview" class="sidebar-brand">
             <div class="sidebar-brand-icon">
-                <i class="fa-solid fa-shield-halved"></i>
+                <img src="img/shield_lavender.png" alt="XDR ShieldX" style="width: 18px; height: 18px; object-fit: contain;">
             </div>
-            <span class="sidebar-brand-title">XDR BASE</span>
+            <span class="sidebar-brand-title">XDR <span style="color: var(--accent-tertiary);">ShieldX</span></span>
         </a>
 
         <ul class="sidebar-menu">
@@ -85,33 +90,26 @@
                 </a>
             </li>
             <li>
-                <a href="javascript:void(0)" onclick="scanNetwork()" class="sidebar-link">
+                <a href="javascript:void(0)" onclick="scanNetwork()" class="sidebar-link" id="scanBtn">
                     <i class="fa-solid fa-satellite-dish"></i>
                     <span>Scan Network</span>
                 </a>
             </li>
             <li>
-                <a href="javascript:void(0)" onclick="triggerLogCollection()" class="sidebar-link">
+                <a href="javascript:void(0)" onclick="triggerLogCollection()" class="sidebar-link" id="ingestBtn">
                     <i class="fa-solid fa-cloud-arrow-down"></i>
                     <span>Ingest Logs</span>
-                </a>
-            </li>
-            <li>
-                <a href="javascript:void(0)" onclick="logout()" class="sidebar-link">
-                    <i class="fa-solid fa-power-off"></i>
-                    <span>Sign Out</span>
                 </a>
             </li>
         </ul>
     </div>
 
-    <!-- Real System Status Box (Sharp 0px) -->
-    <div class="sidebar-status-box">
-        <div class="status-indicator">
-            <span class="status-dot live"></span>
-            <span class="status-title">CORE ONLINE</span>
-        </div>
-        <div class="status-detail">FastAPI • PostgreSQL • OpenSearch</div>
+    <!-- Fixed Bottom Controls (Standout Red Sign Out) -->
+    <div class="sidebar-bottom">
+        <a href="javascript:void(0)" onclick="logout()" class="sidebar-signout-btn" id="sidebarSignoutBtn" title="Terminate Session">
+            <i class="fa-solid fa-power-off"></i>
+            <span>Sign Out</span>
+        </a>
     </div>
 </aside>
 
@@ -1025,7 +1023,7 @@
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="js/dashboard.js?v=4.5"></script>
+<script src="js/dashboard.js?v=6.3"></script>
 
 </body>
 </html>

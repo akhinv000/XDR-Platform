@@ -3,55 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XDR BASE | Login</title>
+    <title>XDR ShieldX | SOC Portal</title>
+    <!-- Favicon Suite (SVG, Multi-size PNGs, ICO) -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=6.3">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png?v=6.3">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png?v=6.3">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png?v=6.3">
+    <link rel="shortcut icon" href="favicon.ico?v=6.3">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="css/login.css?v=4.5">
+    <link rel="stylesheet" href="css/login.css?v=6.3">
 </head>
 <body>
 
-<div class="login-page">
+<div class="login-wrapper">
+    <!-- Ambient corner grid / HUD decorations -->
+    <div class="hud-top-bar">
+        <div class="hud-node">
+            <span class="dot"></span>
+            <span>NODE // XDR-CORE-SOC</span>
+        </div>
+        <div class="hud-time" id="hudClock">UTC 00:00:00</div>
+    </div>
+
     <div class="login-card">
+        <!-- Laser top accent -->
+        <div class="card-laser-line"></div>
+
+        <!-- Tactical Emblem -->
         <div class="logo">
-            <i class="fa-solid fa-shield-virus"></i>
+            <img src="img/shield_lavender.png" alt="XDR ShieldX" style="width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.6));">
         </div>
 
-        <h1>XDR BASE</h1>
-        <span class="brand-sub">Security Operations Center</span>
+        <!-- Typography -->
+        <h1 class="brand-title">XDR <span style="color: var(--accent-electric);">Shield</span><span style="color: #DDD6FE;">X</span></h1>
+        <div class="hud-pill">
+            <span class="pulse-dot"></span>
+            <span>SOC CONSOLE // OPERATOR ACCESS</span>
+        </div>
         <p class="subtitle">Autonomous Security & Extended Threat Response</p>
 
-        <div class="input-group">
-            <input type="text" id="username" placeholder="Username / Operator ID" autocomplete="username">
-            <i class="fa-solid fa-user"></i>
+        <!-- Form fields -->
+        <div class="form-container">
+            <div class="input-field-wrap">
+                <label for="username" class="input-label">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>OPERATOR IDENTITY</span>
+                </label>
+                <div class="input-box">
+                    <i class="input-icon fa-solid fa-id-badge"></i>
+                    <input type="text" id="username" placeholder="Username / Operator ID" autocomplete="username" autofocus>
+                </div>
+            </div>
+
+            <div class="input-field-wrap">
+                <label for="password" class="input-label">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>PASSCODE / TOKEN</span>
+                </label>
+                <div class="input-box">
+                    <i class="input-icon fa-solid fa-key"></i>
+                    <input type="password" id="password" placeholder="Passcode / Security Token" autocomplete="current-password">
+                    <button type="button" class="pw-toggle-btn" onclick="togglePasswordVisibility()" title="Toggle visibility">
+                        <i class="fa-solid fa-eye" id="pwToggleIcon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button type="button" class="btn-authenticate" onclick="login()">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                <span>Authenticate to SOC</span>
+            </button>
+
+            <p id="message"></p>
         </div>
 
-        <div class="input-group">
-            <input type="password" id="password" placeholder="Passcode / Security Token" autocomplete="current-password">
-            <i class="fa-solid fa-lock"></i>
+        <!-- Zero-Trust telemetry indicator -->
+        <div class="secure-badge">
+            <i class="fa-solid fa-fingerprint"></i>
+            <span>Zero-Trust Protocol Active • TLS 1.3</span>
         </div>
 
-        <button type="button" onclick="login()">
-            <i class="fa-solid fa-right-to-bracket"></i>
-            <span>Authenticate to SOC</span>
-        </button>
-
-        <p id="message"></p>
-
-        <div class="secure">
-            <i class="fa-solid fa-shield-halved"></i>
-            <span>Zero-Trust Enterprise Authentication Active</span>
+        <!-- Quick Credentials Hint -->
+        <div class="quick-creds" onclick="fillQuickCreds()" title="Click to autofill default credentials">
+            <span class="cred-tag">DEFAULT OPERATOR:</span>
+            <code>admin</code> • <code>admin123</code>
         </div>
 
         <div class="login-footer">
-            XDR BASE Platform v1.0
-            <br>
-            Powered by <strong>FastAPI</strong> • <strong>PostgreSQL</strong> • <strong>OpenSearch</strong>
+            <div class="tech-pills">
+                <span>TLS 1.3</span>
+                <span>ZERO-TRUST</span>
+                <span>AES-256</span>
+            </div>
+            <div class="version-label">XDR ShieldX Enterprise Platform v1.0</div>
         </div>
     </div>
 </div>
 
-<script src="js/login.js"></script>
+<script src="js/login.js?v=6.2"></script>
 </body>
 </html>

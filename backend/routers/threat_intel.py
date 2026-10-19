@@ -3,10 +3,10 @@ Threat Intelligence & IOC Enrichment Service for XDR BASE
 Supports real-time IP reputation, ASN/ISP lookup, country geolocation,
 malicious threat categorization, and file hash reputation.
 """
-from typing import Optional, Dict, Any, List
+from typing import Dict, Any
 import ipaddress
 import re
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends
 from auth_utils import get_current_user
 from models import User
 

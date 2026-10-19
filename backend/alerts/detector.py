@@ -1,5 +1,5 @@
 import re
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 from typing import Optional, List, Dict, Any
 from sqlalchemy.orm import Session
 from database import SessionLocal
@@ -14,7 +14,6 @@ SSH_FAIL_REGEX = re.compile(
     r"Failed (?:publickey|none) for\s*(\S+)\s*from\s*([0-9.]+))",
     re.IGNORECASE
 )
-SSH_ACCEPT_REGEX = re.compile(r"Accepted (?:password|publickey) for\s*(\S+)\s*from\s*([0-9.]+)", re.IGNORECASE)
 
 SQLI_REGEX = re.compile(r"(?:\bUNION\s+SELECT\b|\bOR\s+['\"]?\d+['\"]?\s*=\s*['\"]?\d+|INFORMATION_SCHEMA|SELECT\s+.*\s+FROM)", re.IGNORECASE)
 XSS_REGEX = re.compile(r"(?:<script\b|javascript\s*:|onerror\s*=|onload\s*=|alert\s*\(|document\.cookie)", re.IGNORECASE)
@@ -190,7 +189,6 @@ def detect_alerts(db: Optional[Session] = None, logs_to_evaluate: Optional[List]
         for (src_ip, hostname), fail_events in auth_failures_by_ip.items():
             count = len(fail_events)
             latest_event = fail_events[0]
-            earliest_event = fail_events[-1]
 
             if count >= 3:
                 # High / Critical severity burst alert

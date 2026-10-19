@@ -33,9 +33,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="XDR BASE",
+    title="XDR ShieldX",
     version="1.0.0",
-    description="XDR BASE Enterprise Extended Detection and Response Platform",
+    description="XDR ShieldX Enterprise Extended Detection and Response Platform",
     lifespan=lifespan
 )
 
@@ -84,7 +84,7 @@ def home():
     if frontend_dir.exists():
         return RedirectResponse(url="/app/login.html")
     return {
-        "application": "XDR BASE",
+        "application": "XDR ShieldX",
         "status": "Running",
         "version": "1.0.0"
     }

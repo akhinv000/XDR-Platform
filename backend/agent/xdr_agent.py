@@ -13,7 +13,6 @@ import socket
 import platform
 import subprocess
 import urllib.request
-import urllib.error
 from pathlib import Path
 
 
@@ -110,7 +109,6 @@ class XDRAgent:
         if platform.system() == "Linux":
             try:
                 # Isolate host with iptables: preserve only connection to server
-                server_host = self.server_url.split("//")[-1].split(":")[0]
                 subprocess.run(["iptables", "-F"], check=False)
                 subprocess.run(["iptables", "-P", "INPUT", "DROP"], check=False)
                 subprocess.run(["iptables", "-P", "OUTPUT", "DROP"], check=False)
@@ -168,7 +166,6 @@ class XDRAgent:
         }
         try:
             resp = self.http_post("/api/v1/agent/heartbeat", payload)
-            status = resp.get("status")
             commands = resp.get("commands", [])
 
             for cmd in commands:

@@ -4,11 +4,9 @@ Executes automated rule-to-action containment pipelines when critical threats ar
 """
 from typing import Dict, Any, List, Optional
 from datetime import datetime, timezone
-import json
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import get_db
-from models import Asset, BlockedIP, ContainmentAction, AgentEndpoint, Incident, Alert, User
+from models import Asset, BlockedIP, ContainmentAction, Incident, User
 from auth_utils import get_current_user
 
 router = APIRouter(prefix="/playbooks", tags=["SOAR Automation & Playbooks"])
@@ -117,7 +115,7 @@ def run_soar_playbook(alert_dict: Dict[str, Any], incident: Optional[Incident], 
                 if not existing_block:
                     block_entry = BlockedIP(
                         ip_address=src_ip,
-                        reason=f"SOAR Auto-Ban: Auth Brute-Force Campaign",
+                        reason="SOAR Auto-Ban: Auth Brute-Force Campaign",
                         blocked_by="SOAR Autonomous Engine",
                         status="Active",
                         blocked_at=now

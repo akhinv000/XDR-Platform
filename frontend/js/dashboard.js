@@ -127,17 +127,8 @@ function updateClocks() {
     const utcEl = document.getElementById("clockUtc");
     if (utcEl) utcEl.innerText = `${utcHours}:${utcMins}:${utcSecs}`;
 
-    // Local Clock
-    const locHours = String(now.getHours()).padStart(2, "0");
-    const locMins = String(now.getMinutes()).padStart(2, "0");
-    const locSecs = String(now.getSeconds()).padStart(2, "0");
-    const locEl = document.getElementById("clockLocal");
-    if (locEl) locEl.innerText = `${locHours}:${locMins}:${locSecs}`;
-
     // Auto-Sync Countdown
     syncCountdown--;
-    const syncEl = document.getElementById("hudSyncTimer");
-    if (syncEl) syncEl.innerText = `SYNC ${syncCountdown}s`;
     const syncBtn = document.getElementById("hudSyncBtn");
     if (syncBtn) syncBtn.title = `Force Live Telemetry Sync (${syncCountdown}s to auto-refresh)`;
 
@@ -548,13 +539,13 @@ function renderAnalytics(data) {
         plugins: {
             legend: { display: false },
             tooltip: {
-                backgroundColor: "#122834",
+                backgroundColor: "#000000",
                 titleColor: "#ffffff",
                 bodyColor: "#d1dde3",
-                borderColor: "rgba(92, 112, 122, 0.4)",
+                borderColor: "rgba(139, 92, 246, 0.4)",
                 borderWidth: 1,
                 padding: 10,
-                cornerRadius: 8,
+                cornerRadius: 4,
                 usePointStyle: true,
                 titleFont: { family: "Space Grotesk", weight: "700" },
                 bodyFont: { family: "Space Mono" }
@@ -562,14 +553,14 @@ function renderAnalytics(data) {
         },
         scales: {
             x: {
-                grid: { color: "rgba(92, 112, 122, 0.16)" },
-                ticks: { color: "#82959f", font: { size: 11, family: "Space Grotesk" } }
+                grid: { color: "rgba(255, 255, 255, 0.05)" },
+                ticks: { color: "#8b949e", font: { size: 11, family: "Space Grotesk" } }
             },
             y: {
                 beginAtZero: true,
-                grid: { color: "rgba(92, 112, 122, 0.16)" },
+                grid: { color: "rgba(255, 255, 255, 0.05)" },
                 ticks: {
-                    color: "#82959f",
+                    color: "#8b949e",
                     font: { size: 11, family: "Space Mono" },
                     precision: 0
                 }
@@ -588,7 +579,7 @@ function renderAnalytics(data) {
             const l = label.toLowerCase();
             if (l === "high" || l === "critical") return "#FF4438";
             if (l === "medium") return "#f59e0b";
-            return "#00b5d8";
+            return "#8B5CF6";
         });
 
         // Dynamic legend
@@ -596,7 +587,7 @@ function renderAnalytics(data) {
         if (legendEl) {
             legendEl.innerHTML = alertsData.map(a => {
                 const l = (a.severity || "").toLowerCase();
-                const color = (l === "high" || l === "critical") ? "#FF4438" : (l === "medium" ? "#f59e0b" : "#00b5d8");
+                const color = (l === "high" || l === "critical") ? "#FF4438" : (l === "medium" ? "#f59e0b" : "#8B5CF6");
                 return `<span style="color: ${color}; font-size: 11px; font-weight: 700;">● ${escapeHtml(a.severity)}: ${a.total}</span>`;
             }).join(" &nbsp; ");
         }
@@ -613,10 +604,10 @@ function renderAnalytics(data) {
                 datasets: [{
                     label: "Alert Count",
                     data: counts.length ? counts : [0],
-                    backgroundColor: colors.length ? colors : ["#00b5d8"],
-                    borderRadius: 6,
+                    backgroundColor: colors.length ? colors : ["#8B5CF6"],
+                    borderRadius: 4,
                     borderWidth: 1,
-                    borderColor: colors.length ? colors : ["#00b5d8"],
+                    borderColor: colors.length ? colors : ["#8B5CF6"],
                     barThickness: 28
                 }]
             },
@@ -643,8 +634,10 @@ function renderAnalytics(data) {
                 datasets: [{
                     label: "Events Ingested",
                     data: counts.length ? counts : [0],
-                    backgroundColor: "#DCFF1E",
-                    borderRadius: 6,
+                    backgroundColor: "rgba(139, 92, 246, 0.45)",
+                    borderColor: "#8B5CF6",
+                    borderWidth: 1,
+                    borderRadius: 4,
                     barThickness: 28
                 }]
             },
@@ -671,8 +664,10 @@ function renderAnalytics(data) {
                 datasets: [{
                     label: "Endpoints",
                     data: counts.length ? counts : [0],
-                    backgroundColor: ["#00b5d8", "#38bdf8", "#5C707A", "#FF4438", "#163341"],
-                    borderRadius: 6,
+                    backgroundColor: ["#8B5CF6", "#A855F7", "#6366F1", "#3B82F6", "#06B6D4"],
+                    borderColor: "rgba(139, 92, 246, 0.35)",
+                    borderWidth: 1,
+                    borderRadius: 4,
                     barThickness: 28
                 }]
             },
@@ -691,7 +686,7 @@ function renderAnalytics(data) {
             const l = (r.level || "").toLowerCase();
             if (l === "high") return "#FF4438";
             if (l === "medium") return "#f59e0b";
-            return "#00d27a";
+            return "#10B981";
         });
 
         if (riskDistChartInstance) {
@@ -706,8 +701,8 @@ function renderAnalytics(data) {
                 datasets: [{
                     label: "Host Count",
                     data: counts.length ? counts : [0],
-                    backgroundColor: colors.length ? colors : ["#00d27a"],
-                    borderRadius: 6,
+                    backgroundColor: colors.length ? colors : ["#10B981"],
+                    borderRadius: 4,
                     barThickness: 28
                 }]
             },
@@ -814,11 +809,11 @@ function renderTimelineChart() {
                     type: "bar",
                     label: "Ingested Log Events",
                     data: logCounts,
-                    backgroundColor: "rgba(220, 255, 30, 0.4)",
-                    hoverBackgroundColor: "rgba(220, 255, 30, 0.75)",
-                    borderColor: "#DCFF1E",
+                    backgroundColor: "rgba(139, 92, 246, 0.35)",
+                    hoverBackgroundColor: "rgba(139, 92, 246, 0.7)",
+                    borderColor: "#8B5CF6",
                     borderWidth: 1,
-                    borderRadius: 6,
+                    borderRadius: 4,
                     yAxisID: "y"
                 }
             ]
@@ -835,20 +830,20 @@ function renderTimelineChart() {
                     display: false
                 },
                 tooltip: {
-                    backgroundColor: "#122834",
-                    borderColor: "#DCFF1E",
+                    backgroundColor: "#000000",
+                    borderColor: "#8B5CF6",
                     borderWidth: 1,
                     titleFont: { family: "'Space Mono', monospace", size: 12 },
                     bodyFont: { family: "'Space Grotesk', sans-serif", size: 11 },
                     padding: 10,
-                    cornerRadius: 8
+                    cornerRadius: 4
                 }
             },
             scales: {
                 x: {
-                    grid: { color: "rgba(92, 112, 122, 0.16)" },
+                    grid: { color: "rgba(255, 255, 255, 0.05)" },
                     ticks: {
-                        color: "#82959f",
+                        color: "#8b949e",
                         font: { family: "'Space Mono', monospace", size: 10 },
                         maxTicksLimit: 12
                     }
@@ -857,9 +852,9 @@ function renderTimelineChart() {
                     type: "linear",
                     display: true,
                     position: "left",
-                    grid: { color: "rgba(92, 112, 122, 0.16)" },
+                    grid: { color: "rgba(255, 255, 255, 0.05)" },
                     ticks: {
-                        color: "#82959f",
+                        color: "#8b949e",
                         font: { family: "'Space Mono', monospace", size: 10 }
                     }
                 },
@@ -1037,11 +1032,6 @@ function searchLogsWithTerm(term) {
     const searchInput = document.getElementById("globalSearch");
     if (searchInput) {
         searchInput.value = term;
-        searchLogs();
-    }
-    const logInput = document.getElementById("searchLog");
-    if (logInput) {
-        logInput.value = term;
         searchLogs();
     }
     switchWorkbenchView("logs");
@@ -1490,7 +1480,7 @@ function showLogDetails(index) {
 }
 
 function searchLogs() {
-    const input = document.getElementById("searchLog") || document.getElementById("globalSearch");
+    const input = document.getElementById("globalSearch");
     if (!input) return;
 
     const keyword = input.value.toLowerCase().trim();
@@ -2185,18 +2175,18 @@ function openExecutiveReport() {
     body.innerHTML = `
         <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-size: 18px; font-weight: 800; color: #fff;">XDR BASE ENTERPRISE SOC REPORT</span>
+                <span style="font-size: 18px; font-weight: 800; color: #fff;">XDR <span style="color:var(--accent-tertiary);">ShieldX</span> ENTERPRISE SOC REPORT</span>
                 <span style="font-family:var(--font-mono); font-size:12px; color:var(--accent-green);">CONFIDENTIAL // TLP:AMBER</span>
             </div>
             <div style="font-size: 11px; color: var(--text-muted);">
-                Generated on ${now.toUTCString()} | Operator: ${escapeHtml(localStorage.getItem("username") || "Administrator")} | Platform: FastAPI Enterprise Engine
+                Generated on ${now.toUTCString()} | Operator: ${escapeHtml(localStorage.getItem("username") || "Administrator")} | Architecture: Enterprise XDR Appliance
             </div>
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px;">
             <div style="background:var(--bg-card-subtle); border:1px solid var(--border-color); padding:12px;">
                 <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase;">Threat Condition</div>
-                <div style="font-size:18px; font-weight:800; color:${critAlerts > 0 ? '#FF4438' : (highAlerts > 0 ? '#f59e0b' : '#DCFF1E')}; margin-top:4px;">
+                <div style="font-size:18px; font-weight:800; color:${critAlerts > 0 ? '#FF4438' : (highAlerts > 0 ? '#f59e0b' : '#10B981')}; margin-top:4px;">
                     ${critAlerts > 0 ? 'DEFCON 2' : (highAlerts > 0 ? 'DEFCON 3' : 'DEFCON 4')}
                 </div>
             </div>
@@ -2611,7 +2601,7 @@ function selectStorylineNode(pid) {
 
         <div style="margin-top:10px;">
             <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Full Command Line</label>
-            <div style="background:#091A23; border:1px solid var(--border-color); padding:8px; border-radius:var(--radius-xs); font-family:var(--font-mono); font-size:11px; color:var(--accent-tertiary); word-break:break-all; margin-top:6px;">
+            <div style="background:var(--bg-input); border:1px solid var(--border-color); padding:8px; border-radius:var(--radius-xs); font-family:var(--font-mono); font-size:11px; color:var(--accent-tertiary); word-break:break-all; margin-top:6px;">
                 ${escapeHtml(cmdline)}
             </div>
         </div>
