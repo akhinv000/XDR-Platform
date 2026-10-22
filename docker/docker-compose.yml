@@ -1,10 +1,13 @@
+name: XDR
+
 services:
 
   backend:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    container_name: xdr-backend
+    image: xdr
+    container_name: XDR
     ports:
       - "9000:9000"
     environment:

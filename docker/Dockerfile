@@ -1,5 +1,7 @@
 FROM python:3.13-slim
 
+LABEL name="XDR"
+
 WORKDIR /app
 
 # Install system dependencies (nmap for network asset discovery)
